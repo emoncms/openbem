@@ -107,7 +107,7 @@
     var heatloss_body_to_outside = ((internal - outside) * lossrate);
 
     energy_air += (-1 * heatloss_air_to_body + heatinput) * step;
-    energy += (heatloss_air_to_body + (-1 * heatloss_body_to_outside) + heatinput) * step;
+    energy += (heatloss_air_to_body + (-1 * heatloss_body_to_outside)) * step;
     
     internal = energy / thermal_capacity;
     internal_air = energy_air / thermal_capacity_air;
