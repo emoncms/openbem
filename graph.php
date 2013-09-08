@@ -148,7 +148,7 @@
   var lpv = power_data[power_data.length-1][1];
   var time = outside_data[outside_data.length-1][0];
   
-  step =60*5;
+  step =30;
     
   for (var n=0; n<480; n++)
   {
