@@ -1,16 +1,4 @@
 <?php
-  /*
-
-  All Emoncms code is released under the GNU Affero General Public License.
-  See COPYRIGHT.txt and LICENSE.txt.
-
-  ---------------------------------------------------------------------
-  Emoncms - open source energy visualisation
-  Part of the OpenEnergyMonitor project:
-  http://openenergymonitor.org
-
-  */
-
   global $path;
 ?>
 
@@ -20,6 +8,7 @@
 <script language="javascript" type="text/javascript" src="<?php echo $path; ?>Lib/flot/jquery.flot.selection.min.js"></script>
 
 <script language="javascript" type="text/javascript" src="<?php echo $path; ?>Modules/feed/feed.js"></script>
+
 
 <br>
 
@@ -40,13 +29,23 @@
   <div id="graph"></div>
 </div>
 
+<h3>Total W/K heat loss: <span id="total_wk"> </span> W/K</h3>
+<h3>Total thermal capacity: <span id="total_thermal_capacity"></span> J/K</h3>
 
-<script id="source" language="javascript" type="text/javascript">
+<table class="table">
+<tr><th>Segment</th><th>W/K</th><th>Thermal capacity</th></tr>
+<tbody id="segment_config"></tbody>
+</table>
+<p><i>Segment 0 connects to external temperature, Segment <span class="numofsegments"></span> to heat input</i></p>
+
+<button id="simulate" class="btn">Simulate</button>
+
+<script >
 
   var path = "<?php echo $path; ?>";
   var apikey = "";
   
-  var timeWindow = (3600000*12*1);	// Initial time window
+  var timeWindow = (3600000*28*1);	// Initial time window
   var start = +new Date - timeWindow;	// Get start time
   var end = +new Date + 1000*1000;				        // Get end time
   
@@ -60,21 +59,47 @@
   
   var outside_data = feed.get_data(14972,start,end,0);
   var power_data = feed.get_data(16012,start,end,0);
+
+  var segment = [
+    {u:100,k:4000000},
+    {u:500,k:2000000},
+    {u:800,k:1000000}
+  ];
   
-  var internal = lab_back_left[0][1];
-  var internal_air = lab_back_left[0][1];
+  var segment_config_html = "";
   
-  var thermal_capacity = 9000000;
-  var energy = internal * thermal_capacity; 
-  var lossrate = 120;
+  for (i in segment) 
+  {
+    segment_config_html += "<tr><td>"+i+"</td>";
+    segment_config_html += "<td><input id='u"+i+"' type='text' value='"+segment[i].u+"'/ ></td>";
+    segment_config_html += "<td><input id='k"+i+"' type='text' value='"+segment[i].k+"'/ ></td></tr>";
+  }
+
+  $(".numofsegments").html(segment.length-1);
+  $("#segment_config").html(segment_config_html);
   
-  // thermal capacity of air is 66774 J/K
-  // we need a thermal capacity of something like 10x that
-  var thermal_capacity_air = 600000;
-  var energy_air = internal * thermal_capacity_air; 
-    
-  var heatloss = 0;
-  var heatinput = 0;
+  simulate();  
+  
+  function simulate()
+  {  
+  // INITIAL CONDITIONS
+  
+  var sum_u = 0;
+  var sum_k = 0;
+  for (i in segment) 
+  {
+    segment[i].T = lab_back_left[0][1];
+    segment[i].E = segment[i].T * segment[i].k;
+    segment[i].H = 0;
+    sum_u += 1 / segment[i].u;
+    sum_k += 1*segment[i].k;
+  }
+  
+  var total_wk = 1 / sum_u;
+  var total_thermal_capacity = sum_k;
+  
+  $("#total_wk").html(total_wk.toFixed(0));
+  $("#total_thermal_capacity").html(total_thermal_capacity);
   
   var sim = [];
   
@@ -103,42 +128,50 @@
     
     // --------------------------------------------
     
-    var heatloss_air_to_body = ((internal_air - internal) * 500);
-    var heatloss_body_to_outside = ((internal - outside) * lossrate);
-
-    energy_air += (-1 * heatloss_air_to_body + heatinput) * step;
-    energy += (heatloss_air_to_body + (-1 * heatloss_body_to_outside)) * step;
+    segment[2].H = heatinput - ((segment[2].T - segment[1].T) * segment[2].u);
+    segment[1].H = ((segment[2].T - segment[1].T) * segment[2].u) - ((segment[1].T - segment[0].T) * segment[1].u);
+    segment[0].H = ((segment[1].T - segment[0].T) * segment[1].u) - ((segment[0].T - outside) * segment[0].u);
     
-    internal = energy / thermal_capacity;
-    internal_air = energy_air / thermal_capacity_air;
-        
-    sim.push([time,internal_air]);
+    segment[2].E += segment[2].H * step;
+    segment[1].E += segment[1].H * step;
+    segment[0].E += segment[0].H * step;
+    
+    segment[2].T = segment[2].E / segment[2].k;
+    segment[1].T = segment[1].E / segment[1].k;
+    segment[0].T = segment[0].E / segment[0].k;
+
+    sim.push([time,segment[2].T]);
   }
   
   // PREDICTION !!
   var prediction = [];
   var lpv = power_data[power_data.length-1][1];
   var time = outside_data[outside_data.length-1][0];
+  
+  step =60*5;
+    
   for (var n=0; n<480; n++)
   {
-    time += (30*1000);
+    time += (step*1000);
+
+    segment[2].H = lpv - ((segment[2].T - segment[1].T) * segment[2].u);
+    segment[1].H = ((segment[2].T - segment[1].T) * segment[2].u) - ((segment[1].T - segment[0].T) * segment[1].u);
+    segment[0].H = ((segment[1].T - segment[0].T) * segment[1].u) - ((segment[0].T - outside) * segment[0].u);
     
-    var heatloss_air_to_body = ((internal_air - internal) * 500);
-    var heatloss_body_to_outside = ((internal - outside) * lossrate);
-
-    energy_air += (-1 * heatloss_air_to_body + lpv) * 30;
-    energy += (heatloss_air_to_body + (-1 * heatloss_body_to_outside)) * 30;
+    segment[2].E += segment[2].H * step;
+    segment[1].E += segment[1].H * step;
+    segment[0].E += segment[0].H * step;
     
-    internal = energy / thermal_capacity;
-    internal_air = energy_air / thermal_capacity_air;
-
-
-    prediction.push([time,internal_air]);
+    segment[2].T = segment[2].E / segment[2].k;
+    segment[1].T = segment[1].E / segment[1].k;
+    segment[0].T = segment[0].E / segment[0].k;
+    
+    prediction.push([time,segment[2].T]);
   }
   end = time;
   
   
-  var linewidth = 8;
+  var linewidth = 1;
   
   var plot = $.plot($graph, 
     [
@@ -159,4 +192,18 @@
   selection: { mode: "xy" }
   });
   
+  
+  }
+  
+  $("#simulate").click(function(){
+
+    for (i in segment) 
+    {
+      segment[i].u = $("#u"+i).val();
+      segment[i].k = $("#k"+i).val();
+    }
+    
+    simulate();
+  });
+ 
 </script>
