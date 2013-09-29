@@ -57,6 +57,11 @@ function view()
     
     out += "</tr>";
   }
+  
+  if (elements.length==0) {
+    out = "<tr class='alert'><td></td><td style='padding-top:50px; padding-bottom:50px'><b>Click on Add element (top-left) to add floor, walls, roof and window elements</b></td><td></td><td></td><td></td><td></td></tr>";
+  }
+  
   $("#elements").html(out);
 
   $("#total_fabric_heat_loss_WK").html(result.total_fabric_heat_loss_WK.toFixed(0));
