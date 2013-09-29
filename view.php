@@ -256,7 +256,7 @@ var elements = [
   model.input.heating_system_efficiency = heating_system_efficiency;
   model.input.fuel_cost = fuel_cost;
 
-  model.input.mean_internal_temperature = [16,18,18,18,18,18,18,18,18,18,18,18];
+  model.input.mean_internal_temperature = [18,18,18,18,18,18,18,18,18,18,18,18];
   
   // Initit
   var result = model.calc();
