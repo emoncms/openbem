@@ -3,9 +3,9 @@
 ?>
 
 <!--[if IE]><script language="javascript" type="text/javascript" src="<?php echo $path;?>Lib/flot/excanvas.min.js"></script><![endif]-->
-<script language="javascript" type="text/javascript" src="<?php echo $path;?>Lib/flot/jquery.flot.min.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $path;?>Lib/flot/jquery.flot.time.min.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $path; ?>Lib/flot/jquery.flot.selection.min.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $path;?>Lib/flot/jquery.flot.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $path;?>Lib/flot/jquery.flot.time.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $path; ?>Lib/flot/jquery.flot.selection.js"></script>
 
 <script language="javascript" type="text/javascript" src="<?php echo $path; ?>Modules/feed/feed.js"></script>
 
@@ -32,6 +32,8 @@
 <h3>Total W/K heat loss: <span id="total_wk"> </span> W/K</h3>
 <h3>Total thermal capacity: <span id="total_thermal_capacity"></span> J/K</h3>
 
+<h3><span id="error"></span></h3>
+
 <table class="table">
 <tr><th>Segment</th><th>W/K</th><th>Thermal capacity</th></tr>
 <tbody id="segment_config"></tbody>
@@ -45,9 +47,9 @@
   var path = "<?php echo $path; ?>";
   var apikey = "";
   
-  var timeWindow = (3600000*28*1);	// Initial time window
+  var timeWindow = (3600000*24*4);	// Initial time window
   var start = +new Date - timeWindow;	// Get start time
-  var end = +new Date + 1000*1000;				        // Get end time
+  var end = +new Date +1000*1000;				        // Get end time
   
   var $graph_bound = $('#graph_bound');
   var $graph = $('#graph').width($graph_bound.width()).height($('#graph_bound').height());
@@ -59,11 +61,17 @@
   
   var outside_data = feed.get_data(14972,start,end,0);
   var power_data = feed.get_data(16012,start,end,0);
+  var solar_data = feed.get_data(364,start,end,0);
+  
+  var simlast = 0;
+  var lasterror = 1000000;
+  var error = 0;
 
+  var su = 150, sk = 2000000;
   var segment = [
-    {u:100,k:4000000},
-    {u:500,k:2000000},
-    {u:800,k:1000000}
+    {u:130,k:11000000},
+    {u:340,k:2500000},
+    {u:712,k:600000}
   ];
   
   var segment_config_html = "";
@@ -82,17 +90,18 @@
   
   function simulate()
   {  
-  // INITIAL CONDITIONS
-  
+  // INITIAL CONDITIONS  
   var sum_u = 0;
   var sum_k = 0;
+  
+  var d = (lab_back_left[0][1] - outside_data[0][1]) / (segment.length+1);
   for (i in segment) 
   {
-    segment[i].T = lab_back_left[0][1];
+    segment[i].T = outside_data[0][1]+1 + i*0.8;
     segment[i].E = segment[i].T * segment[i].k;
     segment[i].H = 0;
     sum_u += 1 / segment[i].u;
-    sum_k += 1*segment[i].k;
+    sum_k += 1*segment[i].k
   }
   
   var total_wk = 1 / sum_u;
@@ -103,11 +112,15 @@
   
   var sim = [];
   
+  var otsum = 0;
+  var psum = 0;
+  
   for (var z=1; z<outside_data.length; z++)
   {
     var lasttime = outside_data[z-1][0];
     var time = outside_data[z][0];
     var outside = outside_data[z][1];
+    otsum += outside;
     
     var step = (time - lasttime) / 1000.0;
 
@@ -126,24 +139,82 @@
     
     heatinput = power_data[mid][1];
     
+    
+    var spos = 0;
+    var epos = solar_data.length-1;
+    var mid = 0;
+    
+    for (var n=0; n<20; n++)
+    {
+      mid = spos + Math.round((epos - spos ) / 2);
+      if (solar_data[mid][0] > time+3600*1000*1) epos = mid; else spos = mid;
+    }
+    
+    heatinput += solar_data[mid][1]*0.6;
+    
+    psum += heatinput;
     // --------------------------------------------
     
-    segment[2].H = heatinput - ((segment[2].T - segment[1].T) * segment[2].u);
-    segment[1].H = ((segment[2].T - segment[1].T) * segment[2].u) - ((segment[1].T - segment[0].T) * segment[1].u);
-    segment[0].H = ((segment[1].T - segment[0].T) * segment[1].u) - ((segment[0].T - outside) * segment[0].u);
+    //---------------------------------------------
+    // Binary search power closest power datapoints
     
-    segment[2].E += segment[2].H * step;
-    segment[1].E += segment[1].H * step;
-    segment[0].E += segment[0].H * step;
+    var spos = 0;
+    var epos = lab_back_left.length-1;
+    var mid = 0;
     
-    segment[2].T = segment[2].E / segment[2].k;
-    segment[1].T = segment[1].E / segment[1].k;
-    segment[0].T = segment[0].E / segment[0].k;
+    for (var n=0; n<20; n++)
+    {
+      mid = spos + Math.round((epos - spos ) / 2);
+      if (lab_back_left[mid][0] > time) epos = mid; else spos = mid;
+    }
+    
+    var ref = lab_back_left[mid][1];
+    // --------------------------------------------
+    
+    var len = segment.length-1;
 
-    sim.push([time,segment[2].T]);
+    
+    // To provide the option of simulating with one or two segments we have different cases
+    
+    // if there is only one segment then its gaining heat from the heatsource directly and loosing heat to the outside
+    if (segment.length==1)
+    {
+      segment[0].H = heatinput - ((segment[0].T - outside) * segment[0].u);
+    } 
+   
+    if (segment.length>1)
+    {
+      segment[len].H = heatinput - ((segment[len].T - segment[len-1].T) * segment[len].u);
+      segment[0].H = ((segment[1].T - segment[0].T) * segment[1].u) - ((segment[0].T - outside) * segment[0].u);
+    }
+     
+    if (segment.length>2)
+    {
+      for (var i=1; i<len; i++)
+      {
+        segment[i].H = ((segment[i+1].T - segment[i].T) * segment[i+1].u) - ((segment[i].T - segment[i-1].T) * segment[i].u);
+      }
+    }
+    
+    for (i in segment) 
+    {
+      segment[i].E += segment[i].H * step;
+      segment[i].T = segment[i].E / segment[i].k;
+    }
+    
+    sim.push([time,segment[segment.length-1].T]);
+    
+    error += Math.abs(segment[segment.length-1].T - ref); //* (segment[segment.length-1].T - ref))
   }
   
+  simlast = segment[segment.length-1].T;
+  
+  var avexternal = otsum/outside_data.length-1;
+  var avpower = psum/outside_data.length-1;
+  
+  
   // PREDICTION !!
+  
   var prediction = [];
   var lpv = power_data[power_data.length-1][1];
   var time = outside_data[outside_data.length-1][0];
@@ -154,19 +225,37 @@
   {
     time += (step*1000);
 
-    segment[2].H = lpv - ((segment[2].T - segment[1].T) * segment[2].u);
-    segment[1].H = ((segment[2].T - segment[1].T) * segment[2].u) - ((segment[1].T - segment[0].T) * segment[1].u);
-    segment[0].H = ((segment[1].T - segment[0].T) * segment[1].u) - ((segment[0].T - outside) * segment[0].u);
+    var len = segment.length-1;
     
-    segment[2].E += segment[2].H * step;
-    segment[1].E += segment[1].H * step;
-    segment[0].E += segment[0].H * step;
+    // To provide the option of simulating with one or two segments we have different cases
     
-    segment[2].T = segment[2].E / segment[2].k;
-    segment[1].T = segment[1].E / segment[1].k;
-    segment[0].T = segment[0].E / segment[0].k;
+    // if there is only one segment then its gaining heat from the heatsource directly and loosing heat to the outside
+    if (segment.length==1)
+    {
+      segment[0].H = lpv - ((segment[0].T - outside) * segment[0].u);
+    } 
     
-    prediction.push([time,segment[2].T]);
+    if (segment.length>1)
+    {
+      segment[len].H = lpv - ((segment[len].T - segment[len-1].T) * segment[len].u);
+      segment[0].H = ((segment[1].T - segment[0].T) * segment[1].u) - ((segment[0].T - outside) * segment[0].u);
+    }
+    
+    if (segment.length>2)
+    {
+      for (var i=1; i<len; i++)
+      {
+        segment[i].H = ((segment[i+1].T - segment[i].T) * segment[i+1].u) - ((segment[i].T - segment[i-1].T) * segment[i].u);
+      }
+    }
+    
+    for (i in segment) 
+    {
+      segment[i].E += segment[i].H * step;
+      segment[i].T = segment[i].E / segment[i].k;
+    }
+    
+    prediction.push([time,segment[segment.length-1].T]);
   }
   end = time;
   
@@ -177,11 +266,12 @@
     [
       {data: outside_data, lines: { show: true, fill: false }, color: "rgba(0,0,255,0.8)"},
       {data: power_data, yaxis: 2, lines: { show: true, fill: true, fillColor: "rgba(255,150,0,0.2)"}, color: "rgba(255,150,0,0.2)"},
-      
+      {data: solar_data, yaxis: 2, lines: { show: true, fill: false, fillColor: "rgba(255,150,0,0.2)"}, color: "rgba(255,255,0,0.2)"},
+        
       {data: lab_back_left, lines: { show: true, fill: false, lineWidth:linewidth}, color: "rgba(255,0,0,0.3)"},
       {data: lab_back_right, lines: { show: true, fill: false, lineWidth:linewidth}, color: "rgba(255,0,0,0.3)"},
       {data: lab_front_left, lines: { show: true, fill: false, lineWidth:linewidth}, color: "rgba(255,0,0,0.3)"},
-      {data: lab_back_right, lines: { show: true, fill: false, lineWidth:linewidth}, color: "rgba(255,0,0,0.3)"},
+      {data: lab_front_right, lines: { show: true, fill: false, lineWidth:linewidth}, color: "rgba(255,0,0,0.3)"},
       
       {data: sim, lines: { show: true, fill: false, lineWidth: 3}, color: "rgba(0,0,0,1)"},
       {data: prediction, lines: { show: true, fill: false, lineWidth: 3}, color: "rgba(0,0,0,0.5)"}
@@ -192,7 +282,7 @@
   selection: { mode: "xy" }
   });
   
-  
+  $("#error").html("Model is within an average of: "+(error/ outside_data.length).toFixed(3)+"C of measured temperature");
   }
   
   $("#simulate").click(function(){
@@ -202,8 +292,29 @@
       segment[i].u = $("#u"+i).val();
       segment[i].k = $("#k"+i).val();
     }
-    
+    error = 0;
     simulate();
   });
+
+
+//  var updater = setInterval(update, 500);
  
+  function update()
+  {
+    var tmp = lab_front_left[lab_front_left.length-1][1];
+    //segment[0].u += (simlast - tmp)*Math.abs(simlast - tmp);
+    //segment[1].u += (simlast - tmp)*Math.abs(simlast - tmp);
+    
+    if (lasterror-error>0)  segment[0].k += error*10; else segment[0].k -= error*10;
+    //if (lasterror-error>0)  segment[1].k += error*10; else segment[1].k -= error*10;
+    console.log(error);
+    
+    lasterror = error;
+    error = 0;
+    simulate();
+  }
+
+  
+  
+  
 </script>

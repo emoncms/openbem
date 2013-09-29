@@ -22,7 +22,7 @@ function openbem_controller()
   {
     if ($route->action == 'view') $result = view("Modules/openbem/view.php",array());
     if ($route->action == 'graph') $result = view("Modules/openbem/graph.php",array());
-    //$result = view("Modules/openbem/internaltemp.php",array());
+    if ($route->action == 'daily') $result = view("Modules/openbem/daily.php",array());
   }
 
   return array('content'=>$result);

@@ -3,7 +3,7 @@
 var element_library = {
 
   'roof0001': {type:'Roof', description:"Uninsulated loft", uvalue: 2.00, kvalue:9.0},
-  'roof0002': {type:'Roof', description:"Loft with 100mm insulation", uvalue: 0.30, kvalue:9.0},
+  'roof0002': {type:'Roof', description:"Loft with 100mm insulation", uvalue: 0.25, kvalue:9.0},
   'roof0003': {type:'Roof', description:"Room in the roof 200mm", uvalue: 0.2, kvalue:9.0},
   'roof0004': {type:'Roof', description:"Loft with 250mm insulation", uvalue: 0.16, kvalue:9.0},
   'roof0005': {type:'Roof', description:"Superinsulated 250mm insulation", uvalue: 0.14, kvalue:9.0},
@@ -19,7 +19,7 @@ var element_library = {
   'wall0007': {type:'Wall', description:"Uninsulated 600mm stone wall finished with 'plaster on laths'", uvalue: 1.1, kvalue:190.0},
   'wall0008': {type:'Wall', description:"Uninsulated 600mm stone wall finished with 'plaster on the hard'", uvalue: 1.6, kvalue:190.0},
   'wall0009': {type:'Wall', description:"Uninsulated 600mm stone wall finished with plasterboard", uvalue: 0.9, kvalue:190.0},
-  
+  'wall0010': {type:'Wall', description:"Uninsulated 600mm stone wall finished with 'plaster on the hard' 1.3", uvalue: 1.1, kvalue:350.0},
   
   'floor0001': {type:'Floor', description:"Timber floor uninsulated", uvalue: 0.83, kvalue:20.0},
   'floor0002': {type:'Floor', description:"Timber floor with 150mm insulation", uvalue: 0.25, kvalue:20.0},
@@ -28,6 +28,7 @@ var element_library = {
   'floor0005': {type:'Floor', description:"Solid floor with 100mm insulation", uvalue: 0.25, kvalue:110.0},
   'floor0006': {type:'Floor', description:"Solid floor, Superinsulated 200mm insulation", uvalue: 0.15, kvalue:110.0},
 
+  'floor0007': {type:'Floor', description:"Solid floor uninsulated with carpet", uvalue: 0.5, kvalue:110.0},
 
 
   //--------------------------------------------------------------------------------------------------------------------------

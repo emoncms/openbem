@@ -46,3 +46,14 @@ var table_u2 = [
 [8.3,8.0,7.9,6.9,6.4,6.1,5.8,5.8,6.5,7.1,7.5,8.0],
 [8.9,8.6,8.5,7.4,6.9,6.5,6.2,6.2,7.0,7.6,8.0,8.6],
 [6.0,5.7,5.7,5.0,4.6,4.4,4.2,4.2,4.7,5.1,5.4,5.7]];
+
+
+var ratings = [
+  {start:92, end:100, letter:'A', color:"#009a44"},
+  {start:81, end:91, letter:'B', color:"#2dca73"},
+  {start:69, end:80, letter:'C', color:"#b8f351"},
+  {start:55, end:68, letter:'D', color:"#f5ec00"},
+  {start:39, end:54, letter:'E', color:"#ffac4d"},
+  {start:21, end:38, letter:'F', color:"#fd8130"},
+  {start:1, end:20, letter:'G', color:"#fd001a"}
+];
