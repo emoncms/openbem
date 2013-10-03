@@ -3,9 +3,11 @@ function load_controller()
 
   $("#air_change_rate").keyup(function()
   {
-    model.input.airchanges = $(this).val();
+    inputdata.airchanges = $(this).val();
+    model.set_inputdata(inputdata);
     result = model.calc();
     view();
+    openbem.save(building,inputdata);
   });
 
   // Elements table events
@@ -22,11 +24,12 @@ function load_controller()
   // Delete's the element
   $("#elements").on("click",".icon-trash",function(){
     var id = $(this).attr('eid');
-    elements.splice(id,1);
+    inputdata.elements.splice(id,1);
     
-    model.input.elements = elements;
+    model.set_inputdata(inputdata);
     result = model.calc();
     view();
+    openbem.save(building,inputdata);
   });
   
   // Show edit button only on hover
@@ -45,9 +48,9 @@ function load_controller()
 
     var iid = $(this).attr('iid');
     
-    if (iid=='heating_system_efficiency') $("#heating_system_efficiency").html("<input type='text' value='"+heating_system_efficiency+"' />");
+    if (iid=='heating_system_efficiency') $("#heating_system_efficiency").html("<input type='text' value='"+inputdata.heating_system_efficiency+"' />");
     
-    if (iid=='fuel_cost') $("#fuel_cost").html("<input type='text' value='"+fuel_cost+"' />");
+    if (iid=='fuel_cost') $("#fuel_cost").html("<input type='text' value='"+inputdata.fuel_cost+"' />");
   });
   
   $("#annual").on("click",".icon-ok",function(){
@@ -58,21 +61,20 @@ function load_controller()
     
     if (iid=='heating_system_efficiency')
     {
-      heating_system_efficiency = $("#heating_system_efficiency input").val();
-      $("#heating_system_efficiency").html(heating_system_efficiency);
-      model.input.heating_system_efficiency = heating_system_efficiency;
+      inputdata.heating_system_efficiency = $("#heating_system_efficiency input").val();
+      $("#heating_system_efficiency").html(inputdata.heating_system_efficiency);
     }
     
     if (iid=='fuel_cost')
     {
-      fuel_cost = $("#fuel_cost input").val();
-      $("#fuel_cost").html(fuel_cost);
-      model.input.fuel_cost = fuel_cost;
+      inputdata.fuel_cost = $("#fuel_cost input").val();
+      $("#fuel_cost").html(inputdata.fuel_cost);
     }
     
+    model.set_inputdata(inputdata);
     result = model.calc();
     view();
-
+    openbem.save(building,inputdata);
   });
   
   $("#monthly").on("keyup",'input', function() {
@@ -80,10 +82,12 @@ function load_controller()
       var m = $(this).attr('month');
       var val = $(this).val();
       
-      model.input.mean_internal_temperature[m] = parseFloat(val);
+      inputdata.mean_internal_temperature[m] = parseFloat(val);
       
+      model.set_inputdata(inputdata);
       result = model.calc();
       view();
+      openbem.save(building,inputdata);
   });
 
 }

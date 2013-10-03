@@ -12,17 +12,17 @@ http://openenergymonitor.org
 */
 
 global $path; ?>
-<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/element_library.js"></script>
 
-<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/solar.js"></script>
-<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/windowgains.js"></script>
-<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/datasets.js"></script>
+<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/interface/openbem.js"></script>
+<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/datasets/element_library.js"></script>
 
+<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/model/solar.js"></script>
+<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/model/windowgains.js"></script>
+<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/model/model.js"></script>
 
-<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/view/model.js"></script>
-<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/view/view.js"></script>
-<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/view/controller.js"></script>
-<br>
+<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/datasets/datasets.js"></script>
+<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/view/view.js"></script>
+<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/controllers/controller.js"></script>
 
 <style>
   #element-totals td:nth-of-type(1) {  text-align: right; }
@@ -50,10 +50,9 @@ global $path; ?>
 
 <ul class="nav nav-pills">
   <li class="active">
-    <a href="#">OpenBEM</a>
+    <a href="#">Simple Monthly</a>
   </li>
-  <li><a href="graph">Simulation</a></li>
-  <li><a href="daily">Daily average</a></li>
+  <li><a href="<?php echo $path; ?>openbem/dynamic/<?php echo $building; ?>">Dynamic Coheating</a></li>
 </ul>
 
 
@@ -221,44 +220,68 @@ global $path; ?>
     
 <script>
 
-var elements = [
-
-  {name:"Main Floor", lib: 'floor0007', area: (6*3.5)},
-  {name:"Front wall", lib: 'wall0010', area: (6*1.9)},
-  {name:"Back wall", lib: 'wall0010', area: (6*1.9)},
-
-  // 1.45m  
-  {name:"Left wall", lib: 'wall0010', area: (3.5*1.9) + 2.54},
-  {name:"Right wall", lib: 'wall0004', area: (3.5*1.9) + 2.54},
+  var building = <?php echo $building; ?>;
+  console.log(building);
   
-  // hyp 2.27m 
-  {name:"Roof", lib: 'roof0002', area: 2*(2.27*6)},
+  var path = "<?php echo $path; ?>";
   
-  {name:"Front window", lib: 'window0121', area: (0.87*0.9), orientation: 3, overshading: 3},
-  {name:"Roof window Front", lib: 'window0001', area: (2.45*0.42), orientation: 3, overshading: 3},
-  {name:"Roof window Back", lib: 'window0001', area: (2.45*0.42), orientation: 3, overshading: 2},  
+  var inputdata = openbem.get(building);
   
-];
-
-// End of input data
-
-//-----------------------------------------------------------------------------------------------------------------
-
-// Start of model calcs
-
-  fuel_cost = 0.05;
-  heating_system_efficiency = 82;
-
-  model.input.region = 13;
-  model.input.airchanges = 1;
-  model.input.volume = ((3.5*1.9) + 2.54) * 6.0;
-  model.input.elements = elements;
-  model.input.heating_system_efficiency = heating_system_efficiency;
-  model.input.fuel_cost = fuel_cost;
-
-  model.input.mean_internal_temperature = [18,18,18,18,18,18,18,18,18,18,18,18];
+  // inputdata = 0;
   
-  // Initit
+  if (inputdata==0)
+  {
+    // Example data
+    if (building==1)
+    {
+      inputdata = {
+      
+        region: 13,
+        airchanges: 1,
+        volume: ((3.5*1.9) + 2.54) * 6.0,
+      
+        fuel_cost: 0.05,
+        heating_system_efficiency: 82,
+        mean_internal_temperature: [18,18,18,18,18,18,18,18,18,18,18,18],
+        
+        elements: [
+
+          {name:"Main Floor", lib: 'floor0007', area: (6*3.5)},
+          {name:"Front wall", lib: 'wall0010', area: (6*1.9)},
+          {name:"Back wall", lib: 'wall0010', area: (6*1.9)},
+
+          // 1.45m  
+          {name:"Left wall", lib: 'wall0010', area: (3.5*1.9) + 2.54},
+          {name:"Right wall", lib: 'wall0004', area: (3.5*1.9) + 2.54},
+          
+          // hyp 2.27m 
+          {name:"Roof", lib: 'roof0002', area: 2*(2.27*6)},
+          
+          {name:"Front window", lib: 'window0121', area: (0.87*0.9), orientation: 3, overshading: 3},
+          {name:"Roof window Front", lib: 'window0001', area: (2.45*0.42), orientation: 3, overshading: 3},
+          {name:"Roof window Back", lib: 'window0001', area: (2.45*0.42), orientation: 3, overshading: 2},  
+        ]
+      };
+    }
+    else
+    {
+      inputdata = {
+        region: 13,
+        airchanges: 1,
+        volume: ((3.5*1.9) + 2.54) * 6.0,
+        fuel_cost: 0.05,
+        heating_system_efficiency: 100,
+        mean_internal_temperature: [18,18,18,18,18,18,18,18,18,18,18,18],
+        elements: []
+      };
+    }
+  }
+
+  // End of input data
+
+  //-----------------------------------------------------------------------------------------------------------------
+  
+  model.set_inputdata(inputdata);
   var result = model.calc();
   view();
   
@@ -266,4 +289,4 @@ var elements = [
     
 </script>
 
-<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/view/modal_controller.js"></script>
+<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/controllers/modal_controller.js"></script>

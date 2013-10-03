@@ -11,6 +11,11 @@ var model =
     elements: []
   },
   
+  set_inputdata: function(inputdata)
+  {
+    this.input = inputdata;
+  },
+  
   calc: function()
   { 
     var infiltration_WK = model.input.airchanges * model.input.volume * 0.33;

@@ -15,15 +15,95 @@ defined('EMONCMS_EXEC') or die('Restricted access');
 
 function openbem_controller()
 {
-  global $session, $route;
+  global $session, $route, $mysqli;
   $result = false;
-
+  $submenu = false;
+  
+  require "Modules/openbem/openbem_model.php";
+  $openbem = new OpenBEM($mysqli);
+  
   if ($route->format == 'html')
   {
-    if ($route->action == 'view') $result = view("Modules/openbem/view.php",array());
-    if ($route->action == 'graph') $result = view("Modules/openbem/graph.php",array());
-    if ($route->action == 'daily') $result = view("Modules/openbem/daily.php",array());
+  
+    $submenu = view("Modules/openbem/greymenu.php",array());
+  
+    if ($route->action == 'monthly') {
+      if (!$route->subaction) $route->subaction = 1;
+      $result = view("Modules/openbem/SimpleMonthly/monthly.php",array('building'=>$route->subaction));
+    }
+    
+    
+    if ($route->action == 'dynamic') {
+      if (!$route->subaction) $route->subaction = 1;
+      $result = view("Modules/openbem/DynamicCoHeating/dynamic.php",array('building'=>$route->subaction));
+    }
+    
   }
 
-  return array('content'=>$result);
+  if ($route->format == 'json')
+  {  
+  
+    if ($route->action == 'savemonthly')
+    {
+      $result = false;
+      $data = null;
+      
+      // From post or get
+      if (isset($_POST['data'])) $data = $_POST['data'];
+      if (!isset($_POST['data']) && isset($_GET['data'])) $data = $_GET['data'];
+      
+      // if there is indeed data to be saved
+      if ($data && $data!=null) {
+
+        // and we have a write session then save it to db
+        if ($session['write']) {
+          $result = $openbem->save_monthly($session['userid'],get('building'),$data);
+        } else {
+          // ELSE Save in session data
+          // $result = true;
+          // $data = preg_replace('/[^\w\s-.",:{}\[\]]/','',$data);
+          // $_SESSION['sapdata'] = $data;
+        }
+
+      }
+    }
+    
+    if ($route->action == 'savedynamic')
+    {
+      $result = false;
+      $data = null;
+      
+      // From post or get
+      if (isset($_POST['data'])) $data = $_POST['data'];
+      if (!isset($_POST['data']) && isset($_GET['data'])) $data = $_GET['data'];
+      
+      // if there is indeed data to be saved
+      if ($data && $data!=null) {
+
+        // and we have a write session then save it to db
+        if ($session['write']) {
+          $result = $openbem->save_dynamic($session['userid'],get('building'),$data);
+        } else {
+          // ELSE Save in session data
+          // $result = true;
+          // $data = preg_replace('/[^\w\s-.",:{}\[\]]/','',$data);
+          // $_SESSION['sapdata'] = $data;
+        }
+
+      }
+    }
+    
+    if ($route->action == 'getmonthly' && $session['write'])
+    {
+      $result = json_decode($openbem->get_monthly($session['userid'], get('building'))); 
+    } 
+    
+    if ($route->action == 'getdynamic' && $session['write'])
+    {
+      $result = json_decode($openbem->get_dynamic($session['userid'], get('building'))); 
+    } 
+    
+  }
+
+  return array('content'=>$result,'submenu'=>$submenu);
 }

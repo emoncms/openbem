@@ -6,7 +6,7 @@
     var id = $(this).attr('eid');
 
     // Set the element type
-    var element = elements[id].lib;
+    var element = inputdata.elements[id].lib;
     var type = element_library[element].type;
     $("#element-type").val(type);
     
@@ -26,8 +26,8 @@
     $("#element-selector").html(out);
    
     // Set name and area
-    $("#element-name").val(elements[id].name);
-    $("#element-area").val(elements[id].area);    
+    $("#element-name").val(inputdata.elements[id].name);
+    $("#element-area").val(inputdata.elements[id].area);    
     
     $("#myModal").attr('eid',id);
     
@@ -68,11 +68,11 @@
     } 
     else
     {
-      elements.push({name: name, lib: element_id, area: area});
-      model.input.elements = elements;
+      inputdata.elements.push({name: name, lib: element_id, area: area});
+      model.set_inputdata(inputdata);
       result = model.calc();
       view();
-
+      openbem.save(building,inputdata);
       $("#myModal").modal('hide');
     }
   });
@@ -98,16 +98,16 @@
     } 
     else
     {
-      elements[id] = { 
+      inputdata.elements[id] = { 
         lib: element_id,
         name: name,
         area: area
       };
       
-      model.input.elements = elements;
+      model.set_inputdata(inputdata);
       result = model.calc();
       view();
-      
+      openbem.save(building,inputdata); 
       $("#element-add").show();
       $("#element-edit").hide();    
       $("#myModalLabel").html("Add building element");

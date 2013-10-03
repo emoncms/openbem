@@ -1,19 +1,19 @@
 
 function view()
 {
-  var element_table_mode = 'kvalue';
-  $("#air_change_rate").val(model.input.airchanges);
+  var element_table_mode = 'uvalue';
+  $("#air_change_rate").val(inputdata.airchanges);
   
   var out = "";
-  for (i in elements)
+  for (i in inputdata.elements)
   {
-    var id = elements[i].lib;
+    var id = inputdata.elements[i].lib;
     out += "<tr>";
     
     // Only draws type first time it gets that element type in the list
     // makes for nicer looking layout, relies upon ordered elements list
     if (i>0) {
-      var lasttype = element_library[elements[i-1].lib].type;
+      var lasttype = element_library[inputdata.elements[i-1].lib].type;
       if (element_library[id].type!=lasttype) {
         out += "<td><b>"+element_library[id].type+"</b></td>";
       } else {
@@ -23,7 +23,7 @@ function view()
       out += "<td><b>"+element_library[id].type+"</b></td>";
     }
     
-    out += "<td><b>"+elements[i].name+"</b><br><i>";
+    out += "<td><b>"+inputdata.elements[i].name+"</b><br><i>";
     for (z in element_library[id])
     {
       if (z=='description') out += element_library[id][z]+", ";
@@ -35,16 +35,16 @@ function view()
     }
     out +="</i></td>";
     
-    out += "<td>"+elements[i].area.toFixed(1)+"m<sup>2</sup></td>";
+    out += "<td>"+inputdata.elements[i].area.toFixed(1)+"m<sup>2</sup></td>";
     
     if (element_table_mode == 'uvalue')
     {
       out += "<td>"+element_library[id].uvalue+"</td>";
-      out += "<td>"+(element_library[id].uvalue*elements[i].area).toFixed(1)+" W/K</td>";
+      out += "<td>"+(element_library[id].uvalue*inputdata.elements[i].area).toFixed(1)+" W/K</td>";
     } else {
       if (element_library[id].kvalue) {
         out += "<td>"+element_library[id].kvalue+"</td>";
-        out += "<td>"+(element_library[id].kvalue*elements[i].area).toFixed(0)+" kJ/K</td>";
+        out += "<td>"+(element_library[id].kvalue*inputdata.elements[i].area).toFixed(0)+" kJ/K</td>";
       } else {
         out += "<td>n/a</td><td>n/a</td>";
       }
@@ -58,7 +58,7 @@ function view()
     out += "</tr>";
   }
   
-  if (elements.length==0) {
+  if (inputdata.elements.length==0) {
     out = "<tr class='alert'><td></td><td style='padding-top:50px; padding-bottom:50px'><b>Click on Add element (top-left) to add floor, walls, roof and window elements</b></td><td></td><td></td><td></td><td></td></tr>";
   }
   
@@ -88,7 +88,7 @@ function view()
   for (var m=0; m<12; m++)
   {
     // View outputs 
-    external_temperature_html += "<td>"+table_u1[model.input.region][m].toFixed(1)+"C</td>";
+    external_temperature_html += "<td>"+table_u1[inputdata.region][m].toFixed(1)+"C</td>";
     
     if (!editmode) internal_temperature_html += "<td>"+result.mean_internal_temperature[m].toFixed(1)+"C</td>";
     
@@ -111,8 +111,8 @@ function view()
   $("#internal_gains").html("<tr>"+internal_gains_html+"</tr>");
   $("#heating_system_demand").html("<tr>"+heating_system_demand_html+"<td></td></tr>");
 
-    $("#heating_system_efficiency").html(heating_system_efficiency);
-    $("#fuel_cost").html(fuel_cost);
+    $("#heating_system_efficiency").html(inputdata.heating_system_efficiency);
+    $("#fuel_cost").html(inputdata.fuel_cost);
 
   $("#annual_heating_demand").html(result.annual_heating_demand.toFixed(0));
   $("#annual_fuel_input").html(result.annual_fuel_input.toFixed(0));
