@@ -63,9 +63,10 @@
 
 <div class="input-prepend input-append">
   <span class="add-on" style="width:90px"> scale by: </span>
-  <input type="text" style="width:80px"/>
+  <input id="solar_scale" type="text" style="width:65px"/>
   <span class="add-on" style="width:90px"> offset by: </span>
-  <input type="text" style="width:90px"/>
+  <input id="solar_offset" type="text" style="width:65px"/>
+  <button id="solar_ok" class="btn" type="button">Ok</button>
 </div><br>
 
 <div class="input-prepend">
@@ -76,11 +77,15 @@
 <p>Other feeds (comma seperated feed id's):</p>
 
 <div class="input-append">
-<input id="other_feeds"  id="appendedInputButton" type="text" style="width:340px">
+<input id="other_feeds"  id="appendedInputButton" type="text" style="width:345px">
 <button id="other_feeds_ok" class="btn" type="button">Ok</button>
-</div>
+</div><br>
 
-
+<div class="input-prepend input-append">
+  <span class="add-on" style="width:180px; text-align:right;" >Time Window (hours): </span>
+  <input type="text" id="timewindow" style="width:155px" />
+  <button id="timewindow_ok" class="btn" type="button">Ok</button>
+</div><br>
 
 <script >
 
@@ -127,24 +132,31 @@
   var solar_feed_data = feed.get_data(settings.solarfeed,start,end,0);
   var external_feed_data = feed.get_data(settings.externalfeed,start,end,0);
   var internal_feed_data = feed.get_data(settings.internalfeed,start,end,0);
+  
+  var segment_config_html = "";
+    
+  for (i in segment) 
+  {
+    segment_config_html += "<tr><td>"+i+"</td>";
+    segment_config_html += "<td><input id='u"+i+"' type='text' value='"+segment[i].u+"'/ ></td>";
+    segment_config_html += "<td><input id='k"+i+"' type='text' value='"+segment[i].k+"'/ ></td>";
+    segment_config_html += "<td><input id='t"+i+"' type='text' value='"+segment[i].T+"'/ ></td></tr>";
+  }
+
+  $(".numofsegments").html(segment.length-1);
+  $("#segment_config").html(segment_config_html);
  
   simulate();  
   
   function simulate()
   {  
-    var segment_config_html = "";
-  
     for (i in segment) 
     {
-      segment_config_html += "<tr><td>"+i+"</td>";
-      segment_config_html += "<td><input id='u"+i+"' type='text' value='"+segment[i].u+"'/ ></td>";
-      segment_config_html += "<td><input id='k"+i+"' type='text' value='"+segment[i].k+"'/ ></td>";
-      segment_config_html += "<td><input id='t"+i+"' type='text' value='"+segment[i].T+"'/ ></td></tr>";
+      segment[i].u = $("#u"+i).val();
+      segment[i].k = $("#k"+i).val();
+      segment[i].T = $("#t"+i).val();
     }
-
-    $(".numofsegments").html(segment.length-1);
-    $("#segment_config").html(segment_config_html);
-  
+    
     // INITIAL CONDITIONS  
     var sum_u = 0;
     var sum_k = 0;
@@ -277,6 +289,15 @@
   $("#add-element").click(function(){
     if (segment.length) { 
       segment.push(segment[segment.length-1]);
+      
+      var i = segment.length-1;
+      segment_config_html = "";
+      segment_config_html += "<tr><td>"+i+"</td>";
+      segment_config_html += "<td><input id='u"+i+"' type='text' value='"+segment[i].u+"'/ ></td>";
+      segment_config_html += "<td><input id='k"+i+"' type='text' value='"+segment[i].k+"'/ ></td>";
+      segment_config_html += "<td><input id='t"+i+"' type='text' value='"+segment[i].T+"'/ ></td></tr>";
+      
+      $('#segment_config').append(segment_config_html);
       simulate();
     }
   });
@@ -285,6 +306,8 @@
   
     if (segment.length>1) {
       segment.splice(segment.length-1,1);
+      $('#segment_config tr:last').remove();
+
       simulate();
     }
   });
@@ -323,7 +346,11 @@
   $("#solar_feed").html(out);
   
   $("#other_feeds").val(settings.otherfeeds.join(","));
-  
+  $("#timewindow").val(settings.timewindow/3600000);
+
+  $("#solar_scale").val(settings.solarfactor);
+  $("#solar_offset").val(settings.solaroffset);
+    
   $("#other_feeds_ok").click(function(){
   
     var str = $("#other_feeds").val();
@@ -339,6 +366,25 @@
       }
     }
     $("#other_feeds").val(settings.otherfeeds.join(","));
+    simulate();
+  });
+  
+  $("#timewindow_ok").click(function(){
+  
+    settings.timewindow = $("#timewindow").val()*3600000;
+    start = +new Date - settings.timewindow;	// Get start time
+    
+    power_feed_data = feed.get_data(settings.powerfeed,start,end,0);
+    solar_feed_data = feed.get_data(settings.solarfeed,start,end,0);
+    external_feed_data = feed.get_data(settings.externalfeed,start,end,0);
+    internal_feed_data = feed.get_data(settings.internalfeed,start,end,0);
+  
+    simulate();
+  });
+  
+  $("#solar_ok").click(function(){
+    settings.solarfactor = parseFloat($("#solar_scale").val());
+    settings.solaroffset = parseFloat($("#solar_offset").val());
     simulate();
   });
   
@@ -385,6 +431,13 @@
   });
   
   $("#save").click(function(){
+    for (i in segment) 
+    {
+      segment[i].u = $("#u"+i).val();
+      segment[i].k = $("#k"+i).val();
+      segment[i].T = $("#t"+i).val();
+    }
+  
     openbem.savedynamic(building,settings); 
   });
 
