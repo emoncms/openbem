@@ -22,7 +22,7 @@ function openbem_controller()
   require "Modules/openbem/openbem_model.php";
   $openbem = new OpenBEM($mysqli);
   
-  if ($route->format == 'html')
+  if ($route->format == 'html' && $session['write'])
   {
   
     $submenu = view("Modules/openbem/greymenu.php",array());
@@ -40,7 +40,7 @@ function openbem_controller()
     
   }
 
-  if ($route->format == 'json')
+  if ($route->format == 'json' && $session['write'])
   {  
   
     if ($route->action == 'savemonthly')
