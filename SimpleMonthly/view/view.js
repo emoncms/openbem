@@ -1,8 +1,11 @@
 
 function view()
 {
+  $("#regions").val(inputdata.region);
+
   var element_table_mode = 'uvalue';
   $("#air_change_rate").val(inputdata.airchanges);
+  $("#volume").val(inputdata.volume);
   
   var out = "";
   for (i in inputdata.elements)

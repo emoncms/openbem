@@ -59,6 +59,13 @@ global $path; ?>
 <h1>OpenBEM</h1>
 <p>An open source simple building energy model based on SAP 2012</p>
 
+<h3>Region</h3>
+
+<div class="input-prepend">
+  <span class="add-on">Select building location for weather data: </span>
+  <select id="regions"></select>
+</div>
+
 <h3>Ventilation & infiltration</h3>
 
 
@@ -90,12 +97,16 @@ global $path; ?>
 <select>
   <option>Air-tightness test</option>
   <option>Simple air-change slider</option>
-  <option>SAP 2012 Worksheet</option>
+  <option>SAP 2012 Worksheet  (Not added in yet)</option>
 </select>
 
 <span class="add-on" style="margin-left:20px">Air change rate:</span> 
 <input id="air_change_rate" type="text" placeholder="3">
 <span class="add-on">ACH</span> 
+
+<span class="add-on" style="margin-left:20px">Building volume:</span> 
+<input id="volume" type="text" style="width:120px">
+<span class="add-on">m<sup>3</sup></span> 
 </div>
 
 <h3>Building elements</h3>
@@ -137,7 +148,7 @@ global $path; ?>
 <span class="add-on">Mean internal temperature source: </span>
 <select>
   <option>Enter manually</option>
-  <option>SAP 2012 based standard heating schedule</option>
+  <option>SAP 2012 based standard heating schedule (Not added in yet)</option>
 </select>
 </div>
     
@@ -280,6 +291,11 @@ global $path; ?>
   // End of input data
 
   //-----------------------------------------------------------------------------------------------------------------
+  
+  var out = "";
+  for (r in regions) out += "<option value="+r+">"+regions[r]+"</option>";
+  $("#regions").html(out);
+  
   
   model.set_inputdata(inputdata);
   var result = model.calc();

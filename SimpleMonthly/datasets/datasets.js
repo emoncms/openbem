@@ -1,3 +1,29 @@
+
+var regions = [
+"UK average",
+"Thames",
+"South East England",
+"Southern England",
+"South West England",
+"Severn Wales / Severn England", 
+"Midlands", 
+"West Pennines Wales / West Pennines England.", 
+"North West England / South West Scotland", 
+"Borders Scotland / Borders England", 
+"North East England", 
+"East Pennines", 
+"East Anglia", 
+"Wales", 
+"West Scotland", 
+"East Scotland", 
+"North East Scotland", 
+"Highland", 
+"Western Isles", 
+"Orkney", 
+"Shetland", 
+"Northern Ireland"
+];
+
 var table_u1 = [
 [4.5,5.0,6.8,8.7,11.7,14.6,16.9,16.9,14.3,10.8,7.0,4.9],
 [5.1,5.5,7.4,9.3,12.6,15.4,17.8,17.8,15.1,11.6,7.6,5.5],

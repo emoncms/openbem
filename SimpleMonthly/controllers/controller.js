@@ -1,9 +1,28 @@
 function load_controller()
 {
 
+  $("#regions").click(function(){
+  
+    inputdata.region = $(this).val();
+    model.set_inputdata(inputdata);
+    result = model.calc();
+    view();
+    openbem.save(building,inputdata);
+    
+  });
+
   $("#air_change_rate").keyup(function()
   {
     inputdata.airchanges = $(this).val();
+    model.set_inputdata(inputdata);
+    result = model.calc();
+    view();
+    openbem.save(building,inputdata);
+  });
+  
+  $("#volume").keyup(function()
+  {
+    inputdata.volume = $(this).val();
     model.set_inputdata(inputdata);
     result = model.calc();
     view();
