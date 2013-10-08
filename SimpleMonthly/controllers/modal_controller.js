@@ -10,6 +10,14 @@
     var type = element_library[element].type;
     $("#element-type").val(type);
     
+    if (type=='Window') {
+      $("#window_options").show();
+      $("#window_orientation").val(inputdata.elements[id].orientation);
+      $("#window_overshading").val(inputdata.elements[id].overshading);
+    } else {
+      $("#window_options").hide();
+    }
+    
     // Populate and set the element
     var out = "";
     for (z in element_library)
@@ -40,6 +48,13 @@
   $("#element-type").click(function()
   {
     var type = $(this).val();
+
+    if (type=='Window') {
+      $("#window_options").show();
+    } else {
+      $("#window_options").hide();
+    }
+
     var out = "";
     for (z in element_library)
     {
@@ -54,35 +69,7 @@
     var name = $("#element-name").val();
     var area = parseFloat($("#element-area").val()*1);
     
-    if (!element_id)
-    { 
-      alert("Please select an element using the drop down element selector");
-    } 
-    else if (!name) 
-    {
-      alert("Please enter a name for the element such as 'South wall'");
-    } 
-    else if (area<=0 && area!=NaN)
-    {
-      alert("Please give an area greater than 0");
-    } 
-    else
-    {
-      inputdata.elements.push({name: name, lib: element_id, area: area});
-      model.set_inputdata(inputdata);
-      result = model.calc();
-      view();
-      openbem.save(building,inputdata);
-      $("#myModal").modal('hide');
-    }
-  });
-  
-  $("#element-edit").click(function()
-  {
-    var id = $("#myModal").attr('eid');
-    var element_id = $("#element-selector").val();
-    var name = $("#element-name").val();
-    var area = parseFloat($("#element-area").val()*1);
+    var type = element_library[element_id].type;
     
     if (!element_id)
     { 
@@ -98,11 +85,54 @@
     } 
     else
     {
-      inputdata.elements[id] = { 
-        lib: element_id,
-        name: name,
-        area: area
-      };
+    
+      if (type=='Window') {
+        var orient = parseInt($("#window_orientation").val());
+        var shade = parseInt($("#window_overshading").val());
+        inputdata.elements.push({name: name, lib: element_id, area: area, orientation: orient,overshading: shade});
+      } else {
+        inputdata.elements.push({name: name, lib: element_id, area: area});
+      }
+    
+      model.set_inputdata(inputdata);
+      result = model.calc();
+      view();
+      openbem.save(building,inputdata);
+      $("#myModal").modal('hide');
+    }
+  });
+  
+  $("#element-edit").click(function()
+  {
+    var id = $("#myModal").attr('eid');
+    var element_id = $("#element-selector").val();
+    var name = $("#element-name").val();
+    var area = parseFloat($("#element-area").val()*1);
+    var type = element_library[element_id].type;
+    
+    if (!element_id)
+    { 
+      alert("Please select an element using the drop down element selector");
+    } 
+    else if (!name) 
+    {
+      alert("Please enter a name for the element such as 'South wall'");
+    } 
+    else if (area<=0 && area!=NaN)
+    {
+      alert("Please give an area greater than 0");
+    } 
+    else
+    {
+
+      if (type=='Window') {
+        var orient = parseInt($("#window_orientation").val());
+        var shade = parseInt($("#window_overshading").val());
+        inputdata.elements[id] = {name: name, lib: element_id, area: area, orientation: orient,overshading: shade};
+      
+      } else {
+        inputdata.elements[id] = {name: name, lib: element_id, area: area};
+      }
       
       model.set_inputdata(inputdata);
       result = model.calc();

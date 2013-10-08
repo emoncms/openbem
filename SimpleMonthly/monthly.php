@@ -221,6 +221,25 @@ global $path; ?>
 <p><b>Set element area:</b></p>
 <input id="element-area" type="text" />
 
+<div id="window_options" style="display:none">
+  <p><b>Set window orientation:</b></p>
+  <select id="window_orientation">
+    <option value=0 >North</option>
+    <option value=1 >Northeast / Northwest</option>
+    <option value=2 >East / West</option>
+    <option value=3 >Southeast / Southwest</option>
+    <option value=4 >South</option>
+  </select>
+  
+  <p><b>Set window overshading:</b></p>
+  <select id="window_overshading">
+    <option value=0 >Heavy > 80%</option>
+    <option value=1 >More than average > 60%-80%</option>
+    <option value=2 >Average or unknown 20-60%</option>
+    <option value=3 >Very little < 20% </option>
+  </select>
+</div>
+
 </div>
 <div class="modal-footer">
 <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -230,6 +249,8 @@ global $path; ?>
 </div>
     
 <script>
+
+
 
   var building = <?php echo $building; ?>;
   console.log(building);
