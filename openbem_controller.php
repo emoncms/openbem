@@ -21,7 +21,14 @@ function openbem_controller()
   
   require "Modules/openbem/openbem_model.php";
   $openbem = new OpenBEM($mysqli);
-  
+
+  if ($route->format == 'html')
+  {
+    if ($route->action=='heatpumpexplorer') $result = view("Modules/openbem/heatpump.php",array());
+    if ($route->action=='heatingexplorer') $result = view("Modules/openbem/direct.php",array());
+  }
+
+
   if ($route->format == 'html' && $session['write'])
   {
   
