@@ -110,7 +110,7 @@
       solaroffset: 1,
       
       segments: [
-        {u:130,k:11000000,T:15},
+        {u:130,k:11000000,T:10},
         {u:340,k:2500000,T:15},
         {u:712,k:600000,T:15}
       ],
@@ -122,8 +122,12 @@
  
   var segment = settings.segments;
 
-  var start = +new Date - settings.timewindow;	// Get start time
-  var end = +new Date +1000*1000;				        // Get end time
+  //var start = +1378638900000 - settings.timewindow;	// Get start time
+  //var end = +1378638900000 +1000*1000;				        // Get end time
+  
+  var timeWindow = (3600000*24.0*0.7);	//Initial time window
+  var start = +new Date - timeWindow;	//Get start time
+  var end = +new Date;				    //Get end time
   
   var $graph_bound = $('#graph_bound');
   var $graph = $('#graph').width($graph_bound.width()).height($('#graph_bound').height());

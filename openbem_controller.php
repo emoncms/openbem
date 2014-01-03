@@ -32,6 +32,15 @@ function openbem_controller()
       $result = view("Modules/openbem/SimpleMonthly/monthly.php",array('building'=>$route->subaction));
     }
     
+    if ($route->action == 'ventilation') {
+      if (!$route->subaction) $route->subaction = 1;
+      $result = view("Modules/openbem/SimpleMonthly/ventilation.php",array('building'=>$route->subaction));
+    }
+
+    if ($route->action == 'waterheating') {
+      if (!$route->subaction) $route->subaction = 1;
+      $result = view("Modules/openbem/SimpleMonthly/waterheating.php",array('building'=>$route->subaction));
+    }
     
     if ($route->action == 'dynamic') {
       if (!$route->subaction) $route->subaction = 1;

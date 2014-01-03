@@ -8,7 +8,8 @@ var model =
     region: 0,
     airchanges: 0,
     volume: 0,
-    elements: []
+    elements: [],
+    waterheating_gains: [0,0,0,0,0,0,0,0,0,0,0,0]
   },
   
   set_inputdata: function(inputdata)
@@ -66,7 +67,7 @@ var model =
       // calculations
       temperature_difference[m] = mean_internal_temperature[m] - table_u1[model.input.region][m];
       heat_demand[m] = temperature_difference[m] * (total_fabric_heat_loss_WK + infiltration_WK);
-      heating_system_demand[m] = heat_demand[m] - solargains[m] - 0;
+      heating_system_demand[m] = heat_demand[m] - solargains[m] - model.input.waterheating_gains[m];
       sum += heating_system_demand[m];
     }
 
@@ -108,7 +109,7 @@ var model =
     // Solar gains   
     result.solargains = solargains;
     result.average_solargains = average_solargains;
-    
+
     // Monthly temperature difference and heat demand
     result.mean_internal_temperature = mean_internal_temperature;
     result.temperature_difference = temperature_difference;

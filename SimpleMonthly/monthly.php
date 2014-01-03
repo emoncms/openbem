@@ -55,7 +55,6 @@ global $path; ?>
   <li><a href="<?php echo $path; ?>openbem/dynamic/<?php echo $building; ?>">Dynamic Coheating</a></li>
 </ul>
 
-
 <h1>OpenBEM</h1>
 <p>An open source simple building energy model based on SAP 2012</p>
 
@@ -64,6 +63,12 @@ global $path; ?>
 <div class="input-prepend">
   <span class="add-on">Select building location for weather data: </span>
   <select id="regions"></select>
+</div>
+
+<div class="input-prepend input-append">
+<span class="add-on" style="margin-left:20px">Building volume:</span> 
+<input id="volume" type="text" style="width:120px">
+<span class="add-on">m<sup>3</sup></span> 
 </div>
 
 <h3>Ventilation & infiltration</h3>
@@ -94,19 +99,13 @@ global $path; ?>
 
 <div class="input-prepend">
 <span class="add-on">Select input source: </span>
-<select>
-  <option>Air-tightness test</option>
-  <option>Simple air-change slider</option>
-  <option>SAP 2012 Worksheet  (Not added in yet)</option>
-</select>
+<select style="width:300px">
+  <option>Basic average air-change-rate entry</option>
+  <option>SAP 2012 Worksheet</option>
+</select> 
 
-<span class="add-on" style="margin-left:20px">Air change rate:</span> 
-<input id="air_change_rate" type="text" placeholder="3">
-<span class="add-on">ACH</span> 
-
-<span class="add-on" style="margin-left:20px">Building volume:</span> 
-<input id="volume" type="text" style="width:120px">
-<span class="add-on">m<sup>3</sup></span> 
+<span class="add-on" style="margin-left:10px">Air-change-rate: </span>
+<input id="air_change_rate" type="text" style="width:50px" />
 </div>
 
 <h3>Building elements</h3>
@@ -170,12 +169,13 @@ global $path; ?>
   <td><b>Average</b></td>
 </tr>
 
+<tbody id="ventilation_WK"></tbody>
 <tbody id="external_temperature"></tbody>
 <tbody id="internal_temperature"></tbody>
 <tbody id="temperature_difference"></tbody>
 <tbody id="heat_demand"></tbody>
 <tbody id="solargains"></tbody>
-<tbody id="internal_gains"></tbody>
+<tbody id="waterheating_gains"></tbody>
 <tbody id="heating_system_demand" style="background-color:#eee"></tbody>
 </table>
 
@@ -194,8 +194,6 @@ global $path; ?>
   <tr class="sap_rating"><td>SAP Rating</td><td><span id="sap_rating"></span></td><td></td><td></td></tr>
 </table>
 
-
- 
 <!-- Modal -->
 <div id="myModal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 <div class="modal-header">
@@ -249,8 +247,6 @@ global $path; ?>
 </div>
     
 <script>
-
-
 
   var building = <?php echo $building; ?>;
   console.log(building);
@@ -323,7 +319,7 @@ global $path; ?>
   view();
   
   load_controller();
-    
+
 </script>
 
 <script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/controllers/modal_controller.js"></script>

@@ -83,7 +83,7 @@ function view()
   var internal_temperature_html = "<td>Internal Temperature: </td>";
   var temperature_difference_html = "<td>Temperature Difference: </td>";
   var heat_demand_html = "<td>Total heat demand: </td>";
-  var internal_gains_html = "<td> <b>-</b> Internal Gains: </td>";
+  var waterheating_gains_html = "<td> <b>-</b> <a href='waterheating'>Water Heating Gains:</a> </td>";
   var heating_system_demand_html = "<td>Heating system demand: </td>";
 
   var editmode = true;
@@ -103,7 +103,7 @@ function view()
     
     temperature_difference_html += "<td>"+(result.temperature_difference[m]).toFixed(1)+"C</td>";
     heat_demand_html += "<td>"+(result.heat_demand[m]).toFixed(0)+"W</td>";
-    internal_gains_html += "<td>"+(0).toFixed(0)+"W</td>";
+    waterheating_gains_html += "<td>"+(inputdata.waterheating_gains[m]).toFixed(0)+"W</td>";
     heating_system_demand_html += "<td>"+(result.heating_system_demand[m]).toFixed(0)+"W</td>";
   }
 
@@ -111,7 +111,7 @@ function view()
   $("#internal_temperature").html("<tr>"+internal_temperature_html+"</tr>");
   $("#temperature_difference").html("<tr>"+temperature_difference_html+"</tr>");
   $("#heat_demand").html("<tr>"+heat_demand_html+"</tr>");
-  $("#internal_gains").html("<tr>"+internal_gains_html+"</tr>");
+  $("#waterheating_gains").html("<tr>"+waterheating_gains_html+"</tr>");
   $("#heating_system_demand").html("<tr>"+heating_system_demand_html+"<td></td></tr>");
 
     $("#heating_system_efficiency").html(inputdata.heating_system_efficiency);
