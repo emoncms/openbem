@@ -1,0 +1,69 @@
+<table class="table">
+  <tr><td>Reduced internal heat gains: </td><td><input id="reduced_internal_heat_gains" type="checkbox" /></td></tr>
+  <tr><td>Occupancy, N: </td><td><span id="N"></span></td></tr>
+  <tr><td>Total floor area, TFA: </td><td><span id="TFA"></span> m2</td></tr>
+</table>  
+
+<h3>Lighting</h3>
+<table class="table">
+  <tr><td>The number of fixed low energy lighting outlets (LLE)</td><td><input id="LLE" type="text" style="width:80px" /></td></tr>
+  <tr><td>The total number of fixed lighting outlets (L)</td><td><input id="L" type="text" style="width:80px" /></td></tr>
+  
+  <tr><td>Average annual energy consumption for lighting if no low-energy lighting (EB)</td><td><span id="EB"></span> kWh/year</td></tr>
+  <tr><td>Low energy lighting correction factor (C1)</td><td><span id="C1"></span></td></tr>
+  <tr><td>Daylighting correction factor, calculated from window element data (C2)</td><td><span id="C2"></span></td></tr>
+  <tr><td>The initial value of the annual energy used for lighting in the house (EL = EB × C1 × C2)</td><td><span id="EL"></span> kWh/year</td></tr>
+  
+</table>
+
+<table class="table table-bordered">
+<tr>
+  <th></th>
+  <th>Jan</th>
+  <th>Feb</th>
+  <th>Mar</th>
+  <th>Apr</th>
+  <th>May</th>
+  <th>Jun</th>
+  <th>Jul</th>
+  <th>Aug</th>
+  <th>Sep</th>
+  <th>Oct</th>
+  <th>Nov</th>
+  <th>Dec</th>
+</tr>
+  <tbody id="EL_monthly"></tbody>
+  <tbody id="GL_monthly"></tbody>
+</table>
+
+<h3>Appliances</h3>
+
+<table class="table">
+  <tr><td>Annual energy use in kWh for electrical appliances (EA = 207.8 × (TFA × N) ^ 0.4714)</td><td><span id="EA"></span> kWh</td></tr>
+</table>
+
+<table class="table table-bordered">
+<tr>
+  <td></td>
+  <th>Jan</th>
+  <th>Feb</th>
+  <th>Mar</th>
+  <th>Apr</th>
+  <th>May</th>
+  <th>Jun</th>
+  <th>Jul</th>
+  <th>Aug</th>
+  <th>Sep</th>
+  <th>Oct</th>
+  <th>Nov</th>
+  <th>Dec</th>
+</tr>
+  <tbody id="EA_monthly"></tbody>
+  <tbody id="GA_monthly"></tbody>
+</table>
+
+<h3>Cooking</h3>
+
+<table class="table">
+  <tr><td>Internal heat gains in watts from cooking (Normal gains: GC = 35 + 7 N) or (Reduced gains: GC = 23 + 5 N)</td><td><span id="GC"></span>W</td></tr>
+</table>

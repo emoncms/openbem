@@ -54,6 +54,11 @@ function openbem_controller()
       $result = view("Modules/openbem/SimpleMonthly/solarhotwater.php",array('building'=>$route->subaction));
     }
     
+    if ($route->action == 'lac') {
+      if (!$route->subaction) $route->subaction = 1;
+      $result = view("Modules/openbem/SimpleMonthly/LAC.php",array('building'=>$route->subaction));
+    }
+    
     if ($route->action == 'dynamic') {
       if (!$route->subaction) $route->subaction = 1;
       $result = view("Modules/openbem/DynamicCoHeating/dynamic.php",array('building'=>$route->subaction));

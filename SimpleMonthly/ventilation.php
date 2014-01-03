@@ -12,6 +12,7 @@ http://openenergymonitor.org
 */
 
 global $path; ?>
+<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/interface/openbem.js"></script>
 <script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/datasets/datasets.js"></script>
 <script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/Modules/ventilation/ventilation_model.js"></script>
 <script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/Modules/ventilation/ventilation_controller.js"></script>
