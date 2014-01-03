@@ -128,7 +128,6 @@ var hot_water_model =
       waterheating_gains[m] = (1000 * heat_gains_from_water_heating[m]) / (table_1a[m] * 24);
     }  
 
-    
     /*
     // Combi loss for each month from Table 3a, 3b or 3c (enter “0” if not a combi boiler)
     switch(combi_type)
