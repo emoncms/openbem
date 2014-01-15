@@ -1,6 +1,6 @@
 <?php
 
-  $schema['openbem'] = array(
+  $schema['openbem2'] = array(
     'userid'=> array('type'=>'int(11)','Null'=>'NO'),
     'building'=> array('type'=>'int(11)','Null'=>'NO'),
     'monthly'=> array('type'=>'text'),
