@@ -1,4 +1,8 @@
-<?php global $path; ?>
+<?php global $path; 
+
+if (!isset($building)) $building = 1;
+
+?>
 <!--[if IE]><script language="javascript" type="text/javascript" src="<?php echo $path;?>Lib/flot/excanvas.min.js"></script><![endif]-->
 <script language="javascript" type="text/javascript" src="<?php echo $path;?>Lib/flot/jquery.flot.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $path;?>Lib/flot/jquery.flot.time.js"></script>
@@ -7,6 +11,16 @@
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <link rel="stylesheet" href="/resources/demos/style.css" />
 
+<ul class="nav nav-pills">
+  <li><a href="<?php echo $path; ?>openbem/monthly/<?php echo $building; ?>">Simple Monthly</a></li>
+  <li>
+  <a href="<?php echo $path; ?>openbem/dynamic/<?php echo $building; ?>">Dynamic Coheating</a>
+  </li>
+  <li class="active">
+  <a href="<?php echo $path; ?>openbem/heatingexplorer" >Heating Explorer</a>
+  </li>
+</ul>
+
 <h2>Direct electric or gas heating period explorer</h2>
 
 <p><b>Note:</b> Building model is based on a small single space building, floor area is 21m2, walls are 600mm thick stone with plaster on hard, 100mm insulation in roof, roof lights, solid floor. See details and picture <a href="http://openenergymonitor.org/emon/node/2783" >here</a></p>
@@ -14,7 +28,7 @@
 
 <p><b>Theory: </b><a href="http://openenergymonitor.org/emon/node/2999">Building model</a></p>
 
-<p>See also: <a href="http://www.emoncms.org/openbem/heatpumpexplorer">Heatpump efficiency explorer</a></p><br>
+<p>See also: <a href="heatpumpexplorer">Heatpump efficiency explorer</a></p><br>
 
 <div class="input-prepend input-append">
   <span class="add-on">Set point: </span>

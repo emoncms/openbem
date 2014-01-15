@@ -11,11 +11,12 @@
 <script language="javascript" type="text/javascript" src="<?php echo $path; ?>Modules/feed/feed.js"></script>
 
 <ul class="nav nav-pills">
-  <li>
   <li><a href="<?php echo $path; ?>openbem/monthly/<?php echo $building; ?>">Simple Monthly</a></li>
-  </li>
-  <li class="active">
+  <li cass="active">
     <a href="#">Dynamic Coheating</a>
+  </li>
+  <li>
+  <a href="<?php echo $path; ?>openbem/heatingexplorer" >Heating Explorer</a>
   </li>
 </ul>
 

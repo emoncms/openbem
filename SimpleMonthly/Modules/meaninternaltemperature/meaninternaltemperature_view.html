@@ -1,0 +1,44 @@
+<h3>Mean Internal Temperature</h3>
+
+<div class="input-prepend input-append">
+<span class="add-on">Heating system responsivness:</span>
+<select id="R">
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+</select>
+<span class="add-on">Living area:</span>
+<input id="living_area" type="text" style="width:40px" />
+<span class="add-on">m2</span>
+
+<span class="add-on">Target temperature:</span>
+<input id="Th" type="text" style="width:40px" />
+<span class="add-on">C</span>
+
+</div>
+
+<table class="table table-bordered">
+<tr>
+  <td></td>
+  <th>Jan</th>
+  <th>Feb</th>
+  <th>Mar</th>
+  <th>Apr</th>
+  <th>May</th>
+  <th>Jun</th>
+  <th>Jul</th>
+  <th>Aug</th>
+  <th>Sep</th>
+  <th>Oct</th>
+  <th>Nov</th>
+  <th>Dec</th>
+</tr>
+  <tbody id="utilisation_factor_A" title="Utilisation factor A:" dp=2 units=""></tbody>
+  <tbody id="Ti_livingarea" title="Mean internal temperature in living area" dp=1 units="C"></tbody>
+  <tbody id="Th2" title="Temperature during heating periods in rest of dwelling" dp=1 units="C"></tbody>
+  <tbody id="utilisation_factor_B" title="Utilisation factor B:" dp=2 units=""></tbody>
+  <tbody id="Ti_restdwelling" title="Mean internal temperature in the rest of dwelling" dp=1 units="C"></tbody>  
+  <tbody id="MIT" title="Mean Internal Temperature:" dp=1 units=" C"></tbody>
+</table>
+
+

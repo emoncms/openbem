@@ -31,39 +31,13 @@ function openbem_controller()
 
   if ($route->format == 'html' && $session['write'])
   {
-  
+    $building = (int) $route->subaction;
+    if ($building<1) $building = 1;
     $submenu = view("Modules/openbem/greymenu.php",array());
-  
-    if ($route->action == 'monthly') {
-      if (!$route->subaction) $route->subaction = 1;
-      $result = view("Modules/openbem/SimpleMonthly/monthly.php",array('building'=>$route->subaction));
-    }
     
-    if ($route->action == 'ventilation') {
-      if (!$route->subaction) $route->subaction = 1;
-      $result = view("Modules/openbem/SimpleMonthly/ventilation.php",array('building'=>$route->subaction));
-    }
-
-    if ($route->action == 'waterheating') {
-      if (!$route->subaction) $route->subaction = 1;
-      $result = view("Modules/openbem/SimpleMonthly/waterheating.php",array('building'=>$route->subaction));
-    }
-
-    if ($route->action == 'solarhotwater') {
-      if (!$route->subaction) $route->subaction = 1;
-      $result = view("Modules/openbem/SimpleMonthly/solarhotwater.php",array('building'=>$route->subaction));
-    }
+    if ($route->action=='monthly') $result = view("Modules/openbem/SimpleMonthly/monthly.php",array('building'=>$building));
     
-    if ($route->action == 'lac') {
-      if (!$route->subaction) $route->subaction = 1;
-      $result = view("Modules/openbem/SimpleMonthly/LAC.php",array('building'=>$route->subaction));
-    }
-    
-    if ($route->action == 'dynamic') {
-      if (!$route->subaction) $route->subaction = 1;
-      $result = view("Modules/openbem/DynamicCoHeating/dynamic.php",array('building'=>$route->subaction));
-    }
-    
+    if ($route->action=='dynamic') $result = view("Modules/openbem/DynamicCoHeating/dynamic.php",array('building'=>$building));  
   }
 
   if ($route->format == 'json' && $session['write'])
@@ -83,7 +57,7 @@ function openbem_controller()
 
         // and we have a write session then save it to db
         if ($session['write']) {
-          $result = $openbem->save_monthly($session['userid'],get('building'),$data);
+          $result = $openbem->save_monthly($session['userid'],post('building'),$data);
         } else {
           // ELSE Save in session data
           // $result = true;

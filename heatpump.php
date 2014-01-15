@@ -1,4 +1,8 @@
-<?php global $path; ?>
+<?php global $path; 
+
+if (!isset($building)) $building = 1;
+
+?>
 <!--[if IE]><script language="javascript" type="text/javascript" src="<?php echo $path;?>Lib/flot/excanvas.min.js"></script><![endif]-->
 <script language="javascript" type="text/javascript" src="<?php echo $path;?>Lib/flot/jquery.flot.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $path;?>Lib/flot/jquery.flot.time.js"></script>
@@ -7,12 +11,22 @@
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <link rel="stylesheet" href="/resources/demos/style.css" />
 
+<ul class="nav nav-pills">
+  <li><a href="<?php echo $path; ?>openbem/monthly/<?php echo $building; ?>">Simple Monthly</a></li>
+  <li>
+  <a href="<?php echo $path; ?>openbem/dynamic/<?php echo $building; ?>">Dynamic Coheating</a>
+  </li>
+  <li class="active">
+  <a href="<?php echo $path; ?>openbem/heatingexplorer" >Heating Explorer</a>
+  </li>
+</ul>
+
 <h2>Heatpump efficiency explorer</h2>
 <p><b>Note:</b> Building model is based on a small single space building, floor area is 21m2, walls are 600mm thick stone with plaster on hard, 100mm insulation in roof, roof lights, solid floor. See details and picture <a href="http://openenergymonitor.org/emon/node/2783" >here</a>. The radiator model is based on the heat output of the <a href="http://www.dimplex.co.uk/smartrad/technical_specification.htm" >dimplex smartrad at a Delta_T of 25K (1400W)</a>. For the output of this application to be relevant the building model, radiator and heatpump model parameters need to be taylored for the building being explored. At present the results of this application should be taken as a concept, the accuracy of it needs to be tested properly (which is the next step). But it does illustrate some of the core cocepts of a heatpumps operation.</p>
 
 <p><b>Theory: </b><a href="http://openenergymonitor.org/emon/node/2999">Building model</a>, <a href="http://openenergymonitor.org/emon/node/3011">Radiator model</a>, <a href="http://openenergymonitor.org/emon/node/3021">Heatpump model</a></p>
 
-<p>See also: <a href="http://www.emoncms.org/openbem/heatingexplorer">Gas or electric heating period explorer</a></p>
+<p>See also: <a href="heatingexplorer">Gas or electric heating period explorer</a></p>
 
 <br>
 

@@ -11,7 +11,7 @@ var openbem = {
   'save':function(building,data)
   {
     var result = {};
-    $.ajax({ url: path+"openbem/savemonthly.json", data: "building="+building+"&data="+JSON.stringify(data), async: true, success: function(data){} });
+    $.ajax({ type: 'POST', url: path+"openbem/savemonthly.json", data: "building="+building+"&data="+JSON.stringify(data), async: true, success: function(data){} });
     return result;
   },
 }

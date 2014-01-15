@@ -1,21 +1,9 @@
+<h3>SAP Water Heating Gains</h3>
 
 <table class="table">
   <tr>
-    <td>The SAP assumed occupancy based on building floor area is:</td>
-    <td style="text-align:center"><span id="sap-occupancy"></span></td>
-  </tr>
-  <tr>
-    <td>Use custom occupancy figure</td>
-    <td style="text-align:center"><input id="use_manual_occupancy" type="checkbox" /></td>
-  </tr>
-  <tr>
-    <td>Custom occupancy figure</td>
-    <td><input id="manual_occupancy" type="text" style="width:80px" /></td>
-  </tr>
-  <tr><td></td><td></td></tr>
-  <tr>
     <td>Annual average hot water usage in litres per day V d,average</td>
-    <td style="text-align:center"><span id="annual-average-hot-water-use"></span></td>
+    <td style="text-align:center"><span id="Vd_average" dp=2></span></td>
   </tr>
   <tr>
     <td>Designed water use is not more than 125 litres per person per day (all water use, hot and cold)</td>
@@ -40,8 +28,8 @@
   <td>Dec</td>
   <td><b>Total</b></td>
 </tr>
-<tbody id="monthly_hotwater_use_per_day"></tbody>
-<tbody id="monthly_energy_content"></tbody>
+<tbody id="Vd_m" title="Hot water usage in litres per day for each month: " dp=0></tbody>
+<tbody id="monthly_energy_content" title="Energy content (kWh/month) " dp=0></tbody>
 </table>
 
 <table class="table">
@@ -71,7 +59,7 @@
     <td>Dec</td>
     <td><b>Total</b></td>
   </tr>
-  <tbody id="distribution_loss"></tbody>
+  <tbody id="distribution_loss" title="Distribution loss (0.15 x E) kWh/month" dp=0></tbody>
   </table>
 
   <table class="table">
@@ -164,9 +152,9 @@
   <td>Dec</td>
   <td><b>Total</b></td>
 </tr>
-<tbody id="monthly_storage_loss" class="loss-interface"></tbody>
-<tbody id="primary_circuit_loss" class="loss-interface"></tbody>
-<tbody id="combi_loss" class="loss-interface">
+<tbody id="monthly_storage_loss" class="loss-interface" title="Water storage loss" dp=0></tbody>
+<tbody id="primary_circuit_loss" class="loss-interface" title="Primary circuit loss" dp=0></tbody>
+<tbody id="combi_loss" class="loss-interface" title="Combi loss (enter manually)">
   <td>Combi loss (enter manually)</td>
   <td><input class="combi_loss" m=0 type="text" style="padding:0px; width:25px;" /></td>
   <td><input class="combi_loss" m=1 type="text" style="padding:0px; width:25px;" /></td>
@@ -182,11 +170,11 @@
   <td><input class="combi_loss" m=11 type="text" style="padding:0px; width:25px;" /></td>
   <td></td>
 </tbody>
-<tbody id="total_heat_required"></tbody>
-<tbody id="solar_hot_water_contribution"></tbody>
-<tbody id="hot_water_heater_output"></tbody>
-<tbody id="heat_gains_from_water_heating"></tbody>
-<tbody id="waterheating_gains"></tbody>
+<tbody id="total_heat_required" title="Total heat required" dp=0></tbody>
+<tbody id="solar_hot_water_contribution" title="Solar hot water input" dp=0></tbody>
+<tbody id="hot_water_heater_output" title="Hot Water Heater output" dp=0></tbody>
+<tbody id="heat_gains_from_water_heating" title="Heat gains from water heating (kWh)" dp=0></tbody>
+<tbody id="waterheating_gains" title="Heat gains from water heating (Watts)" dp=0></tbody>
 </table>
 <p><i>All table values above are in kWh/month</i></p>
 <p>See page 122-123 of <a href="http://www.bre.co.uk/filelibrary/SAP/2012/SAP-2012_9-92.pdf" >SAP 2012</a> for calculation detail and accompanying notes</p>

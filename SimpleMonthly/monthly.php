@@ -11,335 +11,277 @@ http://openenergymonitor.org
 
 */
 
-global $path; ?>
+global $path; 
 
-<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/interface/openbem.js"></script>
-<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/datasets/element_library.js"></script>
+$sm = $path."Modules/openbem/SimpleMonthly/";
+
+?>
+
+<script type="text/javascript" src="<?php echo $sm; ?>interface/openbem.js"></script>
+<script type="text/javascript" src="<?php echo $sm; ?>datasets/datasets.js"></script>
+<script type="text/javascript" src="<?php echo $sm; ?>datasets/element_library.js"></script>
 
 <script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/model/solar.js"></script>
 <script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/model/windowgains.js"></script>
-<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/model/model.js"></script>
+<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/model/utilisationfactor.js"></script>
 
-<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/datasets/datasets.js"></script>
-<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/view/view.js"></script>
-<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/controllers/controller.js"></script>
 
-<style>
-  #element-totals td:nth-of-type(1) {  text-align: right; }
-  #element-totals td:nth-of-type(2) { width:100px; text-align: center; padding-right: 53px}
+<script type="text/javascript" src="<?php echo $sm; ?>controller.js"></script>
 
-  #element-table th:nth-of-type(3) { text-align: center;}
-  #element-table th:nth-of-type(4) { text-align: center;}
-  #element-table th:nth-of-type(5) { width:80px; text-align: center;}
-  
-  #element-table td:nth-of-type(3) { text-align: center;}
-  #element-table td:nth-of-type(4) { text-align: center;}
-  #element-table td:nth-of-type(5) { text-align: center;}
-  #element-table td:nth-of-type(6) { width:38px; text-align: center;}
-  
-  
-  #annual td:nth-of-type(1) { text-align: left;}
-  #annual td:nth-of-type(2) { width:150px; text-align: right;}
-  #annual td:nth-of-type(3) { width:20px; text-align: left;}
-  #annual td:nth-of-type(4) { width:38px; text-align: center;}
-  
-  #annual input {width:40px; margin:0px; padding:2px; text-align: right;}
-  
-  #monthly input {width:40px; margin:0px; padding:2px; text-align: center;}
-</style>
+<script type="text/javascript" src="<?php echo $sm; ?>Modules/context/context_model.js"></script>
+<script type="text/javascript" src="<?php echo $sm; ?>Modules/elements/elements_model.js"></script>
+<script type="text/javascript" src="<?php echo $sm; ?>Modules/ventilation/ventilation_model.js"></script>
+<script type="text/javascript" src="<?php echo $sm; ?>Modules/waterheating/waterheating_model.js"></script>
+<script type="text/javascript" src="<?php echo $sm; ?>Modules/solarhotwater/solarhotwater_model.js"></script>
+<script type="text/javascript" src="<?php echo $sm; ?>Modules/LAC/LAC_model.js"></script>
+<script type="text/javascript" src="<?php echo $sm; ?>Modules/meaninternaltemperature/meaninternaltemperature_model.js"></script>
+<script type="text/javascript" src="<?php echo $sm; ?>Modules/balance/balance_model.js"></script>
+<script type="text/javascript" src="<?php echo $sm; ?>Modules/energyrequirements/energyrequirements_model.js"></script>
+<script type="text/javascript" src="<?php echo $sm; ?>Modules/fuelcosts/fuelcosts_model.js"></script>
+<script type="text/javascript" src="<?php echo $sm; ?>Modules/saprating/saprating_model.js"></script>
+<script type="text/javascript" src="<?php echo $sm; ?>Modules/data/data_model.js"></script>
 
 <ul class="nav nav-pills">
-  <li class="active">
-    <a href="#">Simple Monthly</a>
+  <li class="active"><a href="#">Simple Monthly</a></li>
   </li>
-  <li><a href="<?php echo $path; ?>openbem/dynamic/<?php echo $building; ?>">Dynamic Coheating</a></li>
+  <li>
+  <a href="<?php echo $path; ?>openbem/dynamic/<?php echo $building; ?>">Dynamic Coheating</a>
+  </li>
+  <li>
+  <a href="<?php echo $path; ?>openbem/heatingexplorer">Heating Explorer</a>
+  </li>
 </ul>
 
 <div class="row">
-  
-  <div class="span9">
-  
-    <h1>OpenBEM</h1>
-    <p>An open source simple building energy model based on SAP 2012.</p>
-  </div>
+
+
+
   <div class="span3">
+
+    <h3>OpenBEM</h3>
+
+    <canvas id="rating" width="269px" height="350px"></canvas>
+    <br><br>
     <table class="table table-bordered">
-    <tr><th>Optional modules</th><th>Used</th></tr>
-    <tr><td><a href="ventilation" >SAP Ventilation loss</a></td><td><input type="checkbox" /></td></tr>
-    <tr><td><a href="waterheating" >SAP Water Heating gains</a></td><td><input type="checkbox" /></td></tr>
-    <tr><td><a href="solarhotwater" >SAP Solar Hot Water gains</a></td><td><input type="checkbox" /></td></tr>
-    <tr><td><a href="lac" >SAP Lighting, Appliances<br>& Cooking gains</a></td><td><input type="checkbox" /></td></tr>
+    <tr><td><a class="menu" name="context">Floor Area and Volume</a></td></tr>
+    <tr><td><a class="menu" name="elements">Building Fabric</a></td></tr>
+    <tr><td><a class="menu" name="ventilation">Ventilation & Infiltration</a></td></tr>
+    <tr><td><a class="menu" name="meaninternaltemperature">Internal Temperature</a></td></tr>
+    <tr><td><a class="menu" name="balance">Heat balance</a></td></tr>
+    <tr><td><a class="menu" name="energyrequirements">Energy Requirements</a></td></tr>
+    <tr><td><a class="menu" name="fuelcosts">Fuel costs</a></td></tr>
+    <tr><td><a class="menu" name="saprating">SAP rating</a></td></tr>
+    <tr><td><a class="menu" name="data">Export data</a></td></tr>
     </table>
+    
+    <h4>Optional modules</h4>
+    <table class="table table-bordered">
+    <tr><td><a class="menu" name="waterheating">SAP Water Heating gains</a></td></tr>
+    <tr><td><a class="menu" name="solarhotwater">SAP Solar Hot Water gains</a></td></tr>
+    <tr><td><a class="menu" name="LAC">SAP Lighting, Appliances<br>& Cooking gains</a></td></tr>
+    </table>
+    
+
+    
+  </div>
+
+  <div class="span9">
+    <div id="placeholder" ></div>
   </div>
 
 </div>
 
-    <h3>Region</h3>
-
-    <div class="input-prepend">
-      <span class="add-on">Select building location for weather data: </span>
-      <select id="regions"></select>
-    </div>
-
-    <div class="input-prepend input-append">
-    <span class="add-on" style="margin-left:20px">Building volume:</span> 
-    <input id="volume" type="text" style="width:120px">
-    <span class="add-on">m<sup>3</sup></span> 
-    </div>
-
-    <h3>Ventilation & infiltration</h3>
-
-
-    <div class="accordion">
-      <div class="accordion-group">
-        <div class="accordion-heading" style="background-color: rgb(217, 237, 247);">
-          <a class="accordion-toggle" data-toggle="collapse" href="#collapseOne">
-          <i class="icon-info-sign"></i> Ventilation & infiltration (Click to hide/show)
-          </a>
-        </div>
-        <div id="collapseOne" class="accordion-body collapse">
-          <div class="accordion-inner" style="background-color: rgba(217, 237, 247,0.5);">
-            <p>Ventilation and infiltration, the movement of heated air from inside the house into its surroundings is one of the main sources of heat loss.</p>
-
-            <p>The rate of air movement is typically measured in air-changes per hour. An air-change is when the full volume of air inside a house is replaced with a new volume of air. This happens suprisingly frequently. The heat lost is equall to the energy stored in the warm air relative to the external temperature</p>
-
-            <p>Typically the number of air-changes per hour will be approximately 4 for an old, undraughtstripped house, 1 to 2 for an average modern house and 0.6 for a very tight, superinsulated house.</p>
-
-            <p>The best way to accuratly measure the air-changes per hour rate is via an air-tightness test. The result of such a test will give you a air permeability value, q50, expressed in cubic metres per hour per square metre of envelope area</p><p>If you have an air-tightness test result select air-tightness test and enter your q50 value.</p>
-
-            <p>The SAP worksheet gives a method for estimating air-changes per hour but it may be more accurate for newer houses as the results are typically around 1 to 2 airchanges per hour.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="input-prepend">
-    <span class="add-on">Select input source: </span>
-    <select style="width:300px">
-      <option>Basic average air-change-rate entry</option>
-      <option>SAP 2012 Worksheet</option>
-    </select> 
-
-    <span class="add-on" style="margin-left:10px">Air-change-rate: </span>
-    <input id="air_change_rate" type="text" style="width:50px" />
-    </div>
-
-    <h3>Building elements</h3>
-    <p>Add all the floor, roof, wall and window elements that describe your building:</p>
-
-    <ul class="nav nav-tabs">
-      <li><a href="#myModal" role="button" data-toggle="modal">Add element: <i class="icon-plus" style="cursor:pointer"></i></a></li>
-      <li class="pull-right"><a>Thermal capacity</a></li>
-      <li class="active  pull-right">
-        <a>U-values</a>
-      </li>
-      <li class="disabled  pull-right"><a>Show: </a></li>
-      
-    </ul>
-
-    <table id="element-table" class="table">
-    <tr><th></th><th>Element</th><th>Area</th><th>U-value</th><th>W/K</th><th></th></tr>
-    <tbody id="elements"></tbody>
-    </table>
-
-    <br>
-    <table id="element-totals" class="table">
-    <tr><td>Fabric heat loss W/K</td><td><span id="total_fabric_heat_loss_WK"></span> W/K</td></tr>
-    <tr><td>Infiltration heat loss W/K</td><td><span id="infiltration_heat_loss_WK"></span> W/K</td></tr>
-    <tr><td>Total heat loss W/K</td><td><span id="total_heat_loss_WK"></span> W/K</td></tr>
-    <tr><td>Total thermal capacity kJ/K</td><td><span id="total_thermal_capacity"></span> kJ/K</td></tr>
-    </table>
-
-
-    <ul class="nav nav-tabs">
-    <li class="disabled"><a>Calculate:</a></li>
-      <li class="active">
-        <a>Heating demand from internal temperature</a>
-      </li>
-      <li><a>Internal temperature from heating input</a></li>
-    </ul>
-
-    <div class="input-prepend">
-    <span class="add-on">Mean internal temperature source: </span>
-    <select>
-      <option>Enter manually</option>
-      <option>SAP 2012 based standard heating schedule (Not added in yet)</option>
-    </select>
-    </div>
-        
-    <table id="monthly" class="table">
-    <tr>
-      <td></td>
-      <td>Jan</td>
-      <td>Feb</td>
-      <td>Mar</td>
-      <td>Apr</td>
-      <td>May</td>
-      <td>Jun</td>
-      <td>Jul</td>
-      <td>Aug</td>
-      <td>Sep</td>
-      <td>Oct</td>
-      <td>Nov</td>
-      <td>Dec</td>
-      <td><b>Average</b></td>
-    </tr>
-
-    <tbody id="ventilation_WK"></tbody>
-    <tbody id="external_temperature"></tbody>
-    <tbody id="internal_temperature"></tbody>
-    <tbody id="temperature_difference"></tbody>
-    <tbody id="heat_demand"></tbody>
-    <tbody id="solargains"></tbody>
-    <tbody id="waterheating_gains"></tbody>
-    <tbody id="heating_system_demand" style="background-color:#eee"></tbody>
-    </table>
-
-    <table id="annual" class="table">
-      <tr><td>Annual heating demand</td><td><span id="annual_heating_demand"></span></td><td>kWh</td><td></td></tr>
-      <tr><td>Heating system efficiency</td><td><span id="heating_system_efficiency">100</span></td><td>%</td>
-        <td><span style='display:none'><i iid='heating_system_efficiency' class='icon-pencil' style='margin-right: 10px; cursor:pointer' ></i></span></td>
-      </tr>
-      <tr><td>Annual fuel input</td><td><span id="annual_fuel_input"></span></td><td>kWh</td><td></td></tr>
-      <tr>
-        <td>Fuel cost</td><td><span id="fuel_cost">0.00</span></td><td>£/kWh</td>
-        <td><span style='display:none'><i iid='fuel_cost' class='icon-pencil' style='margin-right: 10px; cursor:pointer' ></i></span></td>
-      </tr>
-      <tr><td>Annual heating cost</td><td>£ <span id="annual_heating_cost"></span></td><td></td><td></td></tr>
-      <tr><td>Annual energy costs (+internal gain sources)</td><td>£ <span id="annual_energy_cost"></span></td><td></td><td></td></tr>
-      <tr class="sap_rating"><td>SAP Rating</td><td><span id="sap_rating"></span></td><td></td><td></td></tr>
-    </table>
-
-    <!-- Modal -->
-    <div id="myModal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Add Building Element</h3>
-    </div>
-    <div class="modal-body">
-
-    <p><b>Element type:</b></p>
-    <select id="element-type">
-      <option value=Roof>Roof</option>
-      <option value=Wall>Wall</option>
-      <option value=Floor>Floor</option>
-      <option value=Window>Window</option>
-    </select>
-
-    <p><b>Select element:</b></p>
-    <select id="element-selector"></select>
-
-    <p><b>Set element name:</b></p>
-    <input id="element-name" type="text" />
-
-    <p><b>Set element area:</b></p>
-    <input id="element-area" type="text" />
-
-    <div id="window_options" style="display:none">
-      <p><b>Set window orientation:</b></p>
-      <select id="window_orientation">
-        <option value=0 >North</option>
-        <option value=1 >Northeast / Northwest</option>
-        <option value=2 >East / West</option>
-        <option value=3 >Southeast / Southwest</option>
-        <option value=4 >South</option>
-      </select>
-      
-      <p><b>Set window overshading:</b></p>
-      <select id="window_overshading">
-        <option value=0 >Heavy > 80%</option>
-        <option value=1 >More than average > 60%-80%</option>
-        <option value=2 >Average or unknown 20-60%</option>
-        <option value=3 >Very little < 20% </option>
-      </select>
-    </div>
-
-    </div>
-    <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button id="element-add" class="btn btn-primary">Add element</button>
-    <button id="element-edit" class="btn btn-primary" style="display:none" >Save element</button>
-    </div>
-    </div>
-  
-
-  
-
-    
 <script>
-
-  var building = <?php echo $building; ?>;
-  console.log(building);
+  var c=document.getElementById("rating");
+  var ctx=c.getContext("2d");
   
   var path = "<?php echo $path; ?>";
   
+  var building = <?php echo $building; ?>;
   var inputdata = openbem.get(building);
   
-  // inputdata = 0;
+  if (!inputdata) {
   
-  if (inputdata==0)
-  {
-    // Example data
-    if (building==1)
-    {
-      inputdata = {
-      
-        region: 13,
-        airchanges: 1,
-        volume: ((3.5*1.9) + 2.54) * 6.0,
-      
-        fuel_cost: 0.05,
-        heating_system_efficiency: 82,
-        mean_internal_temperature: [18,18,18,18,18,18,18,18,18,18,18,18],
-        
-        elements: [
+    inputdata = {};
+  
+    inputdata.occupancy = 2;
+    inputdata.region = 0;
+    inputdata.TFA = 35;
+    inputdata.volume = 70;
+    inputdata.altitude = 0;
+    inputdata.MIT = [21,21,21, 21,21,21, 21,21,21, 21,21,21];
+    inputdata.gains = {};
+    inputdata.losses = {};
 
-          {name:"Main Floor", lib: 'floor0007', area: (6*3.5)},
-          {name:"Front wall", lib: 'wall0010', area: (6*1.9)},
-          {name:"Back wall", lib: 'wall0010', area: (6*1.9)},
-
-          // 1.45m  
-          {name:"Left wall", lib: 'wall0010', area: (3.5*1.9) + 2.54},
-          {name:"Right wall", lib: 'wall0004', area: (3.5*1.9) + 2.54},
-          
-          // hyp 2.27m 
-          {name:"Roof", lib: 'roof0002', area: 2*(2.27*6)},
-          
-          {name:"Front window", lib: 'window0121', area: (0.87*0.9), orientation: 3, overshading: 3},
-          {name:"Roof window Front", lib: 'window0001', area: (2.45*0.42), orientation: 3, overshading: 3},
-          {name:"Roof window Back", lib: 'window0001', area: (2.45*0.42), orientation: 3, overshading: 2},  
-        ]
-      };
-    }
-    else
-    {
-      inputdata = {
-        region: 13,
-        airchanges: 1,
-        volume: ((3.5*1.9) + 2.54) * 6.0,
-        fuel_cost: 0.05,
-        heating_system_efficiency: 100,
-        mean_internal_temperature: [18,18,18,18,18,18,18,18,18,18,18,18],
-        elements: []
-      };
-    }
+    inputdata.LAC_enabled = false;
+    inputdata.solarhotwater_enabled = false;
+    inputdata.waterheating_enabled = false;
   }
+  
+  var i = {}; var o = {};
+  
+  load_module('balance');
+  
+  $(".menu").click(function()
+  { 
+    var module = $(this).attr('name');
+    load_module(module);
+  });
+  
+  function load_module(module)
+  { 
+    if (module=='LAC') inputdata.LAC_enabled = true;
+    if (module=='solarhotwater') inputdata.solarhotwater_enabled = true;
+    if (module=='waterheating') inputdata.waterheating_enabled = true;
+    calc_all();
+   
+    i = inputdata[module].input;
+    o = inputdata[module].output;
+    
+    $("#placeholder").html(load_view(module));
+    openbem_controller(module);
+    var customcontroller = module+"_customcontroller";
+    if (window[customcontroller]!=undefined) window[customcontroller](module);
+    
+    openbem_update_view(i,o);
+    var customview = module+"_customview";
+    if (window[customview]!=undefined) window[customview](i); 
+    
+    draw_rating(ctx);
+    openbem.save(building,inputdata); 
+  }
+  
+  function openbem_update(module)
+  { 
+    calc_all();
+    
+    o = inputdata[module].output;
+    
+    openbem_update_view(i,o);
+    
+    var customview = module+"_customview";
+    if (window[customview]!=undefined) window[customview](i);
+    
+    draw_rating(ctx);
+    
+    openbem.save(building,inputdata);
+  }
+  
+  function calc_all()
+  {
+    calc_module('context');
+    calc_module('ventilation');
+    calc_module('elements');
+    calc_module('meaninternaltemperature');
+    if (inputdata.LAC_enabled) calc_module('LAC');
+    if (inputdata.solarhotwater_enabled) calc_module('solarhotwater');
+    if (inputdata.waterheating_enabled) calc_module('waterheating');
+    calc_module('balance');
+    calc_module('energyrequirements');
+    calc_module('fuelcosts');
+    calc_module('saprating');
+    calc_module('data');
+  }
+  
+  function calc_module(module)
+  {
+    var modelname = module+"_model";
+    var savetoinputdata = module+"_savetoinputdata";
+    
+    window[modelname].set_from_inputdata(inputdata);
+    inputdata[module] = {
+      input:window[modelname].input, 
+      output:window[modelname].calc()
+    };
+    
+    if (window[savetoinputdata]!=undefined) window[savetoinputdata](inputdata,inputdata[module].output); 
+  }
+  
 
-  // End of input data
+  function load_view(view)
+  {
+    var result = ""; 
+    $.ajax({url: path+"Modules/openbem/SimpleMonthly/Modules/"+view+"/"+view+"_view.html", async: false, cache: false, success: function(data) {result = data;} });
+    return result;
+  }
+  
+  function draw_rating(ctx)
+  {
+    var sap_rating = "?";
+    var kwhm2 = "?";
+    var letter = "";
+    
+    var kwhd = 0;
+    var kwhdpp = 0;
+    
+    if (inputdata.saprating!=undefined) {
+      sap_rating = Math.round(inputdata.saprating.output.sap_rating);
+      var band = 0;
+      for (z in ratings)
+      {
+        if (sap_rating>=ratings[z].start && sap_rating<=ratings[z].end) {band = z; break;}
+      }
+      color = ratings[band].color;
+      letter = ratings[band].letter;
+      sap_rating = sap_rating;
+    }
+    
+    if (inputdata.energyrequirements!=undefined) {
+      kwhm2 = inputdata.energyrequirements.output.total_energy_requirement_m2;
+      kwhm2 = kwhm2.toFixed(0)+" kWh/m2";
+      
+      kwhd = inputdata.energyrequirements.output.total_energy_requirement / 365.0;
+      kwhd = kwhd.toFixed(1)+" kWh/d";
 
-  //-----------------------------------------------------------------------------------------------------------------
-  
-  var out = "";
-  for (r in regions) out += "<option value="+r+">"+regions[r]+"</option>";
-  $("#regions").html(out);
-  
-  
-  model.set_inputdata(inputdata);
-  var result = model.calc();
-  view();
-  
-  load_controller();
+      kwhdpp = inputdata.energyrequirements.output.total_energy_requirement / (365.0 * inputdata.occupancy);
+      kwhdpp = kwhdpp.toFixed(1)+" kWh/d";
+    }
+    
+    ctx.clearRect(0,0,269,350);
+    
+    ctx.fillStyle = color;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+    ctx.fillRect(0,0,269,350);
 
+    ctx.fillStyle = "rgba(255,255,255,0.6)";
+    ctx.fillRect(0,0,269,350);
+    ctx.strokeRect(0,0,269,350);
+        
+    var mid = 269 / 2;
+    
+    ctx.beginPath();
+    ctx.arc(mid, mid, 100, 0, 2 * Math.PI, false);
+    ctx.closePath();
+    ctx.fillStyle = "rgba(255,255,255,0.6)";
+    ctx.fill();
+    ctx.stroke();
+    
+    ctx.fillStyle = color;
+      
+    ctx.textAlign = "center";
+    
+    ctx.font = "bold 22px arial";
+    ctx.fillText("SAP",mid,90);  
+    ctx.font = "bold 92px arial";
+      
+    ctx.fillText(sap_rating,mid,mid+30);
+
+    ctx.font = "bold 22px arial";
+    ctx.fillText(letter+" RATING",mid,mid+60);    
+    ctx.font = "bold 32px arial";
+    
+    //ctx.shadowColor = "rgba(0,0,0,0.0)";
+    //ctx.shadowOffsetX = 1; 
+    //ctx.shadowOffsetY = 1; 
+    //ctx.shadowBlur = 3;
+    ctx.fillText(kwhm2,mid,280);
+    
+    ctx.font = "bold 18px arial";
+    ctx.fillText("DAILY: "+kwhd,mid,308);
+
+    ctx.font = "bold 18px arial";
+    ctx.fillText("PER PERSON: "+kwhdpp,mid,336);
+  }
+  
 </script>
-
-<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/SimpleMonthly/controllers/modal_controller.js"></script>

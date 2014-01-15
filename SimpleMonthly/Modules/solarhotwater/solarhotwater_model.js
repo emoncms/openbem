@@ -1,5 +1,21 @@
 var solarhotwater_model = { 
 
+  set_from_inputdata: function (inputdata)
+  {
+    // Copy full saved input object
+    if (inputdata.solarhotwater!=undefined) {
+      for (z in inputdata.solarhotwater.input) this.input[z] = inputdata.solarhotwater.input[z];
+    }
+    
+    // Input dependencies
+    this.input.region = inputdata.region;
+    
+    if (inputdata.waterheating!=undefined) {
+      this.input.annual_hotwater_energy_content = inputdata.waterheating.output.annual_energy_content;
+    }
+
+  },
+  
   input: {
     A: 1.25,          // Aperture Area 
     n0: 0.599,        // Zero-loss collector efficiency
@@ -13,7 +29,7 @@ var solarhotwater_model = {
     Vs: 168,
     combined_cylinder_volume: 0,
     Vd_average: 125,
-    annual_hotwater_energy_content: 1000
+    annual_hotwater_energy_content: 0
   },
   
   calc: function ()
@@ -70,17 +86,17 @@ var solarhotwater_model = {
     
     // Variables to return as outputs
     return {
-      a: a.toFixed(3),
-      collector_performance_ratio: collector_performance_ratio.toFixed(3),
-      annual_solar: annual_solar.toFixed(0),
-      solar_energy_available: solar_energy_available.toFixed(0),
-      solar_load_ratio: solar_load_ratio.toFixed(2),
-      utilisation_factor: utilisation_factor.toFixed(2),
-      collector_performance_factor: collector_performance_factor.toFixed(3),
+      a: a,
+      collector_performance_ratio: collector_performance_ratio,
+      annual_solar: annual_solar,
+      solar_energy_available: solar_energy_available,
+      solar_load_ratio: solar_load_ratio,
+      utilisation_factor: utilisation_factor,
+      collector_performance_factor: collector_performance_factor,
       Veff: Veff,
-      volume_ratio: volume_ratio.toFixed(2),
-      f2: f2.toFixed(2),
-      Qs: Qs.toFixed(0),
+      volume_ratio: volume_ratio,
+      f2: f2,
+      Qs: Qs,
       Qs_monthly: Qs_monthly
     }   
   }

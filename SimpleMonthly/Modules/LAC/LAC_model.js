@@ -7,11 +7,28 @@ Lighting
 
 var LAC_model = {
 
+  set_from_inputdata: function (inputdata)
+  {
+    // Copy full saved input object
+    if (inputdata.LAC!=undefined) {
+      for (z in inputdata.LAC.input) this.input[z] = inputdata.LAC.input[z];
+    }
+    
+    // Input dependencies
+    this.input.TFA = inputdata.TFA;
+    this.input.N = inputdata.occupancy;
+    
+    if (inputdata.elements!=undefined) {
+      this.input.GL = inputdata.elements.output.GL;
+    }
+  },
+  
   input: {
     TFA: 45,
     N: 2,
     LLE: 10,  // LLE is the number of fixed low energy lighting outlets
     L: 10,    // L is the total number of fixed lighting outlets
+    GL: 0,
     reduced_internal_heat_gains: false,
     elements: {}
   },
@@ -24,38 +41,9 @@ var LAC_model = {
 
     var C1 = 1 - (0.50 * i.LLE / i.L);
 
-    var windows = [];
-    for (z in i.elements)
-    {
-      var id = i.elements[z].lib;
-      
-      // Create specific windows array to pass to solar gains calculation
-      if (element_library[id].type=='Window') {
-      
-        windows.push({
-          orientation: i.elements[z].orientation, 
-          area: i.elements[z].area, 
-          overshading: i.elements[z].overshading, 
-          g: element_library[id].g, 
-          ff: element_library[id].ff
-        });
-
-      }
-    }
-
-    var sum = 0;
-    for (z in windows) 
-    {
-      var overshading = windows[z].overshading;
-      var accessfactor = [0.5,0.67,0.83,1.0];
-      sum += 0.9 * windows[z].area * windows[z].g * windows[z].ff * accessfactor[overshading];
-    }
-
-    var GL = sum / i.TFA;
-
     var C2 = 0;
-    if (GL<=0.095) {
-      C2 = 52.2 * Math.pow(GL,2) - 9.94 * GL + 1.433;
+    if (i.GL<=0.095) {
+      C2 = 52.2 * Math.pow(i.GL,2) - 9.94 * i.GL + 1.433;
     } else {
       C2 = 0.96;
     }
@@ -110,30 +98,39 @@ var LAC_model = {
     
     // When lower internal heat gains are assumed for the calculation
     if (i.reduced_internal_heat_gains) GC = 23 + 5 * i.N;
+
+    var GC_monthly = [];
+    for (var m=0; m<12; m++) GC_monthly[m] = GC;
     
     // CO2 emissions in kg/m2/year associated with cooking
     var cooking_CO2 = (119 + 24 * i.N) / i.TFA;
   
     return {
-      EB: EB.toFixed(0),
-      C1: C1.toFixed(2),
-      C2: C2.toFixed(2),
-      GL: GL,
-      EL: EL.toFixed(0),
-      EL_monthly: {title:"Lighting energy use:", data:EL_monthly, dp:0, units:" kWh"},
-      GL_monthly: {title:"Lighting internal heat gain<br> for each month:", data:GL_monthly, dp:0, units:"W"},
+      EB: EB,
+      C1: C1,
+      C2: C2,
+      EL: EL,
+      EL_monthly: EL_monthly,
+      GL_monthly: GL_monthly,
       EL_sum: EL_sum,
       
-      EA_initial: EA_initial.toFixed(0),
-      EA_monthly: {title:"Appliance energy use:", data:EA_monthly, dp:0, units:" kWh"},
-      EA: EA.toFixed(0),
-      GA_monthly: {title:"Appliance internal heat gain<br>for each month:", data:GA_monthly, dp:0, units:"W"},
+      EA_initial: EA_initial,
+      EA_monthly: EA_monthly,
+      EA: EA,
+      GA_monthly: GA_monthly,
       appliances_CO2: appliances_CO2,
       
       GC: GC,
+      GC_monthly: GC_monthly,
       cooking_CO2: cooking_CO2
     }
   }
   
 }
 
+function LAC_savetoinputdata(inputdata,o)
+{
+  inputdata.gains['lighting'] = o.GL_monthly;
+  inputdata.gains['appliances'] = o.GA_monthly;
+  inputdata.gains['cooking'] = o.GC_monthly;
+}

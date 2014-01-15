@@ -1,13 +1,15 @@
 // SAP 2012 and The Whole House Book by Pat Borer and Cindy Harris datasets
 
 var element_library = {
-
+  'roof0000': {type:'Roof', description:"Custom roof element", uvalue: 0, kvalue:0},
+  
   'roof0001': {type:'Roof', description:"Uninsulated loft", uvalue: 2.00, kvalue:9.0},
   'roof0002': {type:'Roof', description:"Loft with 100mm insulation", uvalue: 0.25, kvalue:9.0},
   'roof0003': {type:'Roof', description:"Room in the roof 200mm", uvalue: 0.2, kvalue:9.0},
   'roof0004': {type:'Roof', description:"Loft with 250mm insulation", uvalue: 0.16, kvalue:9.0},
   'roof0005': {type:'Roof', description:"Superinsulated 250mm insulation", uvalue: 0.14, kvalue:9.0},
   
+  'wall0000': {type:'Wall', description:"Custom wall element", uvalue: 0, kvalue:0},
   'wall0001': {type:'Wall', description:"Solid brick 225mm", uvalue: 2.20, kvalue:190.0},
   'wall0002': {type:'Wall', description:"Uninsulated cavity brick", uvalue: 1.30, kvalue:150.0},
   'wall0003': {type:'Wall', description:"Uninsulated cavity lightweight block", uvalue: 0.96, kvalue:130.0},
@@ -21,6 +23,7 @@ var element_library = {
   'wall0009': {type:'Wall', description:"Uninsulated 600mm stone wall finished with plasterboard", uvalue: 0.9, kvalue:190.0},
   'wall0010': {type:'Wall', description:"Uninsulated 600mm stone wall finished with 'plaster on the hard' 1.3", uvalue: 1.1, kvalue:350.0},
   
+  'floor0000': {type:'Floor', description:"Custom floor element", uvalue: 0, kvalue:0},
   'floor0001': {type:'Floor', description:"Timber floor uninsulated", uvalue: 0.83, kvalue:20.0},
   'floor0002': {type:'Floor', description:"Timber floor with 150mm insulation", uvalue: 0.25, kvalue:20.0},
   'floor0003': {type:'Floor', description:"Timber floor, Superinsulated 250mm insulation", uvalue: 0.14, kvalue:20.0},
@@ -34,6 +37,7 @@ var element_library = {
   //--------------------------------------------------------------------------------------------------------------------------
   
   // Double-glazed air filled
+  'window0000': {type:'Window', description: "Custom window element", uvalue: 0.0, g: 0.0, gL: 0.0, ff:0.0},
   
   'window0001': {type:'Window', description: "PVC or Wood frame, Double-glazed, air filled, 6mm gap", uvalue: 3.1, g: 0.76, gL: 0.8, ff:0.7},
   'window0002': {type:'Window', description: "PVC or Wood frame, Double-glazed, air filled, 12mm gap", uvalue: 2.8, g: 0.76, gL: 0.8, ff:0.7},

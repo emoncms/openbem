@@ -1,9 +1,24 @@
-var hot_water_model = 
+var waterheating_model = 
 {
+  set_from_inputdata: function (inputdata)
+  {
+    // Copy full saved input object
+    if (inputdata.waterheating!=undefined) {
+      for (z in inputdata.waterheating.input) this.input[z] = inputdata.waterheating.input[z];
+    }
+    
+    // Input dependencies
+    this.input.TFA = inputdata.TFA;
+    this.input.N = inputdata.occupancy;
+    
+    if (inputdata.solarhotwater!=undefined) {
+      this.input.solar_hot_water_contribution = inputdata.solarhotwater.output.Qs_monthly;
+    }
+  },
+  
   input: {
     TFA: 50,
-    use_manual_occupancy: false,
-    manual_occupancy: 0,
+    N: 0,
     low_water_use_design: false,
     instantaneous_hotwater: false,
     declared_loss_factor_known: false,
@@ -27,16 +42,8 @@ var hot_water_model =
   calc: function()
   {
     var i = this.input;
-    // Calculation of occupancy based on total floor area
-    if (i.TFA > 13.9) {
-      N = 1 + 1.76 * (1 - Math.exp(-0.000349 * Math.pow((i.TFA -13.9),2))) + 0.0013 * (i.TFA - 13.9);
-    } else {
-      N = 1;
-    }
-    
-    if (i.use_manual_occupancy) N = i.manual_occupancy;
 
-    var Vd_average = (25 * N) + 36;
+    var Vd_average = (25 * i.N) + 36;
     if (i.low_water_use_design) Vd_average *= 0.95;
     
     var Vd_m = [];
@@ -146,7 +153,6 @@ var hot_water_model =
     */    
     
     return {
-      N: N,
       Vd_average: Vd_average,
       Vd_m: Vd_m,
       monthly_energy_content: monthly_energy_content,
@@ -160,4 +166,25 @@ var hot_water_model =
       annual_energy_content: annual_energy_content
     };
   }
+}
+
+function waterheating_savetoinputdata(inputdata,o)
+{
+  inputdata.gains['waterheating'] = o.waterheating_gains;
+}
+
+function waterheating_customview(i)
+{
+    if (i.instantaneous_hotwater) $(".loss-interface").hide(); else  $(".loss-interface").show();
+    
+    if (i.declared_loss_factor_known) {
+      $(".declared-loss-factor-known").show();
+      $(".declared-loss-factor-not-known").hide();
+    } else {
+      $(".declared-loss-factor-known").hide();
+      $(".declared-loss-factor-not-known").show();
+    }
+    
+    if (i.solar_water_heating) $("#solar_hot_water_contribution").show(); else $("#solar_hot_water_contribution").hide();
+
 }

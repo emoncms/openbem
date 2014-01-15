@@ -1,27 +1,37 @@
 var ventilation_model =
 {
-
+  set_from_inputdata: function (inputdata)
+  {
+    // Copy full saved input object
+    if (inputdata.ventilation!=undefined) {
+      for (z in inputdata.ventilation.input) this.input[z] = inputdata.ventilation.input[z];
+    }
+    
+    // Input dependencies
+    this.input.region = inputdata.region;
+    this.input.dwelling_volume = inputdata.volume;
+  },
   // Public variables
   
   // input (defaults)
   input: {
     number_of_chimneys: 0,
-    number_of_openflues: 0,
+    number_of_openflues: 1,
     number_of_intermittentfans: 0,
     number_of_passivevents: 0,
     number_of_fluelessgasfires: 0,
     
-    dwelling_volume: 1,
-    dwelling_storeys: 0,
-    dwelling_construction: '',        // 'timberframe' or 'masonry'
+    dwelling_volume: 0,
+    dwelling_storeys: 1,
+    dwelling_construction: 'timberframe',        // 'timberframe' or 'masonry'
     
     suspended_wooden_floor: 0,        // 'unsealed' or 'sealed' or 0
     draught_lobby: true,
-    percentage_draught_proofed: 0,    // percentage of windows and doors
+    percentage_draught_proofed: 50,    // percentage of windows and doors
     air_permeability_test: false,     
     air_permeability_value: 0,        // 0 or value
     
-    number_of_sides_sheltered: 0, 
+    number_of_sides_sheltered: 2, 
     
     region: 0,
     
@@ -31,18 +41,10 @@ var ventilation_model =
     // c) Whole house extract ventilation or positive input ventilation from outside
     // d) Natural ventilation or whole house positive input ventilation from loft
     
-    ventilation_type: 'a',
+    ventilation_type: 'd',
     
     system_air_change_rate: 1,
     balanced_heat_recovery_efficiency: 80
-  },
-  
-  set_inputdata: function(inputdata)
-  {
-    for (z in inputdata)
-    { 
-      this.input[z] = inputdata[z];
-    }
   },
   
   calc: function()
@@ -148,4 +150,41 @@ var ventilation_model =
     
   }
     
+}
+
+function ventilation_savetoinputdata(inputdata,o)
+{
+  inputdata.losses['ventilation'] = o.infiltration_WK;
+}
+
+function ventilation_customview(i)
+{
+
+  if (i.ventilation_type=='a') {
+    $("#system_air_change_rate_div").show();
+    $("#balanced_heat_recovery_efficiency_div").show();
+  }
+  
+  if (i.ventilation_type=='b') {
+    $("#system_air_change_rate_div").show();
+    $("#balanced_heat_recovery_efficiency_div").hide();
+  }
+  
+  if (i.ventilation_type=='c') {
+    $("#system_air_change_rate_div").show();
+    $("#balanced_heat_recovery_efficiency_div").hide();
+  }
+  
+  if (i.ventilation_type=='d') {
+    $("#system_air_change_rate_div").hide();
+    $("#balanced_heat_recovery_efficiency_div").hide();
+  }
+
+  if (i.air_permeability_test==true) {
+    $("#air_permeability_value_tbody").show();
+    $("#structural").hide();
+  } else {
+    $("#air_permeability_value_tbody").hide();
+    $("#structural").show();  
+  }
 }
