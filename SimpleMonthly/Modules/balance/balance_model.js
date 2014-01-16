@@ -9,6 +9,11 @@ var balance_model = {
     this.input.losses = inputdata.losses;
     this.input.MIT = inputdata.MIT;
     this.input.altitude = inputdata.altitude;
+    this.input.TFA = inputdata.TFA;
+    
+    if (inputdata.elements!=undefined) {
+      this.input.TMP = inputdata.elements.output.TMP;
+    }
   },
 
   input: {
@@ -17,7 +22,10 @@ var balance_model = {
     MIT: [21,21,21, 21,21,21, 21,21,21, 21,21,21],
     gains: {},
     losses: {},
-    altitude:0
+    altitude:0,
+    TFA:35,
+    TMP:0,
+    use_utilfactor_forgains: true,
   },
   
   calc: function ()
@@ -35,20 +43,34 @@ var balance_model = {
       deltaT[m] = i.MIT[m] - i.externaltemperature[m];
     }
     
+    var total_losses = [];
+    
     var total_gains = [];
+    var utilisation_factor = [];
+    var useful_gains = [];
+    
     for (var m=0; m<12; m++)
     {
+      // Monthly loss totals
+      var H = 0; // heat transfer coefficient
+      for (z in i.losses) H += i.losses[z][m];
+      total_losses[m] = H * deltaT[m];
+      
+      // Monthly gains total
       var month_total = 0;
       for (z in i.gains) month_total += i.gains[z][m];
       total_gains[m] = month_total;
-    }
-    
-    var total_losses = [];
-    for (var m=0; m<12; m++)
-    {
-      var month_total = 0;
-      for (z in i.losses) month_total += i.losses[z][m];
-      total_losses[m] = month_total * deltaT[m];
+
+      // HLP for utilisation calc
+      var HLP = H / i.TFA; 
+     
+      utilisation_factor[m] = calc_utilisation_factor(i.TMP,HLP,H,i.MIT[m],i.externaltemperature[m],total_gains[m]);
+      
+      if (i.use_utilfactor_forgains) {
+      useful_gains[m] = total_gains[m] * utilisation_factor[m];
+      } else {
+      useful_gains[m] = total_gains[m];
+      }
     }
     
     var heat_demand = [];
@@ -59,11 +81,11 @@ var balance_model = {
     var cooling_sum = 0;
     for (var m=0; m<12; m++)
     {
-      heat_demand[m] = total_losses[m] - total_gains[m];
+      heat_demand[m] = total_losses[m] - useful_gains[m];
       cooling_demand[m] = 0;
       
       if (heat_demand[m]<0) {
-        cooling_demand[m] = total_gains[m] - total_losses[m];
+        cooling_demand[m] = useful_gains[m] - total_losses[m];
         heat_demand[m] = 0;
       }
       
@@ -78,6 +100,8 @@ var balance_model = {
     var annual_cooling_demand = ((cooling_sum / 12.0) * 0.024 * 365);  
     return {
       total_gains: total_gains,
+      utilisation_factor: utilisation_factor,
+      useful_gains: useful_gains,
       total_losses: total_losses,
       heat_demand: heat_demand,
       cooling_demand: cooling_demand,
