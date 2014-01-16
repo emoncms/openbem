@@ -44,7 +44,8 @@ var meaninternaltemperature_model = {
     R: 1,                             // heating system responsiveness
     living_area: 35,
     TFA:0,
-    altitude:0
+    altitude:0,
+    control_type: 1
   },
   
   calc: function ()
@@ -98,7 +99,13 @@ var meaninternaltemperature_model = {
 
     // rest of dwelling
     var Th2 = [];
-    for (var m=0; m<12; m++) Th2[m] = i.Th - i.HLP[m] + 0.085 *Math.pow(i.HLP[m],2);
+    for (var m=0; m<12; m++) {
+      // see table 9 page 159
+      if (i.control_type==1) Th2[m] = i.Th - 0.5 * i.HLP[m];
+      if (i.control_type==2) Th2[m] = i.Th - i.HLP[m] + (Math.pow(i.HLP[m],2) / 12);
+      if (i.control_type==3) Th2[m] = i.Th - i.HLP[m] + (Math.pow(i.HLP[m],2) / 12);
+      //Th2[m] = i.Th - i.HLP[m] + 0.085 *Math.pow(i.HLP[m],2);
+    }
 
     var utilisation_factor_B = [];
     for (var m=0; m<12; m++) 

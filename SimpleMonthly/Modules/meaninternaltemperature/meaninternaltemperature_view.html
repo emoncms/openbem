@@ -1,12 +1,19 @@
 <h3>Mean Internal Temperature</h3>
 
+<h4>Heating system</h4>
 <div class="input-prepend input-append">
-<span class="add-on">Heating system responsivness:</span>
-<select id="R">
+<span class="add-on">Responsiveness:</span>
+<input id="R" type="text" style="width:40px" />
+<span class="add-on">Control type:</span>
+<select id="control_type" style="width:80px">
   <option value="1">1</option>
   <option value="2">2</option>
   <option value="3">3</option>
 </select>
+</div>
+
+<h4>Living area and target temperature</h4>
+<div class="input-prepend input-append">
 <span class="add-on">Living area:</span>
 <input id="living_area" type="text" style="width:40px" />
 <span class="add-on">m2</span>
@@ -41,4 +48,11 @@
   <tbody id="MIT" title="Mean Internal Temperature:" dp=1 units=" C"></tbody>
 </table>
 
+<p><i>Refer to Table 4a (page 142) or 4d of <a href="http://www.bre.co.uk/filelibrary/SAP/2012/SAP-2012_9-92.pdf">SAP manual</a> for Heating system responsiveness.</i></p>
+<p><i>For example:
+<br>- wet system (gas/oil/wood boiler) with radiators R = 1.0 (table 4d page 149)
+<br>- direct electric R = 1.0
+<br>- storage heaters R from 0.2 (old) to 0.8 (high retention)
+<br>- range cooker boiler R = 0.5</i></p>
 
+<p><i>Refer to Table 4e (page 150) of <a href="http://www.bre.co.uk/filelibrary/SAP/2012/SAP-2012_9-92.pdf">SAP manual</a> for control type.</i></p>
