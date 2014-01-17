@@ -42,7 +42,7 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
 <script type="text/javascript" src="<?php echo $sm; ?>Modules/data/data_model.js"></script>
 <script type="text/javascript" src="<?php echo $sm; ?>Modules/measures/measures_model.js"></script>
 <ul class="nav nav-pills">
-  <li class="active"><a href="#">Simple Monthly</a></li>
+  <li><a href="<?php echo $path; ?>openbem/monthly/<?php echo $building; ?>">Simple Monthly</a></li>
   </li>
   <li>
   <a href="<?php echo $path; ?>openbem/dynamic/<?php echo $building; ?>">Dynamic Coheating</a>
@@ -60,116 +60,147 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
 
     <h3>OpenBEM</h3>
 
-    <canvas id="rating" width="269px" height="350px"></canvas>
+    <canvas id="after" width="269px" height="350px"></canvas>
     <br><br>
     <table class="table table-bordered">
-    <tr><td><a class="menu" name="context">Floor Area and Volume</a></td></tr>
-    <tr><td><a class="menu" name="elements">Building Fabric</a></td></tr>
-    <tr><td><a class="menu" name="ventilation">Ventilation & Infiltration</a></td></tr>
-    <tr><td><a class="menu" name="meaninternaltemperature">Internal Temperature</a></td></tr>
-    <tr><td><a class="menu" name="balance">Heat balance</a></td></tr>
-    <tr><td><a class="menu" name="energyrequirements">Energy Requirements</a></td></tr>
-    <tr><td><a class="menu" name="fuelcosts">Fuel costs</a></td></tr>
-    <tr><td><a class="menu" name="saprating">SAP rating</a></td></tr>
-    <tr><td><a class="menu" name="data">Export data</a></td></tr>
-    <tr><td><a href="<?php echo $path; ?>openbem/measures/<?php echo $building; ?>"><b>Retrofit explorer</b></a></td></tr>
+    <tr><td><a href="<?php echo $path; ?>openbem/monthly/<?php echo $building; ?>"><b>Back to main model</b></a></td></tr>
     </table>
-    
-    <h4>Optional modules</h4>
-    <table class="table table-bordered">
-    <tr><td><a class="menu" name="waterheating">SAP Water Heating gains</a></td></tr>
-    <tr><td><a class="menu" name="solarhotwater">SAP Solar Hot Water gains</a></td></tr>
-    <tr><td><a class="menu" name="LAC">SAP Lighting, Appliances<br>& Cooking gains</a></td></tr>
-    </table>
-    
     
   </div>
 
   <div class="span9">
-    <div id="placeholder" ></div>
+    <h3>Building Fabric Measures</h3>
+    <p>Experimental measures explorer</p>
+    <table class="table">
+    <tr>
+      <th>Current</th><th>Replaced with</th><th>Measure Cost</th><th>Apply</th>
+    </tr>
+
+    <tbody id="measures_list"></tbody>
+
+    </table>
   </div>
 
 </div>
 
 <script>
-  var c=document.getElementById("rating");
-  var ctx=c.getContext("2d");
   
   var path = "<?php echo $path; ?>";
   
   var building = <?php echo $building; ?>;
+  
   var inputdata = openbem.get(building);
+  var elements = inputdata.elements.input.list;
   
-  if (!inputdata) {
+  var cleancopy = JSON.parse(JSON.stringify(inputdata));
   
-    inputdata = {};
+  //var c=document.getElementById("before");
+  //var ctx=c.getContext("2d");
+  //draw_rating(ctx);
   
-    inputdata.occupancy = 2;
-    inputdata.region = 0;
-    inputdata.TFA = 35;
-    inputdata.volume = 70;
-    inputdata.altitude = 0;
-    inputdata.MIT = [21,21,21, 21,21,21, 21,21,21, 21,21,21];
-    inputdata.gains = {};
-    inputdata.losses = {};
-
-    inputdata.LAC_enabled = false;
-    inputdata.solarhotwater_enabled = false;
-    inputdata.waterheating_enabled = false;
-  }
+  var c=document.getElementById("after");
+  var ctx=c.getContext("2d");
   
-  var i = {}; var o = {};
   
-  load_module('balance');
   
-  $(".menu").click(function()
-  { 
-    var module = $(this).attr('name');
-    load_module(module);
-  });
+  // 1) Compile measures list
   
-  function load_module(module)
-  { 
-    if (module=='LAC') inputdata.LAC_enabled = true;
-    if (module=='solarhotwater') inputdata.solarhotwater_enabled = true;
-    if (module=='waterheating') inputdata.waterheating_enabled = true;
-    calc_all();
-   
-    i = inputdata[module].input;
-    o = inputdata[module].output;
-    
-    $("#placeholder").html(load_view(module));
-    openbem_controller(module);
-    var customcontroller = module+"_customcontroller";
-    if (window[customcontroller]!=undefined) window[customcontroller](module);
-    
-    openbem_update_view(i,o);
-    var customview = module+"_customview";
-    if (window[customview]!=undefined) window[customview](i); 
-    
-    draw_rating(ctx);
-    openbem.save(building,inputdata); 
-  }
-  
-  function openbem_update(module)
-  { 
-    calc_all();
-    
-    o = inputdata[module].output;
-    
-    openbem_update_view(i,o);
-    
-    var customview = module+"_customview";
-    if (window[customview]!=undefined) window[customview](i);
-    
-    draw_rating(ctx);
-    
-    openbem.save(building,inputdata);
-  }
-  
-  function calc_all()
+  var measures = [];
+  for (z in elements)
   {
-    calc_module('measures');
+    var measure = false;
+    
+    var lib = elements[z].lib;
+    var type = element_library[lib].type;
+
+    if (type=='Floor' && elements[z].uvalue>0.25) {
+      measure = { current: z, after: 'wall0006', cost: "", applied:true };
+    }
+
+    if (type=='Wall' && elements[z].uvalue>0.45) {
+      measure = { current: z, after: 'wall0006', cost: "", applied:true };
+    }
+
+    if (type=='Roof' && elements[z].uvalue>0.25) {
+      measure = { current: z, after: 'roof0005', cost: "", applied:true };
+    }
+    
+    if (type=='Window' && elements[z].uvalue>1.3) {
+      measure = { current: z, after: 'window0117', cost: "", applied:true };
+    }
+    
+    if (measure) measures.push(measure);
+  }
+
+  // 3) Draw measures list
+
+  var out = "";
+  for (z in measures)
+  {
+    var lib = elements[measures[z].current].lib;
+    out += "<tr><td><b>"+elements[measures[z].current].name+"</b><br>"+element_library[lib].description+"";
+    out += "<br><i>u-value: "+elements[measures[z].current].uvalue+"</i>"
+    out += "</td><td>";
+    
+    var lib = measures[z].after;
+    
+    out += "<b>"+element_library[lib].type+":</b> "+element_library[lib].description+"<br>";
+    if (element_library[lib].type!='Window') {
+      out += "<i>u-value: "+element_library[lib].uvalue+" k-value: "+element_library[lib].kvalue+"</i>";
+    } else {
+      out += "<i>u-value: "+element_library[lib].uvalue+" g: "+element_library[lib].g+" gL: "+element_library[lib].gL+" ff: "+element_library[lib].ff+"</i>";
+    }
+
+    var checked = ""; if (measures[z].applied) checked = 'checked';
+    out += "</td><td>"+measures[z].cost+"</td><td><input measureid="+z+" type='checkbox' "+checked+" / ></tr>";
+  }
+  $("#measures_list").html(out);
+
+  apply_measures();
+  calc_all();
+  draw_rating(ctx);
+  
+  $("input[type=checkbox]").click(function(){
+    var measureid = $(this).attr('measureid');
+    measures[measureid].applied = $(this)[0].checked;
+    
+    inputdata = JSON.parse(JSON.stringify(cleancopy));
+    elements = inputdata.elements.input.list;
+    
+    apply_measures();
+    calc_all();
+    draw_rating(ctx);
+  });
+
+  function apply_measures()
+  {
+    // 2) Apply measures
+
+    for (z in measures)
+    {
+      var measure = measures[z];
+      var type = element_library[measure.after].type;
+      console.log(type);
+      
+      if (measure.applied) {
+      
+        if (type=='Window') {
+          elements[measure.current].uvalue = element_library[measure.after].uvalue;
+          elements[measure.current].kvalue = element_library[measure.after].kvalue;
+          elements[measure.current].g = element_library[measure.after].g;
+          elements[measure.current].gL = element_library[measure.after].gL;
+          elements[measure.current].ff = element_library[measure.after].ff;
+        } else {
+          elements[measure.current].uvalue = element_library[measure.after].uvalue;
+          elements[measure.current].kvalue = element_library[measure.after].kvalue;
+        }
+      
+      }
+    }
+  }
+  
+  function calc_all(){
+  
     calc_module('context');
     calc_module('ventilation');
     calc_module('elements');
@@ -182,7 +213,7 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
     calc_module('fuelcosts');
     calc_module('saprating');
     calc_module('data');
-    
+  
   }
   
   function calc_module(module)
@@ -197,14 +228,6 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
     };
     
     if (window[savetoinputdata]!=undefined) window[savetoinputdata](inputdata,inputdata[module].output); 
-  }
-  
-
-  function load_view(view)
-  {
-    var result = ""; 
-    $.ajax({url: path+"Modules/openbem/SimpleMonthly/Modules/"+view+"/"+view+"_view.html", async: false, cache: false, success: function(data) {result = data;} });
-    return result;
   }
   
   function draw_rating(ctx)

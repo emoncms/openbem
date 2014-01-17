@@ -37,6 +37,8 @@ function openbem_controller()
     
     if ($route->action=='monthly') $result = view("Modules/openbem/SimpleMonthly/monthly.php",array('building'=>$building));
     
+    if ($route->action=='measures') $result = view("Modules/openbem/SimpleMonthly/measures.php",array('building'=>$building));
+    
     if ($route->action=='dynamic') $result = view("Modules/openbem/DynamicCoHeating/dynamic.php",array('building'=>$building));  
   }
 
