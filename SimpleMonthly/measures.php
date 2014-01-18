@@ -66,11 +66,18 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
     <tr><td><a href="<?php echo $path; ?>openbem/monthly/<?php echo $building; ?>"><b>Back to main model</b></a></td></tr>
     </table>
     
+    <table class="table">
+    <tr><td>Current energy cost</td><td>£<span id="current_energy_cost"></td></tr>
+    <tr><td>After retrofit energy cost</td><td>£<span id="retrofit_energy_cost"></span></td></tr>
+    <tr><td>Ten year saving</td><td>£<span id="tenyearsaving"></span></td></tr>
+    <tr><td>Twenty five year saving</td><td>£<span id="twentyfiveyearsaving"></span></td></tr>
+    <tr><td>Total cost of measures</td><td>£<span id="totalcostofmeasures"></span></td></tr>
+    </table>
   </div>
 
   <div class="span9">
     <h3>Building Fabric Measures</h3>
-    <p>Experimental measures explorer</p>
+    <p>Experimental measures explorer, costs are not accurate yet</p>
     <table class="table">
     <tr>
       <th>Current</th><th>Replaced with</th><th>Measure Cost</th><th>Apply</th>
@@ -79,6 +86,8 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
     <tbody id="measures_list"></tbody>
 
     </table>
+    
+
   </div>
 
 </div>
@@ -93,6 +102,9 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
   var elements = inputdata.elements.input.list;
   
   var cleancopy = JSON.parse(JSON.stringify(inputdata));
+  
+  var current_energy_cost = inputdata.fuelcosts.output.total_energy_cost;
+  $("#current_energy_cost").html(current_energy_cost.toFixed(0));
   
   //var c=document.getElementById("before");
   //var ctx=c.getContext("2d");
@@ -114,26 +126,25 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
     var type = element_library[lib].type;
 
     if (type=='Floor' && elements[z].uvalue>0.25) {
-      measure = { current: z, after: 'wall0006', cost: "", applied:true };
+      measure = { current: z, after: 'wall0006', cost: 20, area: elements[z].area, applied:true };
     }
 
     if (type=='Wall' && elements[z].uvalue>0.45) {
-      measure = { current: z, after: 'wall0006', cost: "", applied:true };
+      measure = { current: z, after: 'wall0006', cost: 120, area: elements[z].area, applied:true };
     }
 
     if (type=='Roof' && elements[z].uvalue>0.25) {
-      measure = { current: z, after: 'roof0005', cost: "", applied:true };
+      measure = { current: z, after: 'roof0005', cost: 6, area: elements[z].area, applied:true };
     }
     
     if (type=='Window' && elements[z].uvalue>1.3) {
-      measure = { current: z, after: 'window0117', cost: "", applied:true };
+      measure = { current: z, after: 'window0117', cost: "100", area: elements[z].area, applied:true };
     }
     
     if (measure) measures.push(measure);
   }
 
   // 3) Draw measures list
-
   var out = "";
   for (z in measures)
   {
@@ -152,7 +163,9 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
     }
 
     var checked = ""; if (measures[z].applied) checked = 'checked';
-    out += "</td><td>"+measures[z].cost+"</td><td><input measureid="+z+" type='checkbox' "+checked+" / ></tr>";
+    
+    var measurecost = (measures[z].cost * measures[z].area);
+    out += "</td><td>£"+measures[z].cost+"/m2 = £"+measurecost.toFixed(0)+"</td><td><input measureid="+z+" type='checkbox' "+checked+" / ></tr>";
   }
   $("#measures_list").html(out);
 
@@ -175,7 +188,7 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
   function apply_measures()
   {
     // 2) Apply measures
-
+    var totalcostofmeasures = 0;
     for (z in measures)
     {
       var measure = measures[z];
@@ -194,9 +207,14 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
           elements[measure.current].uvalue = element_library[measure.after].uvalue;
           elements[measure.current].kvalue = element_library[measure.after].kvalue;
         }
+        
+        var measurecost = (measure.cost * measure.area);
+        totalcostofmeasures += measurecost;
       
       }
     }
+    
+    $("#totalcostofmeasures").html(totalcostofmeasures.toFixed(0));
   }
   
   function calc_all(){
@@ -213,7 +231,15 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
     calc_module('fuelcosts');
     calc_module('saprating');
     calc_module('data');
-  
+    
+    var retrofit_energy_cost = inputdata.fuelcosts.output.total_energy_cost;
+    $("#retrofit_energy_cost").html(retrofit_energy_cost.toFixed(0));
+    
+    var tenyearsaving = 10 * (current_energy_cost - retrofit_energy_cost);
+    var twentyfiveyearsaving = 25 * (current_energy_cost - retrofit_energy_cost); 
+       
+    $("#tenyearsaving").html(tenyearsaving.toFixed(0));
+    $("#twentyfiveyearsaving").html(twentyfiveyearsaving.toFixed(0));
   }
   
   function calc_module(module)
