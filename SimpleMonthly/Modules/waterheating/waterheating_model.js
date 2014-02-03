@@ -114,7 +114,7 @@ var waterheating_model =
     //----------------------------------------------------------------------------------------
     
     var waterheating_gains = [];
-    
+    var annual_waterheating_demand = 0;
     for (var m=0; m<12; m++) {
     
       if (i.solar_water_heating) {
@@ -124,6 +124,8 @@ var waterheating_model =
       }
       
       if (hot_water_heater_output[m]<0) hot_water_heater_output[m] = 0;
+      
+      annual_waterheating_demand += hot_water_heater_output[m];
       
       if (i.hot_water_store_in_dwelling || i.community_heating) {
         heat_gains_from_water_heating[m] = 0.25 * (0.85*monthly_energy_content[m]+i.combi_loss[m]) + 0.8*(distribution_loss[m]+monthly_storage_loss[m]+primary_circuit_loss[m]);
@@ -163,7 +165,8 @@ var waterheating_model =
       hot_water_heater_output: hot_water_heater_output,
       heat_gains_from_water_heating: heat_gains_from_water_heating,
       waterheating_gains: waterheating_gains,
-      annual_energy_content: annual_energy_content
+      annual_energy_content: annual_energy_content,
+      annual_waterheating_demand: annual_waterheating_demand
     };
   }
 }

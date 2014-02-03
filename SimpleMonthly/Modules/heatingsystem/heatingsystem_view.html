@@ -1,0 +1,38 @@
+<h3>Energy requirements</h3>
+
+<table class="table">
+<tbody id="test"></tbody>
+</table>
+
+<p>Add energy requirement: (enter negative number if generation)</p>
+<div class="input-prepend input-append">
+<span class="add-on">Name:</span>
+<input id="add-energy-requirement-name" type="text" />
+<span class="add-on">Quantity:</span>
+<input id="add-energy-requirement-quantity" type="text" />
+<span class="add-on">kWh/year</span>
+<button id="add-energy-requirement" class="btn">Add</button>
+</div>
+
+<h3>Fuel requirements:</h3>
+
+<table class="table">
+  <tr>
+    <th>Fuel type</th>
+    <th>Fuel quantity</th>
+    <th>Fuel cost</th>
+    <th>Annual cost</th>
+  </tr>
+
+  <tbody id="fuels-table"></tbody>
+  
+  <tr><td><b>Total cost</b></td><td></td><td></td><td><b>£<span id="total_cost" dp=0></span></b></td></tr>
+</table>
+
+<h3>SAP Rating</h3>
+
+<table class="table">
+  <tr><td>Energy cost deflator (Table 12):</td><td><input id="energy_cost_deflator" type="text" style="width:60px" /></td></tr>
+  <tr><td>Energy cost factor (ECF)</td><td><span id="energy_cost_factor"></span></td></tr>
+  <tr><td>SAP Rating</td><td><span id="sap_rating"></span></td></tr>
+</table>

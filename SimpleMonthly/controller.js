@@ -31,11 +31,13 @@ function openbem_update_view(i,o)
 {
   for (key in i) {
     var element = $("#"+key);
+    var dp = element.attr('dp');
+    
     if (element.length>0) {
       if (element.is("input[type=text]")) element.val(i[key]);
       if (element.is("input[type=checkbox]")) element.attr('checked',i[key]);
       if (element.is("select")) element.val(i[key]);
-      if (element.is("span")) element.html(i[key]);
+      if (element.is("span")) element.html(i[key].toFixed(dp));
       if (element.is("div")) element.html(i[key]);
       if (element.is("tbody")) monthlyrow(element,i[key]);
     }

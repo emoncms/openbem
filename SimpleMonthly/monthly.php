@@ -37,6 +37,10 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
 <script type="text/javascript" src="<?php echo $sm; ?>Modules/meaninternaltemperature/meaninternaltemperature_model.js"></script>
 <script type="text/javascript" src="<?php echo $sm; ?>Modules/balance/balance_model.js"></script>
 <script type="text/javascript" src="<?php echo $sm; ?>Modules/energyrequirements/energyrequirements_model.js"></script>
+
+
+<script type="text/javascript" src="<?php echo $sm; ?>Modules/heatingsystem/heatingsystem_model.js"></script>
+
 <script type="text/javascript" src="<?php echo $sm; ?>Modules/fuelcosts/fuelcosts_model.js"></script>
 <script type="text/javascript" src="<?php echo $sm; ?>Modules/saprating/saprating_model.js"></script>
 <script type="text/javascript" src="<?php echo $sm; ?>Modules/data/data_model.js"></script>
@@ -68,9 +72,10 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
     <tr><td><a class="menu" name="ventilation">Ventilation & Infiltration</a></td></tr>
     <tr><td><a class="menu" name="meaninternaltemperature">Internal Temperature</a></td></tr>
     <tr><td><a class="menu" name="balance">Heat balance</a></td></tr>
-    <tr><td><a class="menu" name="energyrequirements">Energy Requirements</a></td></tr>
-    <tr><td><a class="menu" name="fuelcosts">Fuel costs</a></td></tr>
-    <tr><td><a class="menu" name="saprating">SAP rating</a></td></tr>
+    <!--<tr><td><a class="menu" name="energyrequirements">Energy Requirements</a></td></tr>-->
+    <tr><td><a class="menu" name="heatingsystem">Energy Requirements</a></td></tr>
+    <!--<tr><td><a class="menu" name="fuelcosts">Fuel costs</a></td></tr>-->
+    <!--<tr><td><a class="menu" name="saprating">SAP rating</a></td></tr>-->
     <tr><td><a class="menu" name="data">Export data</a></td></tr>
     <tr><td><a href="<?php echo $path; ?>openbem/measures/<?php echo $building; ?>"><b>Retrofit explorer</b></a></td></tr>
     </table>
@@ -178,9 +183,10 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
     if (inputdata.solarhotwater_enabled) calc_module('solarhotwater');
     if (inputdata.waterheating_enabled) calc_module('waterheating');
     calc_module('balance');
-    calc_module('energyrequirements');
-    calc_module('fuelcosts');
-    calc_module('saprating');
+    //calc_module('energyrequirements');
+    calc_module('heatingsystem');
+    //calc_module('fuelcosts');
+    //calc_module('saprating');
     calc_module('data');
     
   }
@@ -216,8 +222,8 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
     var kwhd = 0;
     var kwhdpp = 0;
     
-    if (inputdata.saprating!=undefined) {
-      sap_rating = Math.round(inputdata.saprating.output.sap_rating);
+    if (inputdata.heatingsystem!=undefined) {
+      sap_rating = Math.round(inputdata.heatingsystem.output.sap_rating);
       var band = 0;
       for (z in ratings)
       {
@@ -228,14 +234,14 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
       sap_rating = sap_rating;
     }
     
-    if (inputdata.energyrequirements!=undefined) {
-      kwhm2 = inputdata.energyrequirements.output.total_energy_requirement_m2;
+    if (inputdata.heatingsystem!=undefined) {
+      kwhm2 = inputdata.heatingsystem.output.total_primaryenergy_requirement / inputdata.TFA;
       kwhm2 = kwhm2.toFixed(0)+" kWh/m2";
       
-      kwhd = inputdata.energyrequirements.output.total_energy_requirement / 365.0;
+      kwhd = inputdata.heatingsystem.output.total_primaryenergy_requirement / 365.0;
       kwhd = kwhd.toFixed(1)+" kWh/d";
 
-      kwhdpp = inputdata.energyrequirements.output.total_energy_requirement / (365.0 * inputdata.occupancy);
+      kwhdpp = inputdata.heatingsystem.output.total_primaryenergy_requirement / (365.0 * inputdata.occupancy);
       kwhdpp = kwhdpp.toFixed(1)+" kWh/d";
     }
     
