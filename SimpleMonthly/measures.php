@@ -106,7 +106,7 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
   
   var cleancopy = JSON.parse(JSON.stringify(inputdata));
   
-  var current_energy_cost = inputdata.fuelcosts.output.total_energy_cost;
+  var current_energy_cost = inputdata.heatingsystem.output.total_cost;
   $("#current_energy_cost").html(current_energy_cost.toFixed(0));
   
   //var c=document.getElementById("before");
