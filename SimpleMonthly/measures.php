@@ -39,6 +39,9 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
 <script type="text/javascript" src="<?php echo $sm; ?>Modules/energyrequirements/energyrequirements_model.js"></script>
 <script type="text/javascript" src="<?php echo $sm; ?>Modules/fuelcosts/fuelcosts_model.js"></script>
 <script type="text/javascript" src="<?php echo $sm; ?>Modules/saprating/saprating_model.js"></script>
+
+<script type="text/javascript" src="<?php echo $sm; ?>Modules/heatingsystem/heatingsystem_model.js"></script>
+
 <script type="text/javascript" src="<?php echo $sm; ?>Modules/data/data_model.js"></script>
 <script type="text/javascript" src="<?php echo $sm; ?>Modules/measures/measures_model.js"></script>
 <ul class="nav nav-pills">
@@ -217,8 +220,10 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
     $("#totalcostofmeasures").html(totalcostofmeasures.toFixed(0));
   }
   
-  function calc_all(){
-  
+
+  function calc_all()
+  {
+    calc_module('measures');
     calc_module('context');
     calc_module('ventilation');
     calc_module('elements');
@@ -227,12 +232,14 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
     if (inputdata.solarhotwater_enabled) calc_module('solarhotwater');
     if (inputdata.waterheating_enabled) calc_module('waterheating');
     calc_module('balance');
-    calc_module('energyrequirements');
-    calc_module('fuelcosts');
-    calc_module('saprating');
+    //calc_module('energyrequirements');
+    calc_module('heatingsystem');
+    //calc_module('fuelcosts');
+    //calc_module('saprating');
     calc_module('data');
     
-    var retrofit_energy_cost = inputdata.fuelcosts.output.total_energy_cost;
+    
+    var retrofit_energy_cost = inputdata.heatingsystem.output.total_cost;
     $("#retrofit_energy_cost").html(retrofit_energy_cost.toFixed(0));
     
     var tenyearsaving = 10 * (current_energy_cost - retrofit_energy_cost);
