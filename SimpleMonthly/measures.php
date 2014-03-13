@@ -271,9 +271,10 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
     
     var kwhd = 0;
     var kwhdpp = 0;
+    var color = 0;
     
-    if (inputdata.saprating!=undefined) {
-      sap_rating = Math.round(inputdata.saprating.output.sap_rating);
+    if (inputdata.heatingsystem!=undefined) {
+      sap_rating = Math.round(inputdata.heatingsystem.output.sap_rating);
       var band = 0;
       for (z in ratings)
       {
@@ -284,14 +285,14 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
       sap_rating = sap_rating;
     }
     
-    if (inputdata.energyrequirements!=undefined) {
-      kwhm2 = inputdata.energyrequirements.output.total_energy_requirement_m2;
+    if (inputdata.heatingsystem!=undefined) {
+      kwhm2 = inputdata.heatingsystem.output.total_primaryenergy_requirement / inputdata.TFA;
       kwhm2 = kwhm2.toFixed(0)+" kWh/m2";
       
-      kwhd = inputdata.energyrequirements.output.total_energy_requirement / 365.0;
+      kwhd = inputdata.heatingsystem.output.total_primaryenergy_requirement / 365.0;
       kwhd = kwhd.toFixed(1)+" kWh/d";
 
-      kwhdpp = inputdata.energyrequirements.output.total_energy_requirement / (365.0 * inputdata.occupancy);
+      kwhdpp = inputdata.heatingsystem.output.total_primaryenergy_requirement / (365.0 * inputdata.occupancy);
       kwhdpp = kwhdpp.toFixed(1)+" kWh/d";
     }
     
