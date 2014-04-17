@@ -23,7 +23,7 @@ var balance_model = {
     gains: {},
     losses: {},
     altitude:0,
-    TFA:35,
+    TFA:0,
     TMP:0,
     use_utilfactor_forgains: true,
   },

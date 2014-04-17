@@ -11,7 +11,7 @@ var context_model = {
   input: {
     basement_area: 0, basement_height: 0,
     groundfloor_area: 0, groundfloor_height: 0,
-    firstfloor_area: 35, firstfloor_height: 2,
+    firstfloor_area: 0, firstfloor_height: 0,
     secondfloor_area: 0, secondfloor_height: 0,
     thirdfloor_area: 0, thirdfloor_height: 0,
     otherfloor1_area: 0, otherfloor1_height: 0,

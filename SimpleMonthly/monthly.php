@@ -17,7 +17,7 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
 
 ?>
 
-<script type="text/javascript" src="<?php echo $sm; ?>interface/openbem.js"></script>
+<script type="text/javascript" src="<?php echo $path; ?>Modules/openbem/openbem.js"></script>
 <script type="text/javascript" src="<?php echo $sm; ?>datasets/datasets.js"></script>
 <script type="text/javascript" src="<?php echo $sm; ?>datasets/element_library.js"></script>
 
@@ -45,24 +45,21 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
 <script type="text/javascript" src="<?php echo $sm; ?>Modules/saprating/saprating_model.js"></script>
 <script type="text/javascript" src="<?php echo $sm; ?>Modules/data/data_model.js"></script>
 <script type="text/javascript" src="<?php echo $sm; ?>Modules/measures/measures_model.js"></script>
-<ul class="nav nav-pills">
-  <li class="active"><a href="#">Simple Monthly</a></li>
-  </li>
-  <li>
-  <a href="<?php echo $path; ?>openbem/dynamic/<?php echo $building; ?>">Dynamic Coheating</a>
-  </li>
-  <li>
-  <a href="<?php echo $path; ?>openbem/heatingexplorer">Heating Explorer</a>
-  </li>
+
+<br>
+<ul class="breadcrumb">
+<li><a href="<?php echo $path; ?>openbem/projects">My Projects</a> <span class="divider">/</span></li>
+<li><a href="<?php echo $path; ?>openbem/project?project_id=<?php echo $project_id; ?>" class="project_name"></a> <span class="divider">/</span></li>
+<li class="active scenario_name">Scenario <?php echo $scenario_id; ?></li>
 </ul>
 
 <div class="row">
 
-
-
   <div class="span3">
 
-    <h3>OpenBEM</h3>
+    <h3>OpenBEM Scenario</h3>
+    
+    <p>Back to <a href="<?php echo $path; ?>openbem/projects">all projects</a></p>
 
     <canvas id="rating" width="269px" height="350px"></canvas>
     <br><br>
@@ -102,17 +99,25 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
   
   var path = "<?php echo $path; ?>";
   
-  var building = <?php echo $building; ?>;
-  var inputdata = openbem.get(building);
+  var scenario_id = <?php echo $scenario_id; ?>;
+  var scenario = openbem.get_scenario(scenario_id);
+  var inputdata = scenario.scenario_data;
+  
+  $(".scenario_name").html(scenario.scenario_meta.name);
+
+  var project_id = <?php echo $project_id; ?>; 
+  var project_details = openbem.getprojectdetails(project_id);
+  $(".project_name").html(project_details.project_name);
   
   if (!inputdata) {
   
     inputdata = {};
   
-    inputdata.occupancy = 2;
+    
+    inputdata.occupancy = 0;
     inputdata.region = 0;
-    inputdata.TFA = 35;
-    inputdata.volume = 70;
+    inputdata.TFA = 0;
+    inputdata.volume = 0;
     inputdata.altitude = 0;
     inputdata.MIT = [21,21,21, 21,21,21, 21,21,21, 21,21,21];
     inputdata.gains = {};
@@ -121,6 +126,7 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
     inputdata.LAC_enabled = false;
     inputdata.solarhotwater_enabled = false;
     inputdata.waterheating_enabled = false;
+    
   }
   
   var i = {}; var o = {};
@@ -153,7 +159,7 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
     if (window[customview]!=undefined) window[customview](i); 
     
     draw_rating(ctx);
-    openbem.save(building,inputdata); 
+    openbem.save_scenario(scenario_id,inputdata); 
   }
   
   function openbem_update(module)
@@ -169,7 +175,7 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
     
     draw_rating(ctx);
     
-    openbem.save(building,inputdata);
+    openbem.save_scenario(scenario_id,inputdata); 
   }
   
   function calc_all()
@@ -236,6 +242,7 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
     
     if (inputdata.heatingsystem!=undefined) {
       kwhm2 = inputdata.heatingsystem.output.total_primaryenergy_requirement / inputdata.TFA;
+      if (isNaN(kwhm2)) kwhm2 = 0;
       kwhm2 = kwhm2.toFixed(0)+" kWh/m2";
       
       kwhd = inputdata.heatingsystem.output.total_primaryenergy_requirement / 365.0;

@@ -22,26 +22,23 @@ function openbem_controller()
   require "Modules/openbem/openbem_model.php";
   $openbem = new OpenBEM($mysqli);
 
-  if ($route->format == 'html')
-  {
-    if ($route->action=='heatpumpexplorer') $result = view("Modules/openbem/heatpump.php",array());
-    if ($route->action=='heatingexplorer') $result = view("Modules/openbem/direct.php",array());
-  }
-
-
   if ($route->format == 'html' && $session['write'])
   {
-    $building = (int) $route->subaction;
-    if ($building<1) $building = 1;
-    $submenu = view("Modules/openbem/greymenu.php",array());
+    if ($route->action=='projects') $result = view("Modules/openbem/SimpleMonthly/projects_view.php",array());    
+    if ($route->action=='project') $result = view("Modules/openbem/SimpleMonthly/project_view.php",array('project_id'=>get('project_id')));
+
+        
+    if ($route->action=='monthly') $result = view("Modules/openbem/SimpleMonthly/monthly.php",array('project_id'=>get('project_id'),'scenario_id'=>get('scenario_id')));
     
-    if ($route->action=='monthly') $result = view("Modules/openbem/SimpleMonthly/monthly.php",array('building'=>$building));
+    if ($route->action=='compare') $result = view("Modules/openbem/SimpleMonthly/compare.php",array('project_id'=>get('project_id'),'scenarioA'=>get('scenarioA'),'scenarioB'=>get('scenarioB')));
+
+
+    //if ($route->action=='compare') $result = view("Modules/openbem/SimpleMonthly/compare.php",array('building'=>$building));
     
-    if ($route->action=='measures') $result = view("Modules/openbem/SimpleMonthly/measures.php",array('building'=>$building));
-    
-    if ($route->action=='dynamic') $result = view("Modules/openbem/DynamicCoHeating/dynamic.php",array('building'=>$building));  
+    //if ($route->action=='measures') $result = view("Modules/openbem/SimpleMonthly/measures.php",array('building'=>$building));
   }
 
+  /*
   if ($route->format == 'json' && $session['write'])
   {  
   
@@ -69,8 +66,24 @@ function openbem_controller()
 
       }
     }
+    */
     
-    if ($route->action == 'savedynamic')
+    //if ($route->action == 'getscenario' && $session['write'] $result = json_decode($openbem->get_monthly($session['userid'], get('scenario'))); 
+  if ($route->format == 'json' && $session['write'])
+  {
+    if ($route->action == 'getprojects') $result = $openbem->get_projects($session['userid']);
+    if ($route->action == 'getprojectdetails') $result = $openbem->get_project_details($session['userid'],get('project_id'));
+    if ($route->action == 'addproject') $result = $openbem->add_project($session['userid'],get('name'),get('description'));
+    if ($route->action == 'deleteproject') $result = $openbem->delete_project($session['userid'],get('projectid'));
+    if ($route->action == 'getproject') $result = $openbem->get_project_scenarios($session['userid'],get('project_id'));
+    
+    if ($route->action == 'getscenarios') $result = $openbem->get_scenarios(get('project_id'));
+    if ($route->action == 'addscenario') $result = $openbem->add_scenario(get('project_id'),get('meta'));
+    if ($route->action == 'clonescenario') $result = $openbem->clone_scenario(get('project_id'),get('scenario_id'));
+
+    
+    if ($route->action == 'getscenario') $result = $openbem->get_scenario(get('scenario_id'));
+    if ($route->action == 'savescenario')
     {
       $result = false;
       $data = null;
@@ -84,7 +97,7 @@ function openbem_controller()
 
         // and we have a write session then save it to db
         if ($session['write']) {
-          $result = $openbem->save_dynamic($session['userid'],get('building'),$data);
+          $result = $openbem->save_scenario(post('scenario_id'),$data);
         } else {
           // ELSE Save in session data
           // $result = true;
@@ -94,18 +107,7 @@ function openbem_controller()
 
       }
     }
-    
-    if ($route->action == 'getmonthly' && $session['write'])
-    {
-      $result = json_decode($openbem->get_monthly($session['userid'], get('building'))); 
-    } 
-    
-    if ($route->action == 'getdynamic' && $session['write'])
-    {
-      $result = json_decode($openbem->get_dynamic($session['userid'], get('building'))); 
-    } 
-    
   }
 
-  return array('content'=>$result,'submenu'=>$submenu);
+  return array('content'=>$result);
 }

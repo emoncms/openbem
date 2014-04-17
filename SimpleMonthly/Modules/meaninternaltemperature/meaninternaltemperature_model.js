@@ -105,6 +105,8 @@ var meaninternaltemperature_model = {
       if (i.control_type==2) Th2[m] = i.Th - i.HLP[m] + (Math.pow(i.HLP[m],2) / 12);
       if (i.control_type==3) Th2[m] = i.Th - i.HLP[m] + (Math.pow(i.HLP[m],2) / 12);
       //Th2[m] = i.Th - i.HLP[m] + 0.085 *Math.pow(i.HLP[m],2);
+      
+      if (isNaN(Th2[m])) Th2[m] = i.Th;
     }
 
     var utilisation_factor_B = [];
@@ -133,6 +135,7 @@ var meaninternaltemperature_model = {
     }
 
     var fLA = i.living_area / i.TFA;
+    if (isNaN(fLA)) fLA = 0;
 
     var MIT = [];
     for (var m=0; m<12; m++) 

@@ -17,14 +17,14 @@ var waterheating_model =
   },
   
   input: {
-    TFA: 50,
+    TFA: 0,
     N: 0,
     low_water_use_design: false,
     instantaneous_hotwater: false,
     declared_loss_factor_known: false,
     manufacturer_loss_factor: 0,
     temperature_factor_a: 0,
-    storage_volume: 160,
+    storage_volume: 0,
     loss_factor_b: 0.0191,
     volume_factor_b: 0.908,
     temperature_factor_b: 0.6,

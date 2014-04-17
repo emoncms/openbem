@@ -18,7 +18,7 @@ var elements_model = {
 
     list: 
     [
-      {
+/*      {
           "name": "Main Floor",
           "lib": "floor0007",
           "area": 21,
@@ -92,7 +92,7 @@ var elements_model = {
           "g":0.76,
           "gL":0.8,
           "ff":0.7
-      }
+      } */
     ]
   },
   

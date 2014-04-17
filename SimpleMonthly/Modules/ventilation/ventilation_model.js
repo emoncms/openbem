@@ -16,22 +16,22 @@ var ventilation_model =
   // input (defaults)
   input: {
     number_of_chimneys: 0,
-    number_of_openflues: 1,
+    number_of_openflues: 0,
     number_of_intermittentfans: 0,
     number_of_passivevents: 0,
     number_of_fluelessgasfires: 0,
     
     dwelling_volume: 0,
-    dwelling_storeys: 1,
+    dwelling_storeys: 0,
     dwelling_construction: 'timberframe',        // 'timberframe' or 'masonry'
     
     suspended_wooden_floor: 0,        // 'unsealed' or 'sealed' or 0
-    draught_lobby: true,
-    percentage_draught_proofed: 50,    // percentage of windows and doors
+    draught_lobby: false,
+    percentage_draught_proofed: 0,    // percentage of windows and doors
     air_permeability_test: false,     
     air_permeability_value: 0,        // 0 or value
     
-    number_of_sides_sheltered: 2, 
+    number_of_sides_sheltered: 0, 
     
     region: 0,
     
@@ -41,10 +41,10 @@ var ventilation_model =
     // c) Whole house extract ventilation or positive input ventilation from outside
     // d) Natural ventilation or whole house positive input ventilation from loft
     
-    ventilation_type: 'd',
+    ventilation_type: 'a',
     
-    system_air_change_rate: 1,
-    balanced_heat_recovery_efficiency: 80
+    system_air_change_rate: 0,
+    balanced_heat_recovery_efficiency: 0
   },
   
   calc: function()
@@ -55,7 +55,11 @@ var ventilation_model =
     total += this.input.number_of_intermittentfans * 10;
     total += this.input.number_of_passivevents * 10;
     total += this.input.number_of_fluelessgasfires * 10;
-    var infiltration = total / this.input.dwelling_volume;
+    
+    var infiltration = 0;
+    if (this.input.dwelling_volume!=0) {
+        infiltration = total / this.input.dwelling_volume;
+    }
     
     if (this.input.air_permeability_test==false) 
     { 

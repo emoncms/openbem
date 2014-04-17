@@ -38,7 +38,7 @@ var heatingsystem_model = {
     
       if (this.input.energy_requirements.spaceheating==undefined) {
         this.input.energy_requirements.spaceheating = {name:"Space Heating", quantity: 0, suppliedby:[
-          {type:'gasboiler',fraction:0.95, efficiency:energysystems.gasboiler.efficiency}
+          //{type:'gasboiler',fraction:0.95, efficiency:energysystems.gasboiler.efficiency}
         ]};
       }
       this.input.energy_requirements.spaceheating.quantity = inputdata.balance.output.annual_heat_demand;
@@ -47,7 +47,7 @@ var heatingsystem_model = {
     if (inputdata.waterheating!=undefined) {
       if (this.input.energy_requirements.waterheating==undefined) {
         this.input.energy_requirements.waterheating = {name:"Hot water", quantity: 0, suppliedby:[
-          {type:'gasboiler',fraction:1.0, efficiency:energysystems.gasboiler.efficiency}
+          //{type:'gasboiler',fraction:1.0, efficiency:energysystems.gasboiler.efficiency}
         ]};
       }
       this.input.energy_requirements.waterheating.quantity = inputdata.waterheating.output.annual_waterheating_demand;

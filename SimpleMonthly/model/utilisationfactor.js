@@ -39,6 +39,7 @@ function calc_utilisation_factor(TMP,HLP,H,Ti,Te,G)
   if (y>0.0 && y!=1.0) n = (1.0 - Math.pow(y,a)) / (1.0 - Math.pow(y,a+1.0));
   if (y == 1.0) n = a / (a + 1.0);
 
+  if (isNaN(n)) n = 0;
   return n;
 }
 
@@ -67,6 +68,7 @@ function calc_temperature_reduction(TMP,HLP,H,Ti,Te,G, R,Th,toff)
 
   //console.log(Tsc);
 
+  if (isNaN(u)) u = 0;
   return u;
 }
 
