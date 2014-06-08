@@ -17,51 +17,44 @@ var elements_model = {
     TFA:0,
 
     list: 
-    [
-/*      {
-          "name": "Main Floor",
+    {
+/*      "Main Floor": {
           "lib": "floor0007",
           "area": 21,
           "uvalue": 0.5,
           "kvalue": 110
       },
-      {
-          "name": "Front wall",
+      "Front wall": {
           "lib": "wall0010",
           "area": 11.399999999999999,
           "uvalue": 1.1,
           "kvalue": 350
       },
-      {
-          "name": "Back wall",
+      "Back wall": {
           "lib": "wall0010",
           "area": 11.399999999999999,
           "uvalue": 1.1,
           "kvalue": 350
       },
-      {
-          "name": "Left wall",
+      "Left wall": {
           "lib": "wall0010",
           "area": 9.19,
           "uvalue": 1.1,
           "kvalue": 350
       },
-      {
-          "name": "Right wall",
+      "Right wall": {
           "lib": "wall0004",
           "area": 9.19,
           "uvalue": 0.45,
           "kvalue": 10
       },
-      {
-          "name": "Roof",
+      "Roof": {
           "lib": "roof0002",
           "area": 27.240000000000002,
           "uvalue": 0.25,
           "kvalue": 9
       },
-      {
-          "name": "Front window",
+      "Front window": {
           "lib": "window0121",
           "area": 0.783,
           "orientation": 3,
@@ -71,8 +64,7 @@ var elements_model = {
           "gL":0.9,
           "ff":0.7
       },
-      {
-          "name": "Roof window Front",
+      "Roof window Front": {
           "lib": "window0001",
           "area": 1.0290000000000001,
           "orientation": 3,
@@ -82,8 +74,7 @@ var elements_model = {
           "gL":0.8,
           "ff":0.7
       },
-      {
-          "name": "Roof window Back",
+      "Roof window Back": {
           "lib": "window0001",
           "area": 1.0290000000000001,
           "orientation": 3,
@@ -93,7 +84,7 @@ var elements_model = {
           "gL":0.8,
           "ff":0.7
       } */
-    ]
+    }
   },
   
   calc: function ()
@@ -186,7 +177,7 @@ function elements_customview(i)
       out += "<td><b>"+element_library[id].type+"</b></td>";
     }
     
-    out += "<td><b>"+i.list[z].name+"</b><br><i>";
+    out += "<td><b>"+z+"</b><br><i>";
     for (x in element_library[id])
     {
       if (x=='description') out += element_library[id][x]+", ";
@@ -214,14 +205,14 @@ function elements_customview(i)
     }
     // Edit and delete icon's, span hide's/show's the icons when the mouse hovers.
     out += "<td><span style='display:none'>";
-    out += "<i class='icon-pencil' style='margin-right: 10px; cursor:pointer' eid="+z+" ></i>";
-    out += "<i class='icon-trash' eid="+z+" style='cursor:pointer' ></i>";
+    out += '<i class="icon-pencil" style="margin-right: 10px; cursor:pointer" eid="'+z+'" ></i>';
+    out += '<i class="icon-trash" eid="'+z+'" style="cursor:pointer" ></i>';
     out += "</span></td>";
     
     out += "</tr>";
   }
   
-  if (i.list.length==0) {
+  if (Object.size(i.list)==0) {
     out = "<tr class='alert'><td></td><td style='padding-top:50px; padding-bottom:50px'><b>Click on Add element (top-left) to add floor, walls, roof and window elements</b></td><td></td><td></td><td></td><td></td></tr>";
   }
   
@@ -242,7 +233,7 @@ function elements_customcontroller(module)
   // Delete's the element
   $("#elements").on("click",".icon-trash",function(){
     var id = $(this).attr('eid');
-    i.list.splice(id,1);
+    delete i.list[id];
     
     openbem_update(module);
   });
@@ -282,7 +273,7 @@ function elements_customcontroller(module)
     $("#element-selector").html(out);
    
     // Set name and area
-    $("#element-title").val(i.list[id].name);
+    $("#element-uniquename").val(id);
     $("#element-area").val(i.list[id].area);
     $("#element-uvalue").val(i.list[id].uvalue);
     $("#element-kvalue").val(i.list[id].kvalue); 
@@ -333,8 +324,26 @@ function elements_customcontroller(module)
 
   $("#element-add").click(function()
   {
+    // Elements are identified via a unqiue name rather than id
+    // to make it easier to compare, as id's could change.
+    var uniquename = $("#element-uniquename").val();
+
+    if (!uniquename) 
+    {
+      alert("Please enter a name for the element such as 'South wall'");
+      return false;
+    } 
+    
+    for (z in i.list)
+    {
+        if (z == uniquename)
+        {
+            alert("Element with this name already exists");
+            return false;
+        }
+    } 
+  
     var element_id = $("#element-selector").val();
-    var name = $("#element-title").val();
     var area = parseFloat($("#element-area").val()*1);
     
     var type = element_library[element_id].type;
@@ -360,10 +369,6 @@ function elements_customcontroller(module)
     { 
       alert("Please select an element using the drop down element selector");
     } 
-    else if (!name) 
-    {
-      alert("Please enter a name for the element such as 'South wall'");
-    } 
     else if (area<=0 && area!=NaN)
     {
       alert("Please give an area greater than 0");
@@ -374,17 +379,17 @@ function elements_customcontroller(module)
       if (type=='Window') {
         var orient = parseInt($("#window_orientation").val());
         var shade = parseInt($("#window_overshading").val());
-        i.list.push({name: name, lib: element_id, area: area, orientation: orient,overshading: shade, uvalue: uvalue, g:g, gL:gL, ff:ff});
+        var description = element_library[element_id].description;
+        i.list[uniquename] = {lib: element_id, description: description, area: area, orientation: orient,overshading: shade, uvalue: uvalue, g:g, gL:gL, ff:ff};
       } else {
-        i.list.push({
-          name: name, 
+        i.list[uniquename] = { 
           lib: element_id, 
           area: area,
           
           uvalue: uvalue,
           kvalue: kvalue
         
-        });
+        };
       }
     
       // save and update
@@ -397,9 +402,22 @@ function elements_customcontroller(module)
   $("#element-edit").click(function()
   {
     var id = $("#myModal").attr('eid');
+    var uniquename = $("#element-uniquename").val();
+    
+    if (!uniquename) 
+    {
+      alert("Please enter a name for the element such as 'South wall'");
+      return false;
+    } 
+    
+    if (id!=uniquename) {
+        // Name has changed, delete old entry
+        delete i.list[id];
+    }
+    
     var element_id = $("#element-selector").val();
-    var name = $("#element-title").val();
-    console.log(name);
+
+    
     var area = parseFloat($("#element-area").val()*1);
     var type = element_library[element_id].type;
     
@@ -423,11 +441,7 @@ function elements_customcontroller(module)
     if (!element_id)
     { 
       alert("Please select an element using the drop down element selector");
-    } 
-    else if (!name) 
-    {
-      alert("Please enter a name for the element such as 'South wall'");
-    } 
+    }
     else if (area<=0 && area!=NaN)
     {
       alert("Please give an area greater than 0");
@@ -438,10 +452,11 @@ function elements_customcontroller(module)
       if (type=='Window') {
         var orient = parseInt($("#window_orientation").val());
         var shade = parseInt($("#window_overshading").val());
-        i.list[id] = {name: name, lib: element_id, area: area, orientation: orient,overshading: shade, uvalue: uvalue, g:g, gL:gL, ff:ff};
+        var description = element_library[element_id].description;
+        i.list[uniquename] = {lib: element_id, description: description, area: area, orientation: orient,overshading: shade, uvalue: uvalue, g:g, gL:gL, ff:ff};
       
       } else {
-        i.list[id] = {name: name, lib: element_id, area: area,
+        i.list[uniquename] = {lib: element_id, area: area,
           uvalue: uvalue,
           kvalue: kvalue
         };
@@ -457,4 +472,12 @@ function elements_customcontroller(module)
     }
   });
 }
+
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
 

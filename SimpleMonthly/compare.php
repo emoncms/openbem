@@ -27,7 +27,7 @@
     
 <h2>Changes</h2>
 <br>
-<table id="compare" class="table table-striped"></table>
+<div id="compare"></div>
 
 <script>
   
@@ -93,14 +93,15 @@
     ["Balanced heat recovery efficiency",'ventilation.input.balanced_heat_recovery_efficiency'],
 
     ["Heating system responsiveness",'meaninternaltemperature.input.R'],
-    ["Control type",'meaninternaltemperature.input.control_type'],  
-    ["Control type",'meaninternaltemperature.input.control_type'],  
+    ["Control type",'meaninternaltemperature.input.control_type'],
     ["Living area",'meaninternaltemperature.input.living_area'],
 
     ["Use utilfactor for gains",'balance.input.use_utilfactor_forgains'],
     ["Energy cost deflator",'heatingsystem.input.energy_cost_deflator']
 
   ];
+  
+  out += "<table class='table table-striped'>";
   
   for (z in changes)
   {
@@ -131,34 +132,232 @@
     }
   }
   
+  out += "</table>";
+  out += "<h3>Building Elements</h3>";
+  out += "<p>Changes to Floor's, Wall's, Windows and Roof elements</p>";
+  out += "<table class='table table-striped'>";
+  out += "<tr><th>Before</th><th>W/K</th><th>After</th><th>W/K</th><th>Change</th></tr>";
+  
   // Changes to elements
+  var listA = inputdataA.elements.input.list;
+  var listB = inputdataB.elements.input.list;
   
-  var num = inputdataB.elements.input.list.length;
-  
-  if (inputdataA.elements.input.list.length>inputdataB.elements.input.list.length) {
-      num = inputdataA.elements.input.list.length;
-  }
-  
-  for (var i=0; i<num; i++)
+  for (z in listA)
   {
-    if (inputdataA.elements.input.list[i].uvalue != inputdataB.elements.input.list[i].uvalue) {
-      valA = inputdataA.elements.input.list[i].uvalue;
-      valB = inputdataB.elements.input.list[i].uvalue;
-      out += "<tr><td>Element: "+inputdataA.elements.input.list[i].name+" u-value changed from "+valA+" to "+valB+"</tr>";
-    }
-    
-    if (inputdataA.elements.input.list[i].area != inputdataB.elements.input.list[i].area) {
-      valA = inputdataA.elements.input.list[i].area;
-      valB = inputdataB.elements.input.list[i].area;
-      out += "<tr><td>Element: "+inputdataA.elements.input.list[i].name+" area changed from "+valA+" m2 to "+valB+" m2</td></tr>";
-    }
-    
-    if (inputdataA.elements.input.list[i].kvalue != inputdataB.elements.input.list[i].kvalue) {
-      valA = inputdataA.elements.input.list[i].kvalue;
-      valB = inputdataB.elements.input.list[i].kvalue;
-      out += "<tr><td>Element: "+inputdataA.elements.input.list[i].name+" k-value changed from "+valA+" kJ/m2 to "+valB+" kJ/m2</td></tr>";
-    }
+        if (listB[z]==undefined)
+        {
+            out += "<tr><td>Element: <b>'"+z+"'</b> in scenario A has been deleted</td></tr>";
+        }
   }
+  
+  for (z in listB)
+  {
+        if (listA[z]==undefined)
+        {
+            out += "<tr><td>New Element: <b>'"+z+"'</b> added to scenario B</td></tr>";
+        }
+        else
+        {
+            
+            if (JSON.stringify(listA[z]) != JSON.stringify(listB[z]))
+            {
+                out += "<tr><td><b>"+z+":</b><br><i>";
+                for (x in listA[z])
+                {
+                    if (x=='description') out += listA[z][x]+", ";
+                    if (x=='area') out += "Area: "+listA[z][x].toFixed(1)+"m<sup>2</sup>, ";
+                    if (x=='uvalue') out += "U-value: "+listA[z][x]+", ";
+                    if (x=='kvalue') out += "k-value: "+listA[z][x];
+                    if (x=='g') out += "g: "+listA[z][x]+", ";
+                    if (x=='gL') out += "gL: "+listA[z][x]+", ";
+                    if (x=='ff') out += "Frame factor: "+listA[z][x];
+                }
+                out += "</i></td>";
+                
+                out += "<td>"+(listA[z].uvalue*listA[z].area).toFixed(1)+" W/K</td>";
+                
+                out += "<td><b>"+z+":</b><br><i>";
+                for (x in listB[z])
+                {
+                    if (x=='description') out += listA[z][x]+", ";
+                    if (x=='area') out += "Area: "+listA[z][x].toFixed(1)+"m<sup>2</sup>, ";
+                    if (x=='uvalue') out += "U-value: "+listB[z][x]+", ";
+                    if (x=='kvalue') out += "k-value: "+listB[z][x];
+                    if (x=='g') out += "g: "+listB[z][x]+", ";
+                    if (x=='gL') out += "gL: "+listB[z][x]+", ";
+                    if (x=='ff') out += "Frame factor: "+listB[z][x];
+                }
+                out += "</i></td>";
+                
+                out += "<td>"+(listB[z].uvalue*listB[z].area).toFixed(1)+" W/K</td>";
+                
+                var saving = (listA[z].uvalue*listA[z].area) - (listB[z].uvalue*listB[z].area);
+                
+                out += "<td>";
+                if (saving>0) out +="<span style='color:#00aa00'>-";
+                if (saving<0) out +="<span style='color:#aa0000'>+";
+                out += (saving).toFixed(1)+" W/K</span></td>";
+                
+                out += "</tr>";
+            }
+        }
+  }
+  out += "</table>";
+  out += "<h3>Energy Requirements</h3>";
+  
+  // Changes to elements
+  var listA = inputdataA.heatingsystem.input.energy_requirements;
+  var listB = inputdataB.heatingsystem.input.energy_requirements;
+   
+  out += "<table class='table table-striped'>";
+  
+  for (z in listA)
+  {
+        if (listB[z]==undefined)
+        {
+                out += "<tr><td>";
+                
+                out += "<b>"+listA[z].name+": </b>";
+                out += listA[z].quantity.toFixed(0)+" kWh<br>";
+                out += "  Supplied by:<br>";
+                for (i in listA[z].suppliedby)
+                {
+                    out += "  - Type: "+listA[z].suppliedby[i].type+", ";
+                    out += "Fraction: "+(listA[z].suppliedby[i].fraction*100).toFixed(0)+"%, ";
+                    out += "Efficiency: "+(listA[z].suppliedby[i].efficiency*100).toFixed(0)+"%";
+                    out += "<br>";
+                }
+                
+                out += "</td><td><br><b>Deleted in scenario B</b></td></tr>";
+        }
+  }
+  
+  for (z in listB)
+  {
+        if (listA[z]==undefined)
+        {
+                out += "<tr><td><br><b>New to scenario B</b></td><td>";
+                
+                out += "<b>"+listB[z].name+": </b>";
+                out += listB[z].quantity.toFixed(0)+" kWh <b>(New)</b><br>";
+                out += "  Supplied by:<br>";
+                for (i in listB[z].suppliedby)
+                {
+                    out += "  - Type: "+listB[z].suppliedby[i].type+", ";
+                    out += "Fraction: "+(listB[z].suppliedby[i].fraction*100).toFixed(0)+"%, ";
+                    out += "Efficiency: "+(listB[z].suppliedby[i].efficiency*100).toFixed(0)+"%";
+                    out += "<br>";
+                }
+                
+                out += "</td></tr>";
+        }
+        else
+        {
+            
+            if (JSON.stringify(listA[z]) != JSON.stringify(listB[z]))
+            {   
+                out += "<tr><td>";
+                
+                out += "<b>"+listA[z].name+": </b>";
+                out += listA[z].quantity.toFixed(0)+" kWh<br>";
+                out += "  Supplied by:<br>";
+                for (i in listA[z].suppliedby)
+                {
+                    out += "  - Type: "+listA[z].suppliedby[i].type+", ";
+                    out += "Fraction: "+(listA[z].suppliedby[i].fraction*100).toFixed(0)+"%, ";
+                    out += "Efficiency: "+(listA[z].suppliedby[i].efficiency*100).toFixed(0)+"%";
+                    out += "<br>";
+                }
+                
+                out += "</td><td>";
+                
+                out += "<b>"+listB[z].name+": </b>";
+                out += listB[z].quantity.toFixed(0)+" kWh<br>";
+                out += "  Supplied by:<br>";
+                for (i in listB[z].suppliedby)
+                {
+                    out += "  - Type: "+listB[z].suppliedby[i].type+", ";
+                    out += "Fraction: "+(listB[z].suppliedby[i].fraction*100).toFixed(0)+"%, ";
+                    out += "Efficiency: "+(listB[z].suppliedby[i].efficiency*100).toFixed(0)+"%";
+                    out += "<br>";
+                }
+                
+                out += "</td></tr>";
+            }
+        }
+  }
+  
+  out += "</table>";
+  out += "<h3>Fuel costs</h3>";
+  
+  // Changes to elements
+  var listA = inputdataA.heatingsystem.output.fueltotals;
+  var listB = inputdataB.heatingsystem.output.fueltotals;
+   
+  out += "<table class='table table-striped'>";
+  
+  for (z in listA)
+  {
+        if (listB[z]==undefined)
+        {
+                out += "<tr><td>";
+                
+                out += "<b>"+z+": </b><br>";
+                out += "Fuel quantity: "+listA[z].quantity.toFixed(0)+" kWh<br>";
+                out += "Fuel cost: £"+listA[z].fuelcost.toFixed(2)+"<br>";
+                out += "Annual cost: £"+listA[z].annualcost.toFixed(0)+"<br>";
+                
+                out += "</td><td><br><b>Deleted in scenario B</b></td></tr>";
+        }
+  }
+  
+  for (z in listB)
+  {
+        if (listA[z]==undefined)
+        {
+                out += "<tr><td><br><b>New to scenario B</b></td><td>";
+                
+                out += "<b>"+z+": </b><br>";
+                out += "Fuel quantity: "+listB[z].quantity.toFixed(0)+" kWh<br>";
+                out += "Fuel cost: £"+listB[z].fuelcost.toFixed(2)+"<br>";
+                out += "Annual cost: £"+listB[z].annualcost.toFixed(0)+"<br>";
+                
+                out += "</td></tr>";
+        }
+        else
+        {
+            
+            if (JSON.stringify(listA[z]) != JSON.stringify(listB[z]))
+            {   
+                out += "<tr><td>";
+                
+                out += "<b>"+z+": </b><br>";
+                out += "Fuel quantity: "+listA[z].quantity.toFixed(0)+" kWh<br>";
+                out += "Fuel cost: £"+listA[z].fuelcost.toFixed(2)+"<br>";
+                out += "Annual cost: £"+listA[z].annualcost.toFixed(0)+"<br>";
+                
+                out += "</td><td>";
+                
+                out += "<b>"+z+": </b><br>";
+                out += "Fuel quantity: "+listB[z].quantity.toFixed(0)+" kWh<br>";
+                out += "Fuel cost: £"+listB[z].fuelcost.toFixed(2)+"<br>";
+                out += "Annual cost: £"+listB[z].annualcost.toFixed(0)+"<br>";
+                
+                out += "</td>";
+                
+                out += "<td><br>";
+                
+                out += (100*(listA[z].quantity-listB[z].quantity)/listA[z].quantity).toFixed(0)+"% Energy saving<br><br>";
+                
+                out += (100*(listA[z].annualcost-listB[z].annualcost)/listA[z].annualcost).toFixed(0)+"% Cost saving<br>";
+                
+                out += "</td></tr>";
+            }
+        }
+  }
+  
+  out += "</table>";
   
   $("#compare").html(out);
+  
 </script>
