@@ -44,7 +44,8 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
 <script type="text/javascript" src="<?php echo $sm; ?>Modules/fuelcosts/fuelcosts_model.js"></script>
 <script type="text/javascript" src="<?php echo $sm; ?>Modules/saprating/saprating_model.js"></script>
 <script type="text/javascript" src="<?php echo $sm; ?>Modules/data/data_model.js"></script>
-<script type="text/javascript" src="<?php echo $sm; ?>Modules/measures/measures_model.js"></script>
+
+<script type="text/javascript" src="<?php echo $sm; ?>Modules/appliancelist/appliancelist_model.js"></script>
 
 <br>
 <ul class="breadcrumb">
@@ -74,14 +75,18 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
     <!--<tr><td><a class="menu" name="fuelcosts">Fuel costs</a></td></tr>-->
     <!--<tr><td><a class="menu" name="saprating">SAP rating</a></td></tr>-->
     <tr><td><a class="menu" name="data">Export data</a></td></tr>
-    <tr><td><a href="<?php echo $path; ?>openbem/measures/<?php echo $building; ?>"><b>Retrofit explorer</b></a></td></tr>
     </table>
     
     <h4>Optional modules</h4>
     <table class="table table-bordered">
-    <tr><td><a class="menu" name="waterheating">SAP Water Heating gains</a></td></tr>
-    <tr><td><a class="menu" name="solarhotwater">SAP Solar Hot Water gains</a></td></tr>
-    <tr><td><a class="menu" name="LAC">SAP Lighting, Appliances<br>& Cooking gains</a></td></tr>
+    <tr><td><a class="menu" name="waterheating">SAP Water Heating gains</a></td>
+    <td><i class="icon-trash remove-module" name="waterheating"></i></td></tr>
+    <tr><td><a class="menu" name="solarhotwater">SAP Solar Hot Water gains</a></td>
+    <td><i class="icon-trash remove-module" name="solarhotwater"></i></td></tr>
+    <tr><td><a class="menu" name="LAC">SAP Lighting, Appliances<br>& Cooking gains</a></td>
+    <td><i class="icon-trash remove-module" name="LAC"></i></td></tr>
+    <tr><td><a class="menu" name="appliancelist">Appliance List</a></td>
+    <td><i class="icon-trash remove-module" name="appliancelist"></i></td></tr>
     </table>
     
     
@@ -123,6 +128,7 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
     inputdata.gains = {};
     inputdata.losses = {};
 
+    inputdata.appliancelist_enabled = false;
     inputdata.LAC_enabled = false;
     inputdata.solarhotwater_enabled = false;
     inputdata.waterheating_enabled = false;
@@ -139,13 +145,39 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
     load_module(module);
   });
   
+  $(".remove-module").click(function()
+  {
+    var name = $(this).attr('name');
+    
+    if (name=='appliancelist') {
+        inputdata.appliancelist_enabled = false;
+        delete inputdata.gains['appliancelistgains'];
+    }
+    
+    if (name=='LAC') {
+        inputdata.LAC_enabled = false;
+        delete inputdata.gains['lighting'];
+        delete inputdata.gains['appliances'];
+        delete inputdata.gains['cooking'];
+    }
+    
+    if (name=='solarhotwater') inputdata.solarhotwater_enabled = false;
+    if (name=='waterheating') {
+        inputdata.waterheating_enabled = false;
+        delete inputdata.gains['waterheating'];
+    }
+    
+    load_module('balance');
+  });
+  
   function load_module(module)
   { 
+    if (module=='appliancelist') inputdata.appliancelist_enabled = true;
     if (module=='LAC') inputdata.LAC_enabled = true;
     if (module=='solarhotwater') inputdata.solarhotwater_enabled = true;
     if (module=='waterheating') inputdata.waterheating_enabled = true;
     calc_all();
-   
+    
     i = inputdata[module].input;
     o = inputdata[module].output;
     
@@ -180,11 +212,11 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
   
   function calc_all()
   {
-    calc_module('measures');
     calc_module('context');
     calc_module('ventilation');
     calc_module('elements');
     calc_module('meaninternaltemperature');
+    if (inputdata.appliancelist_enabled) calc_module('appliancelist');
     if (inputdata.LAC_enabled) calc_module('LAC');
     if (inputdata.solarhotwater_enabled) calc_module('solarhotwater');
     if (inputdata.waterheating_enabled) calc_module('waterheating');
@@ -194,7 +226,6 @@ $sm = $path."Modules/openbem/SimpleMonthly/";
     //calc_module('fuelcosts');
     //calc_module('saprating');
     calc_module('data');
-    
   }
   
   function calc_module(module)

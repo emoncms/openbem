@@ -33,9 +33,9 @@ var heatingsystem_model = {
     }
 
     this.input.TFA = inputdata.TFA;
-
-    if (inputdata.balance!=undefined) {
     
+    if (inputdata.balance!=undefined) {
+        
       if (this.input.energy_requirements.spaceheating==undefined) {
         this.input.energy_requirements.spaceheating = {name:"Space Heating", quantity: 0, suppliedby:[
           //{type:'gasboiler',fraction:0.95, efficiency:energysystems.gasboiler.efficiency}
@@ -44,7 +44,7 @@ var heatingsystem_model = {
       this.input.energy_requirements.spaceheating.quantity = inputdata.balance.output.annual_heat_demand;
     }
 
-    if (inputdata.waterheating!=undefined) {
+    if (inputdata.waterheating!=undefined && inputdata.waterheating_enabled) {
       if (this.input.energy_requirements.waterheating==undefined) {
         this.input.energy_requirements.waterheating = {name:"Hot water", quantity: 0, suppliedby:[
           //{type:'gasboiler',fraction:1.0, efficiency:energysystems.gasboiler.efficiency}
@@ -53,7 +53,7 @@ var heatingsystem_model = {
       this.input.energy_requirements.waterheating.quantity = inputdata.waterheating.output.annual_waterheating_demand;
     }
     
-    if (inputdata.LAC!=undefined) {
+    if (inputdata.LAC!=undefined && inputdata.LAC_enabled) {
     
       if (this.input.energy_requirements.lighting==undefined) {
         this.input.energy_requirements.lighting = {name:"Lighting", quantity: 0, suppliedby:[{type:'electric',fraction:1.0, efficiency:energysystems.electric.efficiency}]};
@@ -72,6 +72,18 @@ var heatingsystem_model = {
       this.input.energy_requirements.cooking.quantity = inputdata.LAC.output.GC * 0.024 * 365;
     }
     
+    if (inputdata.appliancelist!=undefined && inputdata.appliancelist_enabled) {
+      if (this.input.energy_requirements.appliancelist==undefined) {
+        this.input.energy_requirements.appliancelist = {name:"Electrical Appliances", quantity: 0, suppliedby:[{type:'electric',fraction:1.0, efficiency:energysystems.electric.efficiency}]};
+      }
+      this.input.energy_requirements.appliancelist.quantity = inputdata.appliancelist.output.annual_appliancelist_demand;
+    }
+    
+    if (!inputdata.LAC_enabled) delete this.input.energy_requirements.lighting;
+    if (!inputdata.LAC_enabled) delete this.input.energy_requirements.appliances;
+    if (!inputdata.LAC_enabled) delete this.input.energy_requirements.cooking;
+    if (!inputdata.waterheating_enabled) delete this.input.energy_requirements.waterheating;
+    if (!inputdata.appliancelist_enabled) delete this.input.energy_requirements.appliancelist;
   },
   
   input: {

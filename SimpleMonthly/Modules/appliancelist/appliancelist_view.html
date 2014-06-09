@@ -1,0 +1,108 @@
+<style>
+  #table td {
+    border: 0;
+    font-size:14px; 
+    padding:2px 8px 2px 8px;
+  }
+
+  #table th {
+    padding-top:20px;
+    border: 0;
+    border-bottom: 1px solid #DDD;
+  }
+
+  #table tr.trtotal td {
+    font-weight:bold;
+    font-size:16px;
+    padding:25px 8px 25px 8px;
+  }
+
+  #table tr.additem td {
+    padding:8px;
+    background-color:#eee;
+  }
+
+  #table tbody {
+    border: 0;
+  }
+
+  input[type=text] {
+    height:25px;
+    margin-bottom:0px;
+    width:80%;
+  }
+
+  #table td:nth-of-type(2) { width:80px; text-align: center; }
+  #table td:nth-of-type(3) { width:80px; text-align: center; }
+  #table td:nth-of-type(4) { width:80px; text-align: center; }
+  #table td:nth-of-type(5) { width:30px; text-align: center; }
+
+  #table th:nth-of-type(2) { width:80px; text-align: center; }
+  #table th:nth-of-type(3) { width:80px; text-align: center; }
+  #table th:nth-of-type(4) { width:80px; text-align: center; }
+  #table th:nth-of-type(5) { width:30px; text-align: center; }
+  #table th:nth-of-type(6) { width:30px; text-align: center; }
+</style>
+
+<h3>Appliance list</h3>
+
+<p>This module provides an alternate method of calculating energy use and gains from lighting, cooking and appliances.</p>
+
+<p>Start by calculating an estimate for daily electricity consumption by making a list of all lighting, cooking and appliances in your home. Enter an estimate for how many hours each item is used and how much power in Watt's it consumes. (Do not include electric space heaters as these are calculated seperatly) </p>
+
+<div id="appliancelist-table"></div>
+
+<div id="nofeeds" class="alert alert-block hide">
+    <h4 class="alert-heading">No Appliances created</h4>
+    <p></p>
+</div>
+
+<button id="addItemButton" class="btn btn-primary" style="margin-top:-70px; margin-left:8px;">Add new item</button>
+
+
+<div id="AppListModal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="AppListModalLabel" aria-hidden="true" data-backdrop="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="AppListModalLabel">Add item</h3>
+  </div>
+  <div id="AppListModalBody" class="modal-body">
+
+  <p>Describe the item you would like to add below, if you dont know the power consumption and estimated hours that its on for but know the watt hours consumed in a day instead use the watt hours box</p>
+
+  <p><b>Category:</b><br>
+  <input type='text' id='itemcategory' style="width:200px"  /></p>
+  <p><b>Descriptive name: (unique within category)</b><br>
+  <input type='text' id='itemname' style="width:200px" /></p>
+  <p><b>Power (Watts):</b><br>
+  <input type='text' id='itempower' style="width:200px" /></p>
+  <p><b>Hours (0-24):</b><br>
+  <input type='text' id='itemhours' style="width:200px" /></p>
+  <p><b>Watt-hours:</b><br>
+  <input type='text' id='itemwatthours' style="width:200px" /></p>
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    <button id="addsave-button" class="btn btn-primary">Add</button>
+  </div>
+</div>
+
+<h3>Monthly:</h3>
+<table class="table table-bordered">
+<tr>
+  <td></td>
+  <th>Jan</th>
+  <th>Feb</th>
+  <th>Mar</th>
+  <th>Apr</th>
+  <th>May</th>
+  <th>Jun</th>
+  <th>Jul</th>
+  <th>Aug</th>
+  <th>Sep</th>
+  <th>Oct</th>
+  <th>Nov</th>
+  <th>Dec</th>
+</tr>
+  <tbody id="monthly_appliancelist" title="Appliance's" dp=0 units=" W"></tbody>
+</table>

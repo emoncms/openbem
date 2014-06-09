@@ -133,20 +133,18 @@
   }
   
   out += "</table>";
-  out += "<h3>Building Elements</h3>";
-  out += "<p>Changes to Floor's, Wall's, Windows and Roof elements</p>";
-  out += "<table class='table table-striped'>";
-  out += "<tr><th>Before</th><th>W/K</th><th>After</th><th>W/K</th><th>Change</th></tr>";
   
   // Changes to elements
   var listA = inputdataA.elements.input.list;
   var listB = inputdataB.elements.input.list;
   
+  var elements_html = "";
+  
   for (z in listA)
   {
         if (listB[z]==undefined)
         {
-            out += "<tr><td>Element: <b>'"+z+"'</b> in scenario A has been deleted</td></tr>";
+            elements_html += "<tr><td>Element: <b>'"+z+"'</b> in scenario A has been deleted</td></tr>";
         }
   }
   
@@ -154,55 +152,64 @@
   {
         if (listA[z]==undefined)
         {
-            out += "<tr><td>New Element: <b>'"+z+"'</b> added to scenario B</td></tr>";
+            elements_html += "<tr><td>New Element: <b>'"+z+"'</b> added to scenario B</td></tr>";
         }
         else
         {
             
             if (JSON.stringify(listA[z]) != JSON.stringify(listB[z]))
             {
-                out += "<tr><td><b>"+z+":</b><br><i>";
+                elements_html += "<tr><td><b>"+z+":</b><br><i>";
                 for (x in listA[z])
                 {
-                    if (x=='description') out += listA[z][x]+", ";
-                    if (x=='area') out += "Area: "+listA[z][x].toFixed(1)+"m<sup>2</sup>, ";
-                    if (x=='uvalue') out += "U-value: "+listA[z][x]+", ";
-                    if (x=='kvalue') out += "k-value: "+listA[z][x];
-                    if (x=='g') out += "g: "+listA[z][x]+", ";
-                    if (x=='gL') out += "gL: "+listA[z][x]+", ";
-                    if (x=='ff') out += "Frame factor: "+listA[z][x];
+                    if (x=='description') elements_html += listA[z][x]+", ";
+                    if (x=='area') elements_html += "Area: "+listA[z][x].toFixed(1)+"m<sup>2</sup>, ";
+                    if (x=='uvalue') elements_html += "U-value: "+listA[z][x]+", ";
+                    if (x=='kvalue') elements_html += "k-value: "+listA[z][x];
+                    if (x=='g') elements_html += "g: "+listA[z][x]+", ";
+                    if (x=='gL') elements_html += "gL: "+listA[z][x]+", ";
+                    if (x=='ff') elements_html += "Frame factor: "+listA[z][x];
                 }
-                out += "</i></td>";
+                elements_html += "</i></td>";
                 
-                out += "<td>"+(listA[z].uvalue*listA[z].area).toFixed(1)+" W/K</td>";
+                elements_html += "<td>"+(listA[z].uvalue*listA[z].area).toFixed(1)+" W/K</td>";
                 
-                out += "<td><b>"+z+":</b><br><i>";
+                elements_html += "<td><b>"+z+":</b><br><i>";
                 for (x in listB[z])
                 {
-                    if (x=='description') out += listA[z][x]+", ";
-                    if (x=='area') out += "Area: "+listA[z][x].toFixed(1)+"m<sup>2</sup>, ";
-                    if (x=='uvalue') out += "U-value: "+listB[z][x]+", ";
-                    if (x=='kvalue') out += "k-value: "+listB[z][x];
-                    if (x=='g') out += "g: "+listB[z][x]+", ";
-                    if (x=='gL') out += "gL: "+listB[z][x]+", ";
-                    if (x=='ff') out += "Frame factor: "+listB[z][x];
+                    if (x=='description') elements_html += listA[z][x]+", ";
+                    if (x=='area') elements_html += "Area: "+listA[z][x].toFixed(1)+"m<sup>2</sup>, ";
+                    if (x=='uvalue') elements_html += "U-value: "+listB[z][x]+", ";
+                    if (x=='kvalue') elements_html += "k-value: "+listB[z][x];
+                    if (x=='g') elements_html += "g: "+listB[z][x]+", ";
+                    if (x=='gL') elements_html += "gL: "+listB[z][x]+", ";
+                    if (x=='ff') elements_html += "Frame factor: "+listB[z][x];
                 }
-                out += "</i></td>";
+                elements_html += "</i></td>";
                 
-                out += "<td>"+(listB[z].uvalue*listB[z].area).toFixed(1)+" W/K</td>";
+                elements_html += "<td>"+(listB[z].uvalue*listB[z].area).toFixed(1)+" W/K</td>";
                 
                 var saving = (listA[z].uvalue*listA[z].area) - (listB[z].uvalue*listB[z].area);
                 
-                out += "<td>";
-                if (saving>0) out +="<span style='color:#00aa00'>-";
-                if (saving<0) out +="<span style='color:#aa0000'>+";
-                out += (saving).toFixed(1)+" W/K</span></td>";
+                elements_html += "<td>";
+                if (saving>0) elements_html +="<span style='color:#00aa00'>-";
+                if (saving<0) elements_html +="<span style='color:#aa0000'>+";
+                elements_html += (saving).toFixed(1)+" W/K</span></td>";
                 
-                out += "</tr>";
+                elements_html += "</tr>";
             }
         }
   }
-  out += "</table>";
+  
+  if (elements_html!="") {
+    out += "<h3>Building Elements</h3>";
+    out += "<p>Changes to Floor's, Wall's, Windows and Roof elements</p>";
+    out += "<table class='table table-striped'>";
+    out += "<tr><th>Before</th><th>W/K</th><th>After</th><th>W/K</th><th>Change</th></tr>";
+    out += elements_html;
+    out += "</table>";
+  }
+  
   out += "<h3>Energy Requirements</h3>";
   
   // Changes to elements
@@ -228,7 +235,7 @@
                     out += "<br>";
                 }
                 
-                out += "</td><td><br><b>Deleted in scenario B</b></td></tr>";
+                out += "</td><td><br><b>Deleted in scenario B</b></td><td></td></tr>";
         }
   }
   
@@ -249,7 +256,7 @@
                     out += "<br>";
                 }
                 
-                out += "</td></tr>";
+                out += "</td><td></td></tr>";
         }
         else
         {
@@ -282,19 +289,20 @@
                     out += "<br>";
                 }
                 
-                out += "</td></tr>";
+                out += "</td><td></td></tr>";
             }
         }
   }
   
-  out += "</table>";
-  out += "<h3>Fuel costs</h3>";
+  // out += "</table>";
+  out += "<tr><td><h3>Fuel costs</h3></td><td></td><td></td></tr>";
+  // out += "<h3>Fuel costs</h3>";
   
   // Changes to elements
   var listA = inputdataA.heatingsystem.output.fueltotals;
   var listB = inputdataB.heatingsystem.output.fueltotals;
-   
-  out += "<table class='table table-striped'>";
+  
+  //out += "<table class='table table-striped'>";
   
   for (z in listA)
   {
@@ -354,10 +362,34 @@
                 out += "</td></tr>";
             }
         }
-  }
-  
-  out += "</table>";
-  
-  $("#compare").html(out);
-  
+    }
+
+    out += "<tr><td><h3>Totals</h3></td><td></td><td></td></tr>";
+
+    out += "<tr>";
+    out += "<td><b>Total Annual Cost:</b><br>";
+    out += "£"+inputdataA.heatingsystem.output.total_cost.toFixed(0)+"</td>";
+    out += "<td><b>Total Annual Cost:</b><br>"
+    out += "£"+inputdataB.heatingsystem.output.total_cost.toFixed(0)+"</td>";
+    out += "<td></td>";
+    out += "</tr>";
+
+    out += "<tr>";
+    out += "<td><b>SAP Rating:</b><br>";
+    out += ""+inputdataA.heatingsystem.output.sap_rating.toFixed(0)+"</td>";
+    out += "<td><b>SAP Rating:</b><br>"
+    out += ""+inputdataB.heatingsystem.output.sap_rating.toFixed(0)+"</td>";
+
+    var sapinc = (inputdataB.heatingsystem.output.sap_rating-inputdataA.heatingsystem.output.sap_rating);
+
+    if (sapinc>0) out +="<td><br><span style='color:#00aa00'>+";
+    if (sapinc<0) out +="<td><br><span style='color:#aa0000'>-";
+    out += sapinc.toFixed(0)+"</span></td>";
+    
+    out += "</tr>";
+
+    out += "</table>";
+
+    $("#compare").html(out);
+
 </script>
