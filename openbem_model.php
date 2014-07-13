@@ -107,7 +107,9 @@ class OpenBEM
     
     public function delete_scenario($scenario_id)
     {
-    
+        $result = $this->mysqli->query("DELETE FROM openbem_scenarios WHERE `scenario_id` = '$scenario_id'");
+        
+        return array("Deleted");
     }
 
     public function get_scenario($scenario_id)

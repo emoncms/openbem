@@ -65,6 +65,14 @@ var openbem = {
     return result;
   },
   
+  
+  'delete_scenario':function(project_id,scenario_id)
+  {
+    var result = 0;
+    $.ajax({ type: 'GET', url: path+"openbem/deletescenario.json", data: "project_id="+project_id+"&scenario_id="+scenario_id, async: false, success: function(data){result=data;} });
+    return result;
+  },
+  
   'get_scenario':function(scenario_id)
   {
     var result = {};

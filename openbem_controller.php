@@ -80,6 +80,8 @@ function openbem_controller()
     if ($route->action == 'getscenarios') $result = $openbem->get_scenarios(get('project_id'));
     if ($route->action == 'addscenario') $result = $openbem->add_scenario(get('project_id'),get('meta'));
     if ($route->action == 'clonescenario') $result = $openbem->clone_scenario(get('project_id'),get('scenario_id'));
+    
+    if ($route->action == 'deletescenario') $result = $openbem->delete_scenario(get('scenario_id'));
 
     
     if ($route->action == 'getscenario') $result = $openbem->get_scenario(get('scenario_id'));

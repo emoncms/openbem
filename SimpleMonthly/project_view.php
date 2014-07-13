@@ -26,6 +26,7 @@
         <th>Description</th>
         <th>H</th>
         <th></th>
+        <th></th>
         </tr>
         <tbody id="scenarios"></tbody>
         </table>
@@ -79,15 +80,22 @@ $("#scenarios").on('click','.clone-scenario', function() {
     draw_scenarios();
 });
 
+$("#scenarios").on('click','.delete-scenario', function() {
+    var pid = $(this).parent().parent().attr('pid');
+    var sid = $(this).parent().parent().attr('sid');
+    
+    openbem.delete_scenario(pid,sid);
+    scenarios = openbem.get_scenarios(project_id);
+    draw_scenarios();
+});
+
 function draw_scenarios()
 {
     var out = "";
     for (z in scenarios)
     {
-      if (z==0) out += '<tr class="info">'; else out += "<tr>";
-
-      // out += "<td>"+scenarios[z].scenario_id+"</td>";
-
+      if (z==0) out += '<tr class="info"'; else out += "<tr";
+      out += " pid="+project_id+" sid="+scenarios[z].scenario_id+">";
       
       if (scenarios[z].scenario_meta==undefined)
       {
@@ -105,6 +113,8 @@ function draw_scenarios()
       var master_id = scenarios[0].scenario_id;
       out += '<a href="'+path+'openbem/compare?project_id='+project_id+'&scenarioA='+master_id+'&scenarioB='+scenarios[z].scenario_id+'"><div class="label label-info">Compare <i class="icon-random icon-white"></i></div></a>';
       out += '</td>';
+      
+      out += "<td><i style='cursor:pointer' class='delete-scenario icon-trash'></i></td>";
       
       out += "</tr>";
     }
