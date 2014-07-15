@@ -21,3 +21,9 @@ The model used is based on the 2012 version of SAP (Standard Assessment Procedur
     
 The source code for OpenBEM under GPL. You can download and install OpenBEM on your own server, you can look at and peer-review the model calculations, understand how it works, modify and improve it.
 
+### Screenshots
+
+![Front page](images/frontpage.png)
+
+![Elements list](images/elementslist.png)
+
