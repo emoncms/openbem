@@ -1,33 +1,20 @@
 ## OpenBEM - Open Source Building Energy Model
 
 This work is all open source - under GPL.
-If youd like to help with development or have any questions feel free to email me trystan.lea@gmail.com 
 
-OpenBEM is a whole house energy toolkit, currently in an early stage of development.
+### Getting to Zero Carbon
+    
+Achieving zero carbon is often a two step process, first power down - reduction in energy demand through efficiency, and second powering up the remaining energy demand with sustainable energy.
+    
+If we look at how energy is used in the UK we find: Space heating accounts for 20% of total primary energy or 29% of end use energy. Building services (space heating, water heating, lighting & appliances and cooking) make up 30% of total primary energy or 44% of end use energy.
 
-### Simple monthly model
-
-The simple monthly model was originally developed as the SAP 2012 module. The aim of OpenBEM version of it is to focus more on creating a tool thats useful for design rather than compliance which is SAP's main focus, although it is intended that OpenBEM will have a SAP 2012 compliant mode.
-
-The aim of the OpenBEM interface is to make it possible to get results as fast as possible, the core part of the building energy model is contained on the one page. For the more extensive SAP calculation sheets such as internal gains, ventilation and water heating there will be the option to go off the main interface page. 
-
-There will also be the option to compare using SAP's temperature reduction equation with entering in the mean internal temperature manually, allowing for better appreciation of the differences.
-
-The SAP temperature reduction equation is an important part of the model, in certain buildings (low thermal mass, high heat loss) the energy savings from dynamic heating vs constant heating can be very significant.
-
-The dynamic modelling approach explored on the simulation page and in the dynamic_model spreadsheet explores this aspect further. Further investigation is needed to see if the SAP temperature reduction equation can be derived from these dynamic models.
-
-### Dynamic model based coheating test 
-
-A multi-stage dynamic RC type model of a building appears to give a good fit to monitored internal temperature in a simple building.
-
-### Spreadsheet version of dynamic model
-
-See: dynamic_model.ods
-
-### Daily average based coheating test
-
-The aim here is to replicate the current approach of coheating data analysis. Using daily averages and linear regression.
-
-
+Low energy building technology: highly insulated, air-tight buildings can deliver space heating energy savings of up to 50-90% while simultaneously increasing our comfort.
+    
+OpenBEM is an open source energy assessment tool to help you explore how you can achieve this level of performance improvement in your own home.
+    
+The model used is based on the 2012 version of SAP (Standard Assessment Procedure for UK EPC's (Energy Performance Certificate's)) developed by the Building Research Establishment for which the full specification can be downloaded from BRE here: [SAP-2012_9-92.pdf](http://www.bre.co.uk/filelibrary/SAP/2012/SAP-2012_9-92.pdf)
+    
+### Open Source
+    
+The source code for OpenBEM under GPL. You can download and install OpenBEM on your own server, you can look at and peer-review the model calculations, understand how it works, modify and improve it.
 
