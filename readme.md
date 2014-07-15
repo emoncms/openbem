@@ -23,7 +23,11 @@ The source code for OpenBEM under GPL. You can download and install OpenBEM on y
 
 ### Screenshots
 
+**Front page**
+
 ![Front page](images/frontpage.png)
+
+**Element list**
 
 ![Elements list](images/elementslist.png)
 
