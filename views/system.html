@@ -1,0 +1,185 @@
+
+<style>
+.er td:nth-of-type(1) { width:25%;}
+.er td:nth-of-type(2) { width:15%;}
+.er td:nth-of-type(3) { width:20%;}
+.er td:nth-of-type(4) { width:20%;}
+.er td:nth-of-type(5) { width:20%;}
+
+.fc td:nth-of-type(1) { width:40%;}
+.fc td:nth-of-type(2) { width:20%;}
+.fc td:nth-of-type(3) { width:20%;}
+.fc td:nth-of-type(4) { width:20%;}
+</style>
+
+<div class="page">
+
+    <h3>Mean Internal Temperature</h3>
+
+    <table class="table">
+    <tr>
+        <td>
+            <h4>Heating system</h4>
+            <div class="input-prepend input-append">
+                <span class="add-on">Responsiveness:</span>
+                <input key="data.temperature.responsiveness" type="text" style="width:40px" />
+                <span class="add-on">Control type:</span>
+                <select key="data.temperature.control_type" style="width:80px">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
+            
+        </td><td>
+
+            <h4>Living area and target temperature</h4>
+            <div class="input-prepend input-append">
+                <span class="add-on">Living area:</span>
+                <input key="data.temperature.living_area" type="text" style="width:40px" />
+                <span class="add-on">m2</span>
+
+                <span class="add-on">Target temperature:</span>
+                <input key="data.temperature.target" type="text" style="width:40px" />
+                <span class="add-on">C</span>
+            </div>
+            
+        </td>
+    </tr>
+    </table>
+
+    <h3>Energy Requirements</h3>
+        
+    <table class="table">
+    
+        <tbody id="energyrequirement-template"  style="display:none">
+        
+            <tr style="background-color:#eee">
+                <th><span key="data.energy_requirements.template.name"></span></th>
+                <th></th>
+                <th><span key="data.energy_requirements.template.quantity" dp=0></span> kWh/year</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        
+            <tr>
+                <td style="text-align:left">Supplied by:</td>
+                <td>Fraction</td>
+                <td>Demand</td>
+                <td>Efficiency</td>
+                <td>Fuel input </td>
+                <td><i class="icon-plus add-system" style="cursor:pointer" eid="template"></i></td>
+            </tr>
+            
+        </tbody>
+        
+        <tbody id="suppliedby-template" style="display:none">
+            <tr>
+                <td style="text-align:left">
+                    <select class="heating_system_selector" z=tmp x=tmp key="data.energy_systems.template.x.system"></select>
+                </td>
+                <td><input type="text" key="data.energy_systems.template.x.fraction" dp=2 style="width:60px"/></td>
+                <td><span key="data.energy_systems.template.x.demand" dp=0></span> kWh/year</td>
+                <td><input type="text" key="data.energy_systems.template.x.efficiency" dp=2 style="width:60px"></td>
+                <td><span key="data.energy_systems.template.x.fuelinput" dp=0></span> kWh/year</td>
+                <td></td>
+            </tr>
+        </tbody>
+        
+        <tbody id="energyrequirements"></tbody>
+    </table>
+    
+    <br>
+    <h3>Fuel requirements & costs</h3>
+    <table class="table fc">
+        <tr>
+            <th style="text-align:left">Fuel type</th>
+            <th>Fuel quantity</th>
+            <th>Unit cost</th>
+            <th>Annual cost</th>
+        </tr>
+        
+        <tbody id="fuel_totals_template" style="display:none">
+            <tr>
+                <td style="text-align:left"><span key="data.fuel_totals.z.name"></span></td>
+                <td><span key="data.fuel_totals.z.quantity" dp=0></span> kWh</td>
+                <td>£ <input type="text" key="data.fuels.f.fuelcost" value=0 style="width:60px"/></td>
+                <td>£<span key="data.fuel_totals.z.annualcost" dp=0></span></td>
+            </tr>
+        </tbody>
+        
+        <tbody id="fuel_totals"></tbody>
+        
+        <tr>
+            <td style="text-align:left"><b>Total energy cost:</b></td>
+            <td></td>
+            <td></td>
+            <td><b>£<span key="data.total_cost" dp=0></span></b> (<span key="data.SAP.rating" dp=0></span>)</td>
+        </tr>
+    </table>
+    
+    
+</div>
+
+<script>
+
+var out = "";
+for (z in datasets.energysystems) out += "<option value='"+z+"'>"+datasets.energysystems[z].name+"</option>";
+$(".heating_system_selector").html(out);
+
+$("#openbem").on("click",'.add-system', function(){
+    var z = $(this).attr('eid');
+    data.energy_systems[z].push({system: "electric", fraction:1.0, efficiency:1.0});
+    update();
+    openbem.save_scenario(scenario_id,data); 
+});
+
+$("#openbem").bind("UpdateUI", function(e){
+
+    $("#energyrequirements").html("");
+    for (z in data.energy_requirements)
+    {
+        $("#energyrequirements").append($("#energyrequirement-template").html());
+        $("#energyrequirements [key='data.energy_requirements.template.name']").attr('key','data.energy_requirements.'+z+'.name');
+        $("#energyrequirements [key='data.energy_requirements.template.quantity']").attr('key','data.energy_requirements.'+z+'.quantity');
+        $("#energyrequirements [eid=template]").attr('eid',z);
+        for (x in data.energy_systems[z]) add_energy_system(z,x);
+    }
+
+    $("#fuel_totals").html("");
+    for (z in data.fuel_totals)
+    {
+        $("#fuel_totals").append($("#fuel_totals_template").html());
+        $("#fuel_totals [key='data.fuel_totals.z.name']").attr('key','data.fuel_totals.'+z+'.name');
+        $("#fuel_totals [key='data.fuel_totals.z.quantity']").attr('key','data.fuel_totals.'+z+'.quantity');
+        $("#fuel_totals [key='data.fuel_totals.z.annualcost']").attr('key','data.fuel_totals.'+z+'.annualcost');
+        $("#fuel_totals [key='data.fuels.f.fuelcost']").attr('key','data.fuels.'+z+'.fuelcost');
+    }
+    
+});
+
+// Automatically load efficiency for heating system when heating system is changed
+$("#openbem").on("change",'.heating_system_selector', function(){
+    var system = $(this).val();
+    var x = $(this).attr("x");
+    var z = $(this).attr("z");
+    data.energy_systems[z][x].efficiency = datasets.energysystems[system].efficiency;
+});
+
+function add_energy_system(z,x)
+{
+    $("#energyrequirements").append($("#suppliedby-template").html());
+    var prefixA = "#energyrequirements [key='data.energy_systems.template.x";
+    var prefixB = 'data.energy_systems.'+z+'.'+x;
+    $(prefixA+".system']").attr('key',prefixB+'.system');
+    $(prefixA+".fraction']").attr('key',prefixB+'.fraction');
+    $(prefixA+".demand']").attr('key',prefixB+'.demand');
+    $(prefixA+".efficiency']").attr('key',prefixB+'.efficiency');
+    $(prefixA+".fuelinput']").attr('key',prefixB+'.fuelinput');
+    
+    $("#energyrequirements [z='tmp']").attr('z',z);
+    $("#energyrequirements [x='tmp']").attr('x',x);
+}
+
+</script>

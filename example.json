@@ -1,0 +1,235 @@
+{
+    "region": 0,
+    "altitude": 100,
+    "use_custom_occupancy": 0,
+    "custom_occupancy": 1,
+    "floors": {
+        "Ground Floor": {
+            "area": 19.035,
+            "height": 2.7
+        }
+    },
+    "fabric": {
+        "elements": [
+            {
+                "type": "floor",
+                "name": "Floor",
+                "area": 19.038,
+                "uvalue": 0.7,
+                "kvalue": 75
+            },
+            {
+                "type": "wall",
+                "name": "Back Wall",
+                "area": 11.97,
+                "uvalue": 0.65,
+                "kvalue": 190
+            },
+            {
+                "type": "wall",
+                "name": "Front Wall",
+                "area": 10.626,
+                "uvalue": 0.65,
+                "kvalue": 190
+            },
+            {
+                "type": "wall",
+                "name": "Left Wall",
+                "area": 9.018,
+                "uvalue": 0.65,
+                "kvalue": 190
+            },
+            {
+                "type": "wall",
+                "name": "Right Wall",
+                "area": 9.018,
+                "uvalue": 0.45,
+                "kvalue": 10
+            },
+            {
+                "type": "window",
+                "name": "Desk Window",
+                "area": 0.774,
+                "uvalue": 2,
+                "orientation": 3,
+                "overshading": 2,
+                "g": 0.76,
+                "gL": 0.8,
+                "ff": 0.7
+            },
+            {
+                "type": "window",
+                "name": "Front roof light",
+                "area": 1.06855,
+                "uvalue": 2,
+                "orientation": 3,
+                "overshading": 2,
+                "g": 0.76,
+                "gL": 0.8,
+                "ff": 0.7
+            },
+            {
+                "type": "window",
+                "name": "Back roof light",
+                "area": 1.06855,
+                "uvalue": 2,
+                "orientation": 1,
+                "overshading": 1,
+                "g": 0.76,
+                "gL": 0.8,
+                "ff": 0.7
+            },
+            {
+                "type": "roof",
+                "name": "Roof",
+                "area": 22.6009,
+                "uvalue": 0.25,
+                "kvalue": 9
+            }
+        ]
+    },
+    "ventilation": {
+        "number_of_chimneys": 0,
+        "number_of_openflues": 0,
+        "number_of_intermittentfans": 0,
+        "number_of_passivevents": 1,
+        "number_of_fluelessgasfires": 0,
+        "air_permeability_test": 0,
+        "air_permeability_value": 0,
+        "dwelling_construction": "masonry",
+        "suspended_wooden_floor": 0,
+        "draught_lobby": 1,
+        "percentage_draught_proofed": 100,
+        "number_of_sides_sheltered": 2,
+        "ventilation_type": "d",
+        "system_air_change_rate": 0,
+        "balanced_heat_recovery_efficiency": 100
+    },
+    "use_LAC": 1,
+    "LAC": {
+        "LLE": 10,
+        "L": 10,
+        "reduced_internal_heat_gains": 1
+    },
+    "use_water_heating": 1,
+    "water_heating": {
+        "low_water_use_design": 1,
+        "instantaneous_hotwater": 0,
+        "solar_water_heating": 1,
+        "pipework_insulated_fraction": 1,
+        "declared_loss_factor_known": 0,
+        "manufacturer_loss_factor": 1,
+        "storage_volume": 160,
+        "temperature_factor_a": 2,
+        "loss_factor_b": 0.0191,
+        "volume_factor_b": 0.908,
+        "temperature_factor_b": 0.6,
+        "community_heating": 0,
+        "hot_water_store_in_dwelling": 1,
+        "contains_dedicated_solar_storage_or_WWHRS": 0,
+        "hot_water_control_type": "cylinder_thermostat_with_timer"
+    },
+    "use_SHW": 1,
+    "SHW": {
+        "A": 4,
+        "n0": 0.599,
+        "a1": 2.773,
+        "a2": 0.009,
+        "inclination": 35,
+        "orientation": 4,
+        "overshading": 1,
+        "Vs": 160,
+        "combined_cylinder_volume": 160
+    },
+    "use_appliancelist": 0,
+    "appliancelist": {
+        "list": [
+            {
+                "name": "Kettle",
+                "power": 3000,
+                "hours": 0.5
+            },
+            {
+                "name": "LED Light",
+                "power": 6,
+                "hours": 12
+            }
+        ]
+    },
+    "temperature": {
+        "responsiveness": 1,
+        "target": 20,
+        "control_type": 1,
+        "living_area": 19.035
+    },
+    "space_heating": {
+        "use_utilfactor_forgains": true
+    },
+    "energy_systems": {
+        "space_heating": [
+            {
+                "system": "heatpump",
+                "fraction": 1,
+                "efficiency": 3
+            },
+            {
+                "system": "electric",
+                "fraction": 0,
+                "efficiency": 1
+            }
+        ],
+        "lighting": [
+            {
+                "system": "electric",
+                "fraction": 1,
+                "efficiency": 1
+            }
+        ],
+        "appliances": [
+            {
+                "system": "electric",
+                "fraction": 1,
+                "efficiency": 1
+            }
+        ],
+        "cooking": [
+            {
+                "system": "electric",
+                "fraction": 1,
+                "efficiency": 1
+            }
+        ],
+        "waterheating": [
+            {
+                "system": "heatpump",
+                "fraction": 1,
+                "efficiency": 3
+            },
+            {
+                "system": "electric",
+                "fraction": 0,
+                "efficiency": 1
+            }
+        ]
+    },
+    "fuels": {
+        "oil": {
+            "fuelcost": 0.051
+        },
+        "gas": {
+            "fuelcost": 0.043
+        },
+        "wood": {
+            "fuelcost": 0
+        },
+        "electric": {
+            "fuelcost": 0.145
+        },
+        "electric-high": {
+            "fuelcost": 0.155
+        },
+        "electric-low": {
+            "fuelcost": 0.07
+        }
+    }
+}
