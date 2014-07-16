@@ -63,19 +63,22 @@ function UpdateUI(data)
         var value = keys[z];
         var target = $("[key='"+z+"']");
         
-        var dp = 1*target.attr('dp');
-        var units = target.attr('units');
-        if (!isNaN(dp)) value = (1*value).toFixed(dp);
-        
-        if (units!=undefined) value += ""+units;
-        
-        if (target.is('span')) target.html(value);
-        if (target.is('div')) target.html(value);
-        if (target.is('td')) target.html(value);
-        if (target.is('th')) target.html(value);
-        if (target.is('input[type=text]')) target.val(value);
-        if (target.is('input[type=checkbox]')) target.prop('checked', value);
-        if (target.is('select')) target.val(value);
+        if (target.length) {
+            
+            var dp = 1*target.attr('dp');
+            var units = target.attr('units');
+            if (!isNaN(dp)) value = (1*value).toFixed(dp);
+            
+            if (units!=undefined) value += ""+units;
+            
+            if (target.is('span')) { target.html(value); }
+            else if (target.is('input[type=text]')) { target.val(value); }
+            else if (target.is('input[type=checkbox]')) { target.prop('checked', value); }
+            else if (target.is('select')) { target.val(value); }
+            else if (target.is('td')) { target.html(value); }
+            else if (target.is('th')) { target.html(value); }
+            else if (target.is('div')) { target.html(value); }
+        }
     }
 }
 
