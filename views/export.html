@@ -1,5 +1,10 @@
 <h3>Import/Export</h3>
 
+<p>
+<button id="input-data">Input Data</button>
+<button id="all-data">All Data</button>
+</p>
+
 <textarea id="import-export" style="width:100%;"></textarea>
 
 <button class="btn" id="import-data">Import & Save</button>
@@ -8,12 +13,25 @@
 
     var inputdata = openbem.extract_inputdata(data);
     $("#import-export").html(JSON.stringify(inputdata, null, 4));
+    $('textarea').height($('textarea').prop('scrollHeight'));
+    
     
     $("#import-data").click(function(){
         data = JSON.parse($("#import-export").val());
         update();
         openbem.save_scenario(scenario_id,data); 
     });
+    
+    $("#input-data").click(function(){
+        var inputdata = openbem.extract_inputdata(data);
+        $("#import-export").html(JSON.stringify(inputdata, null, 4));
+        $('textarea').height($('textarea').prop('scrollHeight'));
+    });
+    
+    $("#all-data").click(function(){
+        $("#import-export").html(JSON.stringify(data, null, 4));
+        $('textarea').height($('textarea').prop('scrollHeight'));
+    });
 
-    $('textarea').height($('textarea').prop('scrollHeight'));
+    
 </script>

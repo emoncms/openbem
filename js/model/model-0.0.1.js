@@ -137,8 +137,12 @@ calc.fabric = function()
     data.fabric.total_wall_WK = 0;
     data.fabric.total_roof_WK = 0;
     data.fabric.total_window_WK = 0;
+    
+    data.fabric.annual_solar_gain = 0;
             
-    var windows = [];
+    // Solar gains
+    var sum = 0;
+    var gains = [0,0,0,0,0,0,0,0,0,0,0,0];
     
     for (z in data.fabric.elements)
     {
@@ -156,12 +160,46 @@ calc.fabric = function()
             data.fabric.total_thermal_capacity += data.fabric.elements[z].kvalue * data.fabric.elements[z].area;
         }
         
-        // Extract windows
-        if (data.fabric.elements[z].type == 'window') {
-            windows.push(data.fabric.elements[z]);
+        if (data.fabric.elements[z].type == 'window') 
+        {
+            var orientation = data.fabric.elements[z]['orientation'];
+            var area = data.fabric.elements[z]['area'];
+            var overshading = data.fabric.elements[z]['overshading'];
+            var g = data.fabric.elements[z]['g'];
+            var ff = data.fabric.elements[z]['ff'];
+            
+            var gain = 0;
+
+            // The gains for a given window are calculated for each month
+            // the result of which needs to be put in a bin for totals for jan, feb etc..
+            for (var month=0; month<12; month++)
+            {
+                // Access factor table: first dimention is shading factor, 2nd in winter, summer.
+                var table_6d = [[0.3,0.5],[0.54,0.7],[0.77,0.9],[1.0,1.0]];
+
+                // access factor is time of year dependent
+                // Summer months: 5:June, 6:July, 7:August and 8:September (where jan = month 0)
+                var summer = 0; if (month>=5 && month<=8) summer = 1;
+                var access_factor = table_6d[overshading][summer];
+
+                // Map orientation code from window to solar rad orientation codes.
+                if (orientation == 5) orientation = 3; // SE/SW
+                if (orientation == 6) orientation = 2; // East/West
+                if (orientation == 7) orientation = 1; // NE/NW
+
+                var gain_month = access_factor * area * solar_rad(data.region,orientation,90,month) * 0.9 * g * ff;
+                gains[month] += gain_month;
+                gain += gain_month;
+            }
+
+            var accessfactor = [0.5,0.67,0.83,1.0];
+            sum += 0.9 * area * g * ff * accessfactor[overshading];
+            data.fabric.elements[z].gain = gain / 12.0;
+            data.fabric.annual_solar_gain += data.fabric.elements[z].gain;
         }
     }
     
+    data.fabric.annual_solar_gain_kwh = data.fabric.annual_solar_gain * 0.024 * 365;
     data.TMP = data.fabric.total_thermal_capacity / data.TFA;
 
     var monthly_fabric_heat_loss = [];
@@ -169,17 +207,9 @@ calc.fabric = function()
     
     data.losses_WK["fabric"] = monthly_fabric_heat_loss;
     
-    // Solar gains
-    var sum = 0;
-    for (z in windows) 
-    {
-      var overshading = windows[z].overshading;
-      var accessfactor = [0.5,0.67,0.83,1.0];
-      sum += 0.9 * windows[z].area * windows[z].g * windows[z].ff * accessfactor[overshading];
-    }
-    
+    data.gains_W["solar"] = gains;
     data.GL = sum / data.TFA;
-    data.gains_W["solar"] = calc_solar_gains_from_windows(windows,data.region);
+    
 }
 
 //---------------------------------------------------------------------------------------------
@@ -529,6 +559,20 @@ calc.space_heating = function()
         annual_heating_demand += heat_demand_kwh[m];
         annual_cooling_demand += cooling_demand_kwh[m];
     }
+    
+    data.space_heating.delta_T = delta_T;
+    data.space_heating.total_losses = total_losses;
+    data.space_heating.total_gains = total_gains;
+    data.space_heating.utilisation_factor = utilisation_factor;
+    data.space_heating.useful_gains = useful_gains;
+    
+    data.space_heating.heat_demand = heat_demand;
+    data.space_heating.cooling_demand = cooling_demand;
+    data.space_heating.heat_demand_kwh = heat_demand_kwh;
+    data.space_heating.cooling_demand_kwh = cooling_demand_kwh;
+    
+    data.space_heating.annual_heating_demand = annual_heating_demand;
+    data.space_heating.annual_cooling_demand = annual_cooling_demand;
       
     if (annual_heating_demand>0) data.energy_requirements.space_heating = {name: "Space Heating", quantity: annual_heating_demand};
     if (annual_cooling_demand>0) data.energy_requirements.space_cooling = {name: "Space Cooling", quantity: annual_cooling_demand};

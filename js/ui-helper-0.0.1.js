@@ -33,6 +33,25 @@ function varset(key,value)
     }
 }
 
+function InitUI()
+{
+    $(".monthly").each(function(){
+    
+        var name = $(this).attr('key');
+        var dp = $(this).attr('dp');
+        var title = $(this).attr('title');
+        var units = $(this).attr('units');
+        
+        var out = "<td>"+title+"</td>";
+        for (var m=0; m<12; m++)
+        {
+            out += "<td key='"+name+"."+m+"' dp="+dp+" units='"+units+"'></td>";
+        }
+
+        $(this).html("<tr>"+out+"</tr>");
+    });
+}
+
 function UpdateUI(data)
 {
     $("#openbem").trigger("UpdateUI");
@@ -45,7 +64,10 @@ function UpdateUI(data)
         var target = $("[key='"+z+"']");
         
         var dp = 1*target.attr('dp');
+        var units = target.attr('units');
         if (!isNaN(dp)) value = (1*value).toFixed(dp);
+        
+        if (units!=undefined) value += ""+units;
         
         if (target.is('span')) target.html(value);
         if (target.is('div')) target.html(value);

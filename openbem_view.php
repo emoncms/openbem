@@ -66,6 +66,7 @@ if (!$project_id) $project_id = 0;
         <tr><td><a href="#elements">3. Fabric</a></td></tr>
         <tr><td><a href="#system">4. Energy Systems</a></tr>
         <tr><td><a href="#export">Import/Export</a></tr>
+        <tr><td><a href="#detail">Detailed view</a></tr>
     </table>
     <table class="table table-bordered">
         <tr><td><a href="#LAC">Lighting, Appliances & Cooking</a></td><td><input type="checkbox" key="data.use_LAC"/></td></tr>
@@ -114,6 +115,7 @@ if (!$project_id) $project_id = 0;
     var page = (window.location.hash).substring(1);
     if (!page) page = "start";
     $("#content").html(load_view(page));
+    InitUI();
     
     UpdateUI(data);
     draw_openbem_graphics();
@@ -122,6 +124,7 @@ if (!$project_id) $project_id = 0;
     $(window).on('hashchange', function() {
         page = (window.location.hash).substring(1);
         $("#content").html(load_view(page));
+        InitUI();
         UpdateUI(data);
     });
     
