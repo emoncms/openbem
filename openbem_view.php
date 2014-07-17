@@ -90,12 +90,8 @@ if (!$project_id) $project_id = 0;
     var path = "<?php echo $path;?>";
     $("#topgraphic").html(load_view('topgraphic'));
     
-    var itter = 0;
-    
     var c=document.getElementById("rating");
     var ctx=c.getContext("2d");
-  
-    // var data = openbem.load();
     
     var scenario_id = <?php echo $scenario_id; ?>;
     var scenario = openbem.get_scenario(scenario_id);
@@ -106,13 +102,10 @@ if (!$project_id) $project_id = 0;
     var project_id = <?php echo $project_id; ?>; 
     var project_details = openbem.getprojectdetails(project_id);
     $(".project_name").html(project_details.project_name);
-
     
     var keys = {};
     calc.run();
     calc.run();
-        
-    console.log(data);
 
     var page = (window.location.hash).substring(1);
     if (!page) page = "start";

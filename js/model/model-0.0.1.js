@@ -877,7 +877,6 @@ calc.water_heating = function()
       for (var m=0; m<12; m++) total_heat_required[m] = 0.85 * monthly_energy_content[m];
     }
     
-    console.log(total_heat_required);
     //----------------------------------------------------------------------------------------
     
     var waterheating_gains = [];
@@ -1097,7 +1096,6 @@ function calc_temperature_reduction(TMP,HLP,H,Ti,Te,G, R,Th,toff)
   if (toff <= tc) u = 0.5 * toff * toff * (Th - Tsc) / (24 * tc);
   if (toff > tc) u = (Th - Tsc) * (toff - 0.5 * tc) / 24;
 
-  //console.log(Tsc);
 
   if (isNaN(u)) u = 0;
   return u;

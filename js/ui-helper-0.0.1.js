@@ -1,19 +1,24 @@
-var views = {};
+var view_html = {};
 
 function load_view(view)
-{
-    
-    if (views[view]!=undefined) {
-        console.log(views[view]);
-        return views[view];
+{ 
+    if (view_html[view]!=undefined) {
+        return view_html[view];
     }
     
-    var result = ""; 
-    $.ajax({url: path+"Modules/openbem/views/"+view+".html", async: false, cache: false, success: function(data) {result = data;} });
+    var result_html = ""; 
+    $.ajax({url: path+"Modules/openbem/views/"+view+".html", async: false, cache: false, success: function(data) {result_html = data;} });
     
-    views[view] = result;
+    // Load js
+    $.ajax({
+        url: path+"Modules/openbem/views/"+view+".js",
+        dataType: 'script',
+        async: false
+    });
     
-    return result;
+    view_html[view] = result_html;
+    
+    return result_html;
 }
 
 function varset(key,value)
@@ -46,6 +51,10 @@ function varset(key,value)
 
 function InitUI()
 {
+    // Call page specific updateui function
+    var functionname = page+"_initUI";
+    if (window[functionname]!=undefined) window[functionname]();
+    
     $(".monthly").each(function(){
     
         var name = $(this).attr('key');
@@ -64,8 +73,10 @@ function InitUI()
 }
 
 function UpdateUI(data)
-{
-    $("#openbem").trigger("UpdateUI");
+{   
+    // Call page specific updateui function
+    var functionname = page+"_UpdateUI";
+    if (window[functionname]!=undefined) window[functionname]();
     
     getkeys('data',data);
     
