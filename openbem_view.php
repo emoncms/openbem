@@ -86,9 +86,11 @@ if (!$project_id) $project_id = 0;
 </div>
 
 <script>
+
     var path = "<?php echo $path;?>";
     $("#topgraphic").html(load_view('topgraphic'));
     
+    var itter = 0;
     
     var c=document.getElementById("rating");
     var ctx=c.getContext("2d");

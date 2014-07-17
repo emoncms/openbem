@@ -1,7 +1,18 @@
+var views = {};
+
 function load_view(view)
 {
+    
+    if (views[view]!=undefined) {
+        console.log(views[view]);
+        return views[view];
+    }
+    
     var result = ""; 
     $.ajax({url: path+"Modules/openbem/views/"+view+".html", async: false, cache: false, success: function(data) {result = data;} });
+    
+    views[view] = result;
+    
     return result;
 }
 
