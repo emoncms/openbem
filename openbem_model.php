@@ -77,8 +77,6 @@ class OpenBEM
             $scenarios[] = $row;
         }
         
-        // if (count($scenarios)==0) $this->add_scenario($project_id);
-        
         return $scenarios;
     }
     
@@ -164,4 +162,3 @@ class OpenBEM
 
     }
 }
-?>
