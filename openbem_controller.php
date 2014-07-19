@@ -18,7 +18,6 @@ function openbem_controller()
   global $session, $route, $redis, $mysqli,$path;
   $result = false;
   $submenu = false;
-  
   $fw = false;
   
   require "Modules/openbem/openbem_model.php";
@@ -26,20 +25,20 @@ function openbem_controller()
 
   if ($route->format == 'html')
   {
-      if ($route->action=='projects' && $session['write']) $result = view("Modules/openbem/projects_view.php",array('project_id'=>get('project_id'),'scenario_id'=>get('scenario_id')));    
-      if ($route->action=='project' && $session['write']) $result = view("Modules/openbem/project_view.php",array('project_id'=>get('project_id')));
+      if ($route->action=='projects' && $session['write']) $result = view("Modules/openbem/projects_view.php",array('project_id'=>(int)get('project_id'),'scenario_id'=>(int)get('scenario_id')));    
+      if ($route->action=='project' && $session['write']) $result = view("Modules/openbem/project_view.php",array('project_id'=>(int)get('project_id')));
     
       if ($route->action=='monthly') {
-          $result = view("Modules/openbem/openbem_view.php",array('project_id'=>get('project_id'),'scenario_id'=>get('scenario_id')));
+          $result = view("Modules/openbem/openbem_view.php",array('project_id'=>(int)get('project_id'),'scenario_id'=>(int)get('scenario_id')));
           $fw = true;
       }
     
       if ($route->action=='compare' && $session['write']) {
         $result = view("Modules/openbem/compare.php",
             array(
-                'project_id'=>get('project_id'),
-                'scenarioA'=>get('scenarioA'),
-                'scenarioB'=>get('scenarioB')
+                'project_id'=>(int)get('project_id'),
+                'scenarioA'=>(int)get('scenarioA'),
+                'scenarioB'=>(int)get('scenarioB')
             )
         );
       }

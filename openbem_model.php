@@ -14,6 +14,7 @@ class OpenBEM
     public function get_projects($userid)
     {
         $userid = (int) $userid;
+        
         $result = $this->mysqli->query("SELECT * FROM openbem_projects WHERE project_owner = '$userid'");
         
         $projects = array();
@@ -30,6 +31,7 @@ class OpenBEM
     {
         $userid = (int) $userid;
         $project_id = (int) $project_id;
+        
         $result = $this->mysqli->query("SELECT * FROM openbem_projects WHERE project_owner = '$userid' AND project_id = '$project_id'");
         return $result->fetch_object();
     }
@@ -37,6 +39,8 @@ class OpenBEM
     public function add_project($userid,$name,$description)
     {
         $userid = (int) $userid;
+        $name = preg_replace('/[^\w\s-]/','',$name);
+        $description = preg_replace('/[^\w\s-]/','',$description);
         
         $project_mdate = time();
         
@@ -62,6 +66,8 @@ class OpenBEM
     
     public function get_scenarios($project_id)
     {
+        $project_id = (int) $project_id;
+        
         $result = $this->mysqli->query("SELECT `scenario_id`,`scenario_meta` FROM openbem_scenarios WHERE `project_id` = '$project_id' ORDER BY scenario_id ASC");
         $scenarios = array();
         
@@ -78,6 +84,9 @@ class OpenBEM
     
     public function add_scenario($projectid,$meta)
     {
+        $project_id = (int) $project_id;
+        
+        $meta = preg_replace('/[^\w\s-.",:{}\[\]]/','',$meta);
         $meta = json_decode($meta);
         if ($meta==null) return false;
         $meta = json_encode($meta);
@@ -90,6 +99,9 @@ class OpenBEM
     
     public function clone_scenario($projectid,$scenario_id)
     {
+        $project_id = (int) $project_id;
+        $scenario_id = (int) $scenario_id;
+        
         // 1) Get data from scenario to clone
         $result = $this->mysqli->query("SELECT `scenario_data`, `scenario_meta` FROM openbem_scenarios WHERE `scenario_id` = '$scenario_id'");
         $row = $result->fetch_array();
@@ -107,6 +119,8 @@ class OpenBEM
     
     public function delete_scenario($scenario_id)
     {
+        $scenario_id = (int) $scenario_id;
+        
         $result = $this->mysqli->query("DELETE FROM openbem_scenarios WHERE `scenario_id` = '$scenario_id'");
         
         return array("Deleted");
@@ -115,6 +129,7 @@ class OpenBEM
     public function get_scenario($scenario_id)
     {
         $scenario_id = (int) $scenario_id;
+        
         $result = $this->mysqli->query("SELECT `scenario_meta`,`scenario_data` FROM openbem_scenarios WHERE `scenario_id` = '$scenario_id'");
         
         $row = $result->fetch_object();

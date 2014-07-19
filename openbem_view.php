@@ -74,6 +74,10 @@ if (!$project_id) $project_id = 0;
         <tr><td><a href="#solarhotwater">Solar Hot Water heating</a></td><td><input type="checkbox" key="data.use_SHW"/></td></tr>
         <tr><td><a href="#appliancelist">Appliance List</a></td><td><input type="checkbox" key="data.use_appliancelist"/></td></tr>
     </table>
+    
+    <table class="table table-bordered">
+        <tr><td><a href="https://github.com/openenergymonitor/documentation/tree/master/BuildingBlocks/BuildingEnergyModelling">Documentation</a></td></tr>
+    </table>
      
   </div>
 
