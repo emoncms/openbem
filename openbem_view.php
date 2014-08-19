@@ -73,6 +73,7 @@ if (!$project_id) $project_id = 0;
         <tr><td><a href="#waterheating">Water Heating</a></td><td><input type="checkbox" key="data.use_water_heating"/></td></tr>
         <tr><td><a href="#solarhotwater">Solar Hot Water heating</a></td><td><input type="checkbox" key="data.use_SHW"/></td></tr>
         <tr><td><a href="#appliancelist">Appliance List</a></td><td><input type="checkbox" key="data.use_appliancelist"/></td></tr>
+        <tr><td><a href="design">2D Layout Editor</a></td><td></td></tr>
     </table>
     
     <table class="table table-bordered">

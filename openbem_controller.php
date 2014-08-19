@@ -27,6 +27,10 @@ function openbem_controller()
   {
       if ($route->action=='projects' && $session['write']) $result = view("Modules/openbem/projects_view.php",array('project_id'=>(int)get('project_id'),'scenario_id'=>(int)get('scenario_id')));    
       if ($route->action=='project' && $session['write']) $result = view("Modules/openbem/project_view.php",array('project_id'=>(int)get('project_id')));
+      if ($route->action=="design" && $session['write']) {
+          $result = view("Modules/openbem/designer_view.php",array());
+          $fw = true;
+      }
     
       if ($route->action=='monthly') {
           $result = view("Modules/openbem/openbem_view.php",array('project_id'=>(int)get('project_id'),'scenario_id'=>(int)get('scenario_id')));
