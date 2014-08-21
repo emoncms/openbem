@@ -17,7 +17,7 @@ http://openenergymonitor.org
 <div id="page-container" style="position:relative;" >
   <canvas id="can" style="position:absolute; top:0px; left:0px; margin:0; padding:0;" oncontextmenu="return false;"></canvas>
   
-  <div id="hud" style="position:absolute; top:20px; right:20px; width:200px; height:300px; background-color:rgba(50,50,50,0.8); padding:20px; color:#aaa">
+  <div id="hud" style="position:absolute; top:20px; right:20px; width:200px; height:350px; background-color:rgba(50,50,50,0.8); padding:20px; color:#aaa">
   
   <p><b>Info:</b></p>
   
@@ -276,6 +276,9 @@ http://openenergymonitor.org
                 
                 line(p1,p3);
                 line(p3,vector_add(p3,mid));
+                
+                ctx.fillStyle = "rgba(35,157,251,0.5)"
+                fillPoly(p1,p3,vector_add(p1,mid),vector_add(p3,mid));
             }
 
             if (walllinks[z].length==2)
@@ -315,6 +318,10 @@ http://openenergymonitor.org
                 // Draw lines from mid points to intersection point
                 line(p4,ip);
                 line(p5,ip);
+                
+                ctx.fillStyle = "rgba(35,157,251,0.5)"
+                fillPoly(p2,ip,mid2,p5);
+                fillPoly(p2,ip,mid1,p4);
             }
         
         }
@@ -363,6 +370,7 @@ http://openenergymonitor.org
             mx = Math.round(mx/25)*25;
             my = Math.round(my/25)*25;
         }
+        
         $("#mx").html(mx);
         $("#my").html(my);
         
