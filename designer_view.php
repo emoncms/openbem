@@ -19,19 +19,24 @@ http://openenergymonitor.org
   
   <div id="hud" style="position:absolute; top:20px; right:20px; width:200px; height:300px; background-color:rgba(50,50,50,0.8); padding:20px; color:#aaa">
   
-  <b>HUD</b>
+  <p><b>Info:</b></p>
   
-  <p><b>Mouse:</b><br>
+  <!--
+   <p><b>Mouse:</b><br>
+  
     mx: <span id="mx"></span><br>
     my: <span id="my"></span><br>
     mousedown: <span id="mousedown"></span><br>
     pointselected: <span id="pointselected"></span><br>
     activepoint: <span id="activepoint"></span><br>
-    command: <br>
-    <div id="cmdstr"></div><br>
+    -->
+    <p><b>Dimension: <span id="cmdstr"></span> cm</b></p>
+    <p>Click on page to start.</p>
     <p>left, right, up, down: Create segments in direction</p>
+    <p>0-9: Enter exact wall lengths with keyboard, backspace to ammend.</p>
     <p>n: Hold to create a new point on mouse click</p>
-  </p>
+    <p>v: Hold v to move the whole view</p>
+
   
   </div>
 </div>
