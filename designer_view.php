@@ -36,6 +36,7 @@ http://openenergymonitor.org
     <p>0-9: Enter exact wall lengths with keyboard, backspace to ammend.</p>
     <p>n: Hold to create a new point on mouse click</p>
     <p>v: Hold v to move the whole view</p>
+    <p>s: Hold s to snap mouse to grid</p>
 
   
   </div>
@@ -358,9 +359,10 @@ http://openenergymonitor.org
             my = event.offsetY;
         }
         
-        // mx = Math.round(mx/25)*25;
-        // my = Math.round(my/25)*25;
-        
+        if (keydown=='s'){
+            mx = Math.round(mx/25)*25;
+            my = Math.round(my/25)*25;
+        }
         $("#mx").html(mx);
         $("#my").html(my);
         
