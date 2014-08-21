@@ -187,64 +187,133 @@ http://openenergymonitor.org
             
             ctx.fillRect(pixelposx-4,pixelposy-4,8,8);
             if (points[p].highlight == true) ctx.strokeRect(pixelposx-8,pixelposy-8,16,16);
+            
+            if (p == activepoint) ctx.strokeRect(pixelposx-8,pixelposy-8,16,16);
         }
         
         //---------------------------------------------------------------------------------
         // Draw lines:
         
+        ctx.lineWidth = 2.0;
+        
         for (var p = 0; p < wallsegments.length; p++)
         {
             // get line positions in view and draw line:
-            var p1x = points[wallsegments[p][0]].x;
-            var p1y = points[wallsegments[p][0]].y;
-            pixelpos1x = ((p1x - minx) / (maxx - minx)) * width;
-            pixelpos1y = ((p1y - miny) / (maxy - miny)) * height;
-            ctx.moveTo(pixelpos1x,pixelpos1y);
+            var p1 = points[wallsegments[p][0]];
+            var p2 = points[wallsegments[p][1]];
+            line(p1,p2);
             
-            var p2x = points[wallsegments[p][1]].x;
-            var p2y = points[wallsegments[p][1]].y;
-            pixelpos2x = ((p2x - minx) / (maxx - minx)) * width;
-            pixelpos2y = ((p2y - miny) / (maxy - miny)) * height;
-            ctx.lineTo(pixelpos2x,pixelpos2y);
+            // Draw dimension label:
             
-            // Calculation of mid point position on line with vector math
-            var v1x = p1x;
-            var v1y = p1y;
+            // 1. calculate line mid point
+            var v = vector_subtract(p2,p1);
+            var mag = vector_mag(v);
+            var v = vector_scale(v,0.5);
+            var mid = vector_add(p1,v);
             
-            var v2x = p2x - v1x;
-            var v2y = p2y - v1y;
-            
-            v2mag = Math.sqrt(v2x*v2x + v2y*v2y);
-            
-            var v2x_n = v2x / v2mag;
-            var v2y_n = v2y / v2mag;
-            
-            var v3x = v2x_n * v2mag * 0.5;
-            var v3y = v2y_n * v2mag * 0.5;
-            
-            tx = v1x + v3x;
-            ty = v1y + v3y;
+            ctx.fillStyle = "rgba(35,157,251,1.0)";
             ctx.textAlign="center";
             
             // Fix to 3 decimal places, this should also update the actual line length
-            var text = ""+(v2mag/100);
+            var text = ""+(mag/100);
             var dp = text.split(".");
             if (dp[1]!=undefined && dp[1].length>3) text = (parseFloat(text)).toFixed(3);
             
-            // Rotation and drawing of text to line angle
+            // 2. Rotation and drawing of text to line angle and offset
             ctx.save();
-            tx = ((tx - minx) / (maxx - minx)) * width;
-            ty = ((ty - miny) / (maxy - miny)) * height;
+            tx = ((mid.x - minx) / (maxx - minx)) * width;
+            ty = ((mid.y - miny) / (maxy - miny)) * height;
             ctx.translate(tx, ty);
-            ctx.rotate(Math.atan(v2y/v2x));
+            ctx.rotate(Math.atan(v.y/v.x));
             ctx.textAlign = "center";
             ctx.fillText(text+" m", 0, -8);
             ctx.restore();
         }
         
-        ctx.lineWidth = 2.0;
-       
-        ctx.stroke();
+        
+        var walllinks = [];
+        
+        // Compile list of wall segments that connect to each point:
+        for (z in points)
+        {
+            if (walllinks[z]==undefined) walllinks[z] = [];
+            for (x in wallsegments)
+            {
+                if (wallsegments[x][0]==z) walllinks[z].push(wallsegments[x][1]);
+                if (wallsegments[x][1]==z) walllinks[z].push(wallsegments[x][0]);
+            }
+        }
+        
+        for (z in walllinks)
+        {
+            if (walllinks[z].length==0)
+            {
+            
+            
+            }
+            
+            if (walllinks[z].length==1)
+            {
+                // Draw square wall end:
+                
+                var p1 = points[z];
+                var p2 = points[walllinks[z][0]];
+                
+                var v1 = vector_subtract(p2,p1);
+                var mid = vector_scale(v1,0.5);
+            
+                var vn = vector_normal(v1);
+                vn = vector_unit(vn);
+                if (walllinks[z][0]>z) vn = vector_scale(vn,20);
+                if (walllinks[z][0]<z) vn = vector_scale(vn,-20);
+                p3 = vector_add(p1,vn);
+                
+                line(p1,p3);
+                line(p3,vector_add(p3,mid));
+            }
+
+            if (walllinks[z].length==2)
+            {
+                // Load 3 wall points
+                var p1 = points[walllinks[z][0]];
+                var p2 = points[z];
+                var p3 = points[walllinks[z][1]];
+            
+                // Calculate mid point and vector normal of first segment
+                var v1 = vector_subtract(p2,p1);
+                var v1mid = vector_scale(v1,0.5);
+                var mid1 = vector_add(p1,v1mid);
+                
+                var vn = vector_normal(v1);
+                vn = vector_unit(vn);
+                vn = vector_scale(vn,20);
+                
+                // p4 is mid offset on first segment
+                p4 = vector_add(mid1,vn);
+                
+                // Calculate mid point and vector normal of second segment
+                var v2 = vector_subtract(p2,p3);
+                var v2mid = vector_scale(v2,0.5);
+                var mid2 = vector_add(p3,v2mid);
+                
+                var vn = vector_normal(v2);
+                vn = vector_unit(vn);
+                vn = vector_scale(vn,-20);
+                
+                // p5 is mid offset on second segment
+                p5 = vector_add(mid2,vn);
+
+                // Calculate intersection point of 2 vectors protruding from mid points towards corner join
+                var ip = intersect(p4,v1,p5,v2);
+                
+                // Draw lines from mid points to intersection point
+                line(p4,ip);
+                line(p5,ip);
+            }
+        
+        }
+        
+        
     }
     
     $(this.canvas).mousedown(function(event) {
@@ -469,5 +538,85 @@ http://openenergymonitor.org
     function isInt(n){
         return n%1===0;
     }
-  
+    
+    function line(p1,p2)
+    {
+        ctx.beginPath();
+        
+        var x = ((p1.x - minx) / (maxx - minx)) * width;
+        var y = ((p1.y - miny) / (maxy - miny)) * height;
+        ctx.moveTo(x,y);
+        
+        var x = ((p2.x - minx) / (maxx - minx)) * width;
+        var y = ((p2.y - miny) / (maxy - miny)) * height;
+        ctx.lineTo(x,y);
+        
+        ctx.stroke();
+    }
+    
+    function fillPoly(p1,p2,p3,p4)
+    {
+        ctx.beginPath();
+        
+        var x = ((p1.x - minx) / (maxx - minx)) * width;
+        var y = ((p1.y - miny) / (maxy - miny)) * height;
+        ctx.moveTo(x,y);
+        
+        var x = ((p2.x - minx) / (maxx - minx)) * width;
+        var y = ((p2.y - miny) / (maxy - miny)) * height;
+        ctx.lineTo(x,y);
+        
+        var x = ((p4.x - minx) / (maxx - minx)) * width;
+        var y = ((p4.y - miny) / (maxy - miny)) * height;
+        ctx.lineTo(x,y);
+
+        var x = ((p3.x - minx) / (maxx - minx)) * width;
+        var y = ((p3.y - miny) / (maxy - miny)) * height;
+        ctx.lineTo(x,y);
+        
+        ctx.closePath();
+        
+        ctx.fill();
+    }
+    
+    function vector_add(v1,v2) {
+        return {x: v1.x+v2.x, y: v1.y+v2.y};
+    }
+    
+    function vector_subtract(v1,v2) {
+        return {x: v1.x-v2.x, y: v1.y-v2.y};
+    }
+    
+    function vector_normal(v) {
+        return {x:-v.y, y:v.x}
+    }
+    
+    function vector_unit(v) {
+        var mag = vector_mag(v);
+        return {x:v.x/mag, y:v.y/mag}
+    }
+    
+    function vector_mag(v) {
+        return Math.sqrt(v.x*v.x + v.y*v.y);
+    }
+    
+    function vector_scale(v,scale) {
+        return {x:v.x*scale, y:v.y*scale}
+    }
+    
+    function intersect(p1,v1,p2,v2)
+    {
+        var div = (v2.x*v1.y - v2.y*v1.x);
+        if (div!=0)
+        {
+            var B = (p2.y*v1.x  - p1.y*v1.x + p1.x*v1.y - p2.x*v1.y) / div;
+            var x = (p2.x + v2.x * B);
+            var y = (p2.y + v2.y * B);
+        } else {
+            var x = p1.x + (p2.x - p1.x) * 0.5;
+            var y = p1.y + (p2.y - p1.y) * 0.5;
+        }
+        return {x:x,y:y};
+    }
+    
 </script>
