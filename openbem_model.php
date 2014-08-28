@@ -91,7 +91,10 @@ class OpenBEM
         $meta = json_encode($meta);
         
         $data = false;
-        $this->mysqli->query("INSERT INTO openbem_scenarios".$this->dbv." (`project_id`,`scenario_meta`,`scenario_data`) VALUES ('$project_id','$meta','$data')");
+        $stmt = $this->mysqli->prepare("INSERT INTO openbem_scenarios".$this->dbv." (`project_id`,`scenario_meta`,`scenario_data`) VALUES (?,?,?)");
+        $stmt->bind_param("iss", $project_id, $meta, $data);
+        $stmt->execute();
+        
         $new_scenario_id = $this->mysqli->insert_id;
         return $new_scenario_id;
     }
@@ -110,7 +113,10 @@ class OpenBEM
         $meta = json_encode($meta);
         
         // 2) Insert data in new scenario
-        $this->mysqli->query("INSERT INTO openbem_scenarios".$this->dbv." (`project_id`,`scenario_meta`,`scenario_data`) VALUES ('$projectid','$meta','$data')");
+        $stmt = $this->mysqli->prepare("INSERT INTO openbem_scenarios".$this->dbv." (`project_id`,`scenario_meta`,`scenario_data`) VALUES (?,?,?)");
+        $stmt->bind_param("iss", $projectid, $meta, $data);
+        $stmt->execute();
+        
         $new_scenario_id = $this->mysqli->insert_id;
         
         return $new_scenario_id;
@@ -135,7 +141,6 @@ class OpenBEM
         
         $row->scenario_meta = json_decode($row->scenario_meta);
         $row->scenario_data = json_decode($row->scenario_data);
-        
         return $row;
         
     }
@@ -150,9 +155,11 @@ class OpenBEM
         if ($data!=null) {
 
           $data = json_encode($data);
-          $data = $this->mysqli->real_escape_string($data);
+          
+          $stmt = $this->mysqli->prepare("UPDATE openbem_scenarios".$this->dbv." SET `scenario_data` = ? WHERE `scenario_id` = ?");
+          $stmt->bind_param("si", $data, $scenario_id);
+          $stmt->execute();
 
-          $this->mysqli->query("UPDATE openbem_scenarios".$this->dbv." SET `scenario_data` = '$data' WHERE `scenario_id` = '$scenario_id'");
           if ($this->mysqli->affected_rows==1) return true; else return false;
           
         }
