@@ -93,7 +93,7 @@ if (!$project_id) $project_id = 0;
 <script>
 
     var path = "<?php echo $path;?>";
-    $("#topgraphic").html(load_view('topgraphic'));
+    load_view("#topgraphic",'topgraphic');
     
     var c=document.getElementById("rating");
     var ctx=c.getContext("2d");
@@ -114,7 +114,7 @@ if (!$project_id) $project_id = 0;
 
     var page = (window.location.hash).substring(1);
     if (!page) page = "start";
-    $("#content").html(load_view(page));
+    load_view("#content",page);
     InitUI();
     
     UpdateUI(data);
@@ -123,7 +123,7 @@ if (!$project_id) $project_id = 0;
     
     $(window).on('hashchange', function() {
         page = (window.location.hash).substring(1);
-        $("#content").html(load_view(page));
+        load_view("#content",page);
         InitUI();
         UpdateUI(data);
     });

@@ -1,4 +1,7 @@
 $("#add-floor").click(function(){
+
+    console.log("test");
+
     var size = Object.size(data.floors);
     if (size==0) name = "Ground Floor";
     if (size==1) name = "1st Floor";

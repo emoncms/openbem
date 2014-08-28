@@ -1,6 +1,6 @@
 var view_html = {};
 
-function load_view(view)
+function load_view(eid,view)
 { 
     if (view_html[view]!=undefined) {
         return view_html[view];
@@ -8,6 +8,8 @@ function load_view(view)
     
     var result_html = ""; 
     $.ajax({url: path+"Modules/openbem/views/"+view+".html", async: false, cache: false, success: function(data) {result_html = data;} });
+    
+    $(eid).html(result_html);
     
     // Load js
     $.ajax({
