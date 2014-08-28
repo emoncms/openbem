@@ -23,7 +23,7 @@ if (!$project_id) $project_id = 0;
 <div class="container">
 
 <script language="javascript" type="text/javascript" src="<?php echo $path; ?>Modules/openbem/js/openbem-0.0.1.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $path; ?>Modules/openbem/js/ui-helper-0.0.1.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $path; ?>Modules/openbem/js/ui-helper-0.0.2.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $path; ?>Modules/openbem/js/ui-openbem-0.0.1.js"></script>
 
 <script language="javascript" type="text/javascript" src="<?php echo $path; ?>Modules/openbem/js/model/datasets-0.0.1.js"></script>
