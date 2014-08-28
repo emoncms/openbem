@@ -5,6 +5,7 @@ defined('EMONCMS_EXEC') or die('Restricted access');
 class OpenBEM
 {
     private $mysqli;
+    private $dbv = "_v3"; 
 
     public function __construct($mysqli)
     {
@@ -15,7 +16,7 @@ class OpenBEM
     {
         $userid = (int) $userid;
         
-        $result = $this->mysqli->query("SELECT * FROM openbem_projects WHERE project_owner = '$userid'");
+        $result = $this->mysqli->query("SELECT * FROM openbem_projects".$this->dbv." WHERE project_owner = '$userid'");
         
         $projects = array();
         
@@ -32,7 +33,7 @@ class OpenBEM
         $userid = (int) $userid;
         $project_id = (int) $project_id;
         
-        $result = $this->mysqli->query("SELECT * FROM openbem_projects WHERE project_owner = '$userid' AND project_id = '$project_id'");
+        $result = $this->mysqli->query("SELECT * FROM openbem_projects".$this->dbv." WHERE project_owner = '$userid' AND project_id = '$project_id'");
         return $result->fetch_object();
     }
     
@@ -44,7 +45,7 @@ class OpenBEM
         
         $project_mdate = time();
         
-        $result = $this->mysqli->query("INSERT INTO openbem_projects (`project_name`,`project_description`,`project_owner`,`project_mdate`) VALUES ('$name','$description','$userid','$project_mdate')");
+        $result = $this->mysqli->query("INSERT INTO openbem_projects".$this->dbv." (`project_name`,`project_description`,`project_owner`,`project_mdate`) VALUES ('$name','$description','$userid','$project_mdate')");
         $project_id = $this->mysqli->insert_id;
         return $project_id;
     }
@@ -54,10 +55,10 @@ class OpenBEM
         $project_owner = (int) $userid;
         $project_id = (int) $project_id;
         
-        $result = $this->mysqli->query("DELETE FROM openbem_projects WHERE `project_id`='$project_id' AND `project_owner`='$project_owner'");
+        $result = $this->mysqli->query("DELETE FROM openbem_projects".$this->dbv." WHERE `project_id`='$project_id' AND `project_owner`='$project_owner'");
         
         if ($this->mysqli->affected_rows==1) {
-            $result = $this->mysqli->query("DELETE FROM openbem_scenarios WHERE `project_id`='$project_id'");  
+            $result = $this->mysqli->query("DELETE FROM openbem_scenarios".$this->dbv." WHERE `project_id`='$project_id'");  
             return true;
         }      
         
@@ -68,7 +69,7 @@ class OpenBEM
     {
         $project_id = (int) $project_id;
         
-        $result = $this->mysqli->query("SELECT `scenario_id`,`scenario_meta` FROM openbem_scenarios WHERE `project_id` = '$project_id' ORDER BY scenario_id ASC");
+        $result = $this->mysqli->query("SELECT `scenario_id`,`scenario_meta` FROM openbem_scenarios".$this->dbv." WHERE `project_id` = '$project_id' ORDER BY scenario_id ASC");
         $scenarios = array();
         
         while($row = $result->fetch_object())
@@ -80,7 +81,7 @@ class OpenBEM
         return $scenarios;
     }
     
-    public function add_scenario($projectid,$meta)
+    public function add_scenario($project_id,$meta)
     {
         $project_id = (int) $project_id;
         
@@ -90,7 +91,7 @@ class OpenBEM
         $meta = json_encode($meta);
         
         $data = false;
-        $this->mysqli->query("INSERT INTO openbem_scenarios (`project_id`,`scenario_meta`,`scenario_data`) VALUES ('$projectid','$meta','$data')");
+        $this->mysqli->query("INSERT INTO openbem_scenarios".$this->dbv." (`project_id`,`scenario_meta`,`scenario_data`) VALUES ('$project_id','$meta','$data')");
         $new_scenario_id = $this->mysqli->insert_id;
         return $new_scenario_id;
     }
@@ -101,7 +102,7 @@ class OpenBEM
         $scenario_id = (int) $scenario_id;
         
         // 1) Get data from scenario to clone
-        $result = $this->mysqli->query("SELECT `scenario_data`, `scenario_meta` FROM openbem_scenarios WHERE `scenario_id` = '$scenario_id'");
+        $result = $this->mysqli->query("SELECT `scenario_data`, `scenario_meta` FROM openbem_scenarios".$this->dbv." WHERE `scenario_id` = '$scenario_id'");
         $row = $result->fetch_array();
         $data = $row['scenario_data'];
         $meta = json_decode($row['scenario_meta']);
@@ -109,7 +110,7 @@ class OpenBEM
         $meta = json_encode($meta);
         
         // 2) Insert data in new scenario
-        $this->mysqli->query("INSERT INTO openbem_scenarios (`project_id`,`scenario_meta`,`scenario_data`) VALUES ('$projectid','$meta','$data')");
+        $this->mysqli->query("INSERT INTO openbem_scenarios".$this->dbv." (`project_id`,`scenario_meta`,`scenario_data`) VALUES ('$projectid','$meta','$data')");
         $new_scenario_id = $this->mysqli->insert_id;
         
         return $new_scenario_id;
@@ -119,7 +120,7 @@ class OpenBEM
     {
         $scenario_id = (int) $scenario_id;
         
-        $result = $this->mysqli->query("DELETE FROM openbem_scenarios WHERE `scenario_id` = '$scenario_id'");
+        $result = $this->mysqli->query("DELETE FROM openbem_scenarios".$this->dbv." WHERE `scenario_id` = '$scenario_id'");
         
         return array("Deleted");
     }
@@ -128,7 +129,7 @@ class OpenBEM
     {
         $scenario_id = (int) $scenario_id;
         
-        $result = $this->mysqli->query("SELECT `scenario_meta`,`scenario_data` FROM openbem_scenarios WHERE `scenario_id` = '$scenario_id'");
+        $result = $this->mysqli->query("SELECT `scenario_meta`,`scenario_data` FROM openbem_scenarios".$this->dbv." WHERE `scenario_id` = '$scenario_id'");
         
         $row = $result->fetch_object();
         
@@ -151,7 +152,7 @@ class OpenBEM
           $data = json_encode($data);
           $data = $this->mysqli->real_escape_string($data);
 
-          $this->mysqli->query("UPDATE openbem_scenarios SET `scenario_data` = '$data' WHERE `scenario_id` = '$scenario_id'");
+          $this->mysqli->query("UPDATE openbem_scenarios".$this->dbv." SET `scenario_data` = '$data' WHERE `scenario_id` = '$scenario_id'");
           if ($this->mysqli->affected_rows==1) return true; else return false;
           
         }
