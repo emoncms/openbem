@@ -5,7 +5,7 @@
 | Element description | Source | U-value (W/K.m2) | K-value (kJ/K.m2) |
 | :------------------ | ------ | ---------------- | ----------------- |
 |  |  |  |  |
-| **Cavity wall** |  |  |  |
+| ### Cavity wall |  |  |  |
 | Uninsulated cavity brick | The Whole House Book p180 | 1.30 | ? |
 | Uninsulated cavity lightweight block | The Whole House Book p180 | 0.96 | ? |
 | Uninsulated cavity wall | [Historic Scotland in situ measurements p38](http://www.historic-scotland.gov.uk/hstp102011-u-values-and-traditional-buildings.pdf) | 1.2 +- 0.1 | ? |
