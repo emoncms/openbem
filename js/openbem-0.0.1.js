@@ -150,6 +150,9 @@ var openbem = {
             inputdata.fabric.elements[z] = {
                 type: data.fabric.elements[z].type,
                 name: data.fabric.elements[z].name,
+                subtractfrom: data.fabric.elements[z].subtractfrom,
+                l: data.fabric.elements[z].l,
+                h: data.fabric.elements[z].h,
                 area: data.fabric.elements[z].area,
                 uvalue: data.fabric.elements[z].uvalue,
             };

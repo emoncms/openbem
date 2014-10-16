@@ -147,7 +147,36 @@ calc.fabric = function()
     for (z in data.fabric.elements)
     {
         // Calculate heat loss through elements
-        data.fabric.elements[z].wk = data.fabric.elements[z].area * data.fabric.elements[z].uvalue;
+        
+        // Use element length and height if given rather than area.
+        if (data.fabric.elements[z]['l']!=undefined && data.fabric.elements[z]['l']!='' && data.fabric.elements[z]['h']!=undefined && data.fabric.elements[z]['h']!='')
+        {
+            data.fabric.elements[z].area = data.fabric.elements[z]['l'] * data.fabric.elements[z]['h'];
+        }
+        data.fabric.elements[z].netarea = data.fabric.elements[z].area;
+        
+        // Subtract window areas:
+        
+        for (w in data.fabric.elements)
+        {
+            if (data.fabric.elements[w].type=='window')
+            {
+                if (data.fabric.elements[w].subtractfrom == z)
+                {
+                    var windowarea = data.fabric.elements[w].area;
+                    
+                    if (data.fabric.elements[w]['l']!=undefined && data.fabric.elements[w]['l']!='' && data.fabric.elements[w]['h']!=undefined && data.fabric.elements[w]['h']!='')
+                    {
+                        windowarea = data.fabric.elements[w]['l'] * data.fabric.elements[w]['h'];
+                    }
+                    data.fabric.elements[z].windowarea = windowarea;
+                    data.fabric.elements[z].netarea -= windowarea;
+                }
+            }
+        }
+        
+        
+        data.fabric.elements[z].wk = data.fabric.elements[z].netarea * data.fabric.elements[z].uvalue;
         data.fabric.total_heat_loss_WK += data.fabric.elements[z].wk;
         
         if (data.fabric.elements[z].type == 'floor') data.fabric.total_floor_WK += data.fabric.elements[z].wk;

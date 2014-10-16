@@ -2,12 +2,18 @@
     
     <h3>Walls, Roof & Floors</h3>
     
+    <p><i>Note: If the element length and height is given it will automatically calculate and override the area calculation. Leave length and height blank and enter area for ceilings and floors and other elements where its easier to enter the area directly.</i></p>
+    
     <table class="table">
     
         <tr>
             <th>Type</th>
             <th style="text-align:left">Element Name</th>
+            <th>Length<br>(m)</th>
+            <th>Height<br>(m)</th>
             <th>Area<br>(m<sup>2</sup>)</th>
+            <th>Window<br>Area<br>(m<sup>2</sup>)</th>
+            <th>Net<br>Area<br>(m<sup>2</sup>)</th>
             <th>U-value<br>(W/K.m2)</th>
             <th>k-value<br>(kJ/K.m2)</th>
             <th>W/K</th>
@@ -26,8 +32,13 @@
                 </td>
                 
                 <td style="text-align:left"><input style="text-align:left; width:150px" type="text" key="data.fabric.elements.template.name" value="Element"></td>
+
+                <td><input type="text" value="0" key="data.fabric.elements.template.l" style="width:40px"/></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.h" style="width:40px"/></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.area" style="width:40px"/></td>
+                <td><span key="data.fabric.elements.template.windowarea" dp=1>0.0</span>m<sup>2</sup></td>
+                <td><span key="data.fabric.elements.template.netarea" dp=1>0.0</span>m<sup>2</sup></td>
                 
-                <td><input type="text" value="0" key="data.fabric.elements.template.area" style="width:60px"/></td>
                 <td><input type="text" value="0" key="data.fabric.elements.template.uvalue" style="width:40px" /></td>
                 <td><input type="text" value="0" key="data.fabric.elements.template.kvalue" style="width:40px" /></td>
                 <td><span key="data.fabric.elements.template.wk" dp=1>0</span> W/K</td>
@@ -56,6 +67,9 @@
     
         <tr>
             <th style="text-align:left">Window Name</th>
+            <th>subtract<br>from:</th>
+            <th>Width<br>(m)</th>
+            <th>Height<br>(m)</th>
             <th>Area<br>(m<sup>2</sup>)</th>
             <th>Orientation</th>
             <th>Overshading</th>
@@ -70,9 +84,19 @@
         
         <tbody id="window-template" style="display:none">
             <tr>
-                <td style="text-align:left"><input style="text-align:left; width:100px" type="text" key="data.fabric.elements.template.name" value="Element"></td>
+                <td style="text-align:left"><input style="text-align:left; width:80px" type="text" key="data.fabric.elements.template.name" value="Element"></td>
                 
-                <td><input type="text" value="0" key="data.fabric.elements.template.area" style="width:60px"/></td>
+                <td>
+                    <select key="data.fabric.elements.template.subtractfrom" style="width:55px">
+                    
+                    </select>
+                </td>
+                
+                <td><input type="text" value="0" key="data.fabric.elements.template.l" style="width:40px"/></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.h" style="width:40px"/></td>
+                
+                <td><input type="text" value="0" key="data.fabric.elements.template.area" style="width:40px"/></td>
+                
                 <td>
                     <select key="data.fabric.elements.template.orientation" style="width:80px">
                         <option value=0 >North</option>
@@ -84,7 +108,7 @@
                 
                 </td>
                 <td>
-                    <select key="data.fabric.elements.template.overshading" style="width:100px">
+                    <select key="data.fabric.elements.template.overshading" style="width:85px">
                         <option value=0 >Heavy > 80%</option>
                         <option value=1 >More than average > 60%-80%</option>
                         <option value=2 >Average or unknown 20-60%</option>
