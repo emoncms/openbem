@@ -1,5 +1,7 @@
 ## Element Library
 
+SAP 2012 [http://www.bre.co.uk/filelibrary/SAP/2012/SAP-2012_9-92.pdf](http://www.bre.co.uk/filelibrary/SAP/2012/SAP-2012_9-92.pdf)
+
 ### Walls
 
 | Element description | Source | U-value (W/K.m2) | K-value (kJ/K.m2) |
@@ -63,6 +65,72 @@
 | Double-low-E Argon fill 16mm airspace | The Whole House Book p180 | 1.70 | ? |
 | Triple-low-E Argon fill or double super low-E | The Whole House Book p180 | 1.30 | ? |
 
+
+## Table 1e: Heat capacities for some common constructions (k-values) kJ/m2K
+page 197: [http://www.bre.co.uk/filelibrary/SAP/2012/SAP-2012_9-92.pdf)](http://www.bre.co.uk/filelibrary/SAP/2012/SAP-2012_9-92.pdf)
+
+
+### Ground floors
+Suspended timber, insulation between joists | 20
+Slab on ground, screed over insulation | 110
+Suspended concrete floor, carpeted | 75
+
+### Exposed floors
+Timber exposed floor, insulation between joists | 20
+
+### External walls - masonry, solid, external insulation
+Solid wall: dense plaster, 200 mm dense block, insulated externally | 190
+Solid wall: plasterboard on dabs or battens, 200 mm dense block, insulated externally | 150
+Solid wall: dense plaster, 210 mm brick, insulated externally | 135
+Solid wall: plasterboard on dabs or battens, 210 mm brick, insulated externally | 110
+
+### External walls - masonry, solid, internal insulation
+Solid wall: dense plaster, insulation, any outside structure | 17
+Solid wall: plasterboard on dabs or battens, insulation, any outside structure | 9
+
+### External walls - cavity masonry walls, full or partial cavity fill
+Cavity wall: dense plaster, dense block, filled cavity, any outside structure | 190
+Cavity wall; dense plaster, lightweight aggregate block, filled cavity, any outside structure | 140
+Cavity wall: dense plaster, AAC block, filled cavity, any outside structure | 70
+Cavity wall: plasterboard on dabs or battens, dense block, filled cavity, any outside structure | 150
+Cavity wall; plasterboard on dabs or battens, lightweight aggregate block, filled cavity, any outside structure | 110
+Cavity wall: plasterboard on dabs or battens, AAC block, filled cavity, any outside structure | 60
+
+### External walls – timber or steel frame
+Timber framed wall (one layer of plasterboard) | 9
+Timber framed wall (two layers of plasterboard) | 18
+Steel frame wall (warm frame or hybrid construction) | 14
+
+### Roofs
+Plasterboard, insulated at ceiling level | 9
+Plasterboard, insulated slope | 9
+Plasterboard, insulated flat roof | 9
+
+### Party walls
+Dense plaster both sides, dense blocks, cavity or cavity fill (E-WM-1)* | 180
+Dense plaster both sides. lightweight aggregate blocks, cavity or cavity fill (E-WM-2)* | 140
+Single plasterboard on dabs on both sides, dense blocks, cavity or cavity fill (E-WM-3)* | 70
+Single plasterboard on dabs both sides, lightweight aggregate blocks, cavity or cavity fill (E-WM-4)* | 110
+Single plasterboard on both sides, dense cellular blocks, cavity (E-WM-5)* | 70
+Plasterboard on dabs mounted on cement render on both sides, AAC blocks, cavity (E-WM-6 or E-WM-7)* | 45
+Double plasterboard on both sides, twin timber frame with or without sheathing board (E-WT-1 or E-WT-2)* | 20
+Steel frame (E-WS-1 to E-WS-3)* | 20
+
+### Party floors (k from above / k from below)
+Precast concrete planks floor, screed, carpeted (E-FC-1)* | 40/30
+Concrete floor slab, carpeted (E-FC-2)* | 80/100
+Precast concrete plank floor (screed laid on insulation) ,carpeted (E-FC-3)* | 40/30
+Precast concrete plank floor (screed laid on rubber),carpeted (E-FC-4)* | 70/30
+In-situ concrete slab supported by profiled metal deck, carpeted (E-FS-1)* | 64/90
+Timber I-joists, carpeted (E-FT-1)* | 30/20
+
+### Internal partitions
+Plasterboard on timber frame | 9
+Dense block, dense plaster | 100
+Dense block, plasterboard on dabs | 75
+
+### Floor/ceiling/between floors in a house (k from above / k from below)
+Carpeted chipboard floor, plasterboard ceiling | 18/9
 
 
 
