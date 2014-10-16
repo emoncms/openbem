@@ -4,6 +4,8 @@ This guide walk's through doing your own home energy assessment for working out 
 
 It makes use of the online free to use, open source energy assessment software weve been developing here as a collaboration between OpenEnergyMonitor and Carbon Coop.
 
+**Try it out:** [http://emoncms.org/openbem/monthly](http://emoncms.org/openbem/monthly)
+
 ## Measuring up your home
 
 Start by drawing a floor plan of your house, this could be on paper or using a program such as paint, open office draw or a CAD package. Draw an indication of wall widths and include internal walls.
@@ -27,6 +29,8 @@ Then do the same for the windows.
 Calculate the area of each floor not inculding internal walls of each floor, enter each floor in the floor section of the calculator.
 
 In our example here there are two floors each 6 meters by 8 meters and 2.5m high:
+
+[http://emoncms.org/openbem/monthly#context](http://emoncms.org/openbem/monthly#context)
 
 ![floors](files/floors.png)
 
