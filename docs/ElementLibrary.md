@@ -32,7 +32,36 @@
 | 220mm solid brick wall with 50mm airspace/battens and 12.5mm plasterboard | CIBSE Guide (Anderson, 2006a, tables 3.49 and 3.50, via Historic Scotland p38 | 1.41 | ? |
 
 
+### Roof
 
+| Element description | Source | U-value (W/K.m2) | K-value (kJ/K.m2) |
+| :------------------ | ------ | ---------------- | ----------------- |
+| Uninsulated loft | The Whole House Book p180 | 2.00 | ? |
+| with 100mm insulation | The Whole House Book p180 | 0.30 | ? |
+| Room in the roof 200mm (2002 UK) | The Whole House Book p180 | 0.20 | ? |
+| Loft with 250mm insulation (2002 UK) | The Whole House Book p180 | 0.16 | ? |
+| Superinsulated 300mm insulation | The Whole House Book p180 | 0.12 | ? |
+
+### Floor
+
+| Element description | Source | U-value (W/K.m2) | K-value (kJ/K.m2) |
+| :------------------ | ------ | ---------------- | ----------------- |
+| Timber floor uninsulated | The Whole House Book p180 | 0.83 | ? |
+| with 150mm insulation | The Whole House Book p180 | 0.25 | ? |
+| Superinsulated 250mm insulation | The Whole House Book p180 | 0.14 | ? |
+| Solid floor uninsulated (average house) | The Whole House Book p180 | 0.70 | ? |
+| with 100mm insulation (2002 UK) | The Whole House Book p180 | 0.12 | ? |
+| with 100mm insulation (2002 UK) | The Whole House Book p180 | 0.25 | ? |
+| Superinsulated 200mm insulation | The Whole House Book p180 | 0.15 | ? |
+
+### Timber Windows
+
+| Element description | Source | U-value (W/K.m2) | K-value (kJ/K.m2) |
+| :------------------ | ------ | ---------------- | ----------------- |
+| Single glazed | The Whole House Book p180 | 4.80 | ? |
+| Double-low-E 12mm airspace (2002 UK) | The Whole House Book p180 | 2.00 | ? |
+| Double-low-E Argon fill 16mm airspace | The Whole House Book p180 | 1.70 | ? |
+| Triple-low-E Argon fill or double super low-E | The Whole House Book p180 | 1.30 | ? |
 
 
 
