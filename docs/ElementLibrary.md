@@ -12,8 +12,8 @@
 | Brick/block cavity walls with insulation (for 2003-present) | Energy Saving Trust (EST) 2004, table 2, via Historic Scotland p38 | 0.3 | ? |
 | 600mm stonewall with a 50mm airspace and finished with 25mm dense plaster on laths | CIBSE Guide (Anderson, 2006a, tables 3.49 and 3.50, via Historic Scotland p38 | 1.38 | ? |
 | 220mm solid brick wall with 13mm dense plaster | CIBSE Guide (Anderson, 2006a, tables 3.49 and 3.50, via Historic Scotland p38 | 2.09 | ? |
-[ 220mm solid brick wall with 50mm airspace/battens and 12.5mm plasterboard | CIBSE Guide (Anderson, 2006a, tables 3.49 and 3.50, via Historic Scotland p38 | 1.41 | ? |
-[ Brick/brick cavity wall with 105mm brick, 50mm airspace, 105mm brick and 13mm dense plaster | CIBSE Guide (Anderson, 2006a, tables 3.49 and 3.50, via Historic Scotland p38 | 1.44 | ? |
+| 220mm solid brick wall with 50mm airspace/battens and 12.5mm plasterboard | CIBSE Guide (Anderson, 2006a, tables 3.49 and 3.50, via Historic Scotland p38 | 1.41 | ? |
+| Brick/brick cavity wall with 105mm brick, 50mm airspace, 105mm brick and 13mm dense plaster | CIBSE Guide (Anderson, 2006a, tables 3.49 and 3.50, via Historic Scotland p38 | 1.44 | ? |
 
 
 
