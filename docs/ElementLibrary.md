@@ -71,6 +71,7 @@ page 197: [http://www.bre.co.uk/filelibrary/SAP/2012/SAP-2012_9-92.pdf)](http://
 
 
 ### Ground floors
+| --- | --- |
 Suspended timber, insulation between joists | 20
 Slab on ground, screed over insulation | 110
 Suspended concrete floor, carpeted | 75
