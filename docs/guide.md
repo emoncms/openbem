@@ -123,6 +123,36 @@ Insulating cavity walls can drop the U-value from around 1.3 W/K.m2 to 0.3 W/K.m
 
 Insulating the loft with 250mm of insulation a U-value of 0.16 W/K.m2 drops the annual energy cost from £1501/year to £1242/year
 
+### Insulating the floor
+
+Insulating the floor with 100mm of insulation a U-value of 0.12 W/K.m2 drops the annual cost from £1242 to £1155/year.
+
+### Upgrading the windows
+
+If we then upgrade the windows from single glazed units to Triple-low-E Argon fill or double super low-E with a U-value of 1.3 W/K.m2 drops the energy cost from £1155/year to £920/year.
+
+### Upgrading the lighting
+
+Switching to 12 low energy lighting fittings £920 -> £872
+
+### Upgrading the gas boiler or switching to a heatpump
+
+Upgrading the gas boiler to a 92% efficient model would results in £872 -> £810. Had the boiler been switched first the saving would have appeared much larger. The small saving at this stage is largely because we have reduced the demand so much with the fabric improvement measures.
+
+The energy cost of the electricity for lighting, appliances and cooking is now amost twice that of space heating.
+
+### Compare scenarios
+
+- Navigate back to the scenario list for the project you created earlier.
+- Click on the Compare button on the Clone scenario.
+
+A summary of all the measures applied is presented. We can see that our retrofit reduced the space heating energy requirement by 79% and the electricity demand by 10%. The SAP rating increased from 21 to 62 and the annual cost reduced from £1877 to £810
+
+
+
+
+
+
 
 
 
