@@ -58,6 +58,11 @@ The area's can be used directly in the element list rather than entering a lengt
 
 ### Windows
 
+The window section requires additional inputs in order to calculate the contribution to heating from solar gains. Its also possible to subtract window area's from particular wall sections. This both simplifies the calculation procedure for wall areas and provides a convenient way of associating a window with a wall for reference.
 
+Enter each window, its width, height, orientation, overshading level and U-value from the Element Library.
 
+**Example:** Window 1 (W1) is 2.5m wide and 1.25m high, it is positioned in external wall E1. It faces North and is averagely shaded. The U-value for single glazing is 4.8 W/K.m2
+
+![Window list](files/windows.png)
 
