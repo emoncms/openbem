@@ -36,6 +36,10 @@ In our example here there are two floors each 6 meters by 8 meters and 2.5m high
 
 ![floors](files/floors.png)
 
+## 2. Ventilation
+
+![Ventilation](files/ventilation.png)
+
 ## 3. Fabric
 
 The Fabric section is used to enter the dimensions, u-values and other thermal properties of all external and internal walls, floors, the roof and windows of your building. 
@@ -70,3 +74,6 @@ Once a window has been entered and the wall that it is to be subtracted from is 
 
 ![Subtracted window area](files/subtractedwindows.png)
 
+With the ventilation and fabric sections completed the house heat loss graphic should now show all the sources of heat loss and their relative magnitudes:
+
+![Heat loss graphic uninsulated](files/heatloss_uninsulated.png)
