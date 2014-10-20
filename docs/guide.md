@@ -148,6 +148,8 @@ The energy cost of the electricity for lighting, appliances and cooking is now a
 
 A summary of all the measures applied is presented. We can see that our retrofit reduced the space heating energy requirement by 79% and the electricity demand by 10%. The SAP rating increased from 21 to 62 and the annual cost reduced from £1877 to £810
 
+![Comparison screenshot](files/compare.png)
+
 
 
 
