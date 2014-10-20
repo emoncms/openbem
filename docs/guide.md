@@ -102,3 +102,29 @@ Screenshot of the resultant energy systems page:
 ![Energy systems screenshot](files/energysystems.png)
 
 
+## Create a retrofit scenario
+
+This next section will explore creating a retrofit scenario, where we explore the effect of insulating walls, upgrading windows and changing heating systems.
+
+- Navigate back to the scenario list for the project you created earlier.
+- Click on *Clone*
+- Open the Clone scenario.
+
+
+### Reducing un-needed ventilation
+
+Our example house had an open chimney that could be blocked with a chimney ballon. Set the number of chimney's to 0. We will also improve the draught proofing in our scenario when we change the windows so lets set that at 100% draught proofed. These changes did not appear to have a very large effect in the model, the energy cost only reduced from £1877 to £1814/year. Does the SAP model under-estimate the savings possible here?
+
+### Insulating the cavity walls
+
+Insulating cavity walls can drop the U-value from around 1.3 W/K.m2 to 0.3 W/K.m2. Where this option is available and is done with a full and consistent fill, it can be a very cost effective energy saving measure. After applying a U-value of 0.3 W/K.m2 to all the external walls in the model the annual energy cost drops from £1814/year to £1501/year.
+
+### Insulating the loft
+
+Insulating the loft with 250mm of insulation a U-value of 0.16 W/K.m2 drops the annual energy cost from £1501/year to £1242/year
+
+
+
+
+
+
