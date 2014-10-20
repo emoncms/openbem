@@ -83,3 +83,11 @@ With the ventilation and fabric sections completed the house heat loss graphic s
 The space heating requirements for our example uninsulated house under energy requirements should read 23084 kWh. Click on the plus button to add a heating system. Lets give our example home an old gas boiler with an efficiency of 75%. You will at this point get your first indication of energy cost and the SAP rating. The SAP rating is directly proportional to the annual cost of the energy supplied. 
 
 The energy cost does not yet include the energy cost for lighting, appliances, cooking and water heating which will all contribute to heating the house and will reduce the space heating requirements. These sections can be added by completing the input sections for each of these energy requirements and then clicking the tick box to include them.
+
+Our example house has 12 fixed lighting outlets all non-low-energy and uses instantaneous water heating. Electricity is used to supply energy for lighting, appliances, cooking. Water heating and space heating is provided by the gas boiler.
+
+Screenshot of the resultant energy systems page:
+
+![Energy systems screenshot](files/energysystems.png)
+
+
