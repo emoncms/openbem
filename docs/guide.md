@@ -26,6 +26,17 @@ Start in the top-left corner and work clockwise labelling each external wall wit
 
 Then do the same for the windows.
 
+## Create an OpenBEM project
+
+- Login or create an account in emoncms: [http://emoncms.org/user/login](http://emoncms.org/user/login)
+- Navigate to *Extras* and then *OpenBEM v3*.
+- Click on create new project, you can give the project a name and a description.
+- Open the project
+- Create a new scenario (this will be the base scenario)
+- Open the scenario
+
+The scenario will open on the Context page (1. Floors from the navigation on the left).
+
 ## 1. Floors: 
 
 Calculate the area of each floor not including internal walls of each floor, enter each floor in the floor section of the calculator.
