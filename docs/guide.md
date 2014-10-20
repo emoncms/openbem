@@ -66,3 +66,7 @@ Enter each window, its width, height, orientation, overshading level and U-value
 
 ![Window list](files/windows.png)
 
+Once a window has been entered and the wall that it is to be subtracted from is selected from the dropdown menu the wall list will update with the window area and show the resultant net wall area:
+
+![Subtracted window area](files/subtractedwindows.png)
+
