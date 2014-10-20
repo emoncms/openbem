@@ -77,7 +77,9 @@ if (!$project_id) $project_id = 0;
     </table>
     
     <table class="table table-bordered">
-        <tr><td><a href="https://github.com/openenergymonitor/documentation/tree/master/BuildingBlocks/BuildingEnergyModelling">Documentation</a></td></tr>
+        <tr><td><a href="https://github.com/emoncms/openbem/blob/v3/docs/guide.md">User guide</a></td></tr>
+        <tr><td><a href="https://github.com/emoncms/openbem/blob/v3/docs/ElementLibrary.md">Element Library</a></td></tr>
+        <tr><td><a href="https://github.com/openenergymonitor/documentation/tree/master/BuildingBlocks/BuildingEnergyModelling">Building Energy Modelling</a></td></tr>
     </table>
      
   </div>
