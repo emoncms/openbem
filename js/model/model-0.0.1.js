@@ -47,6 +47,7 @@ calc.run = function()
     calc.SHW();
     calc.appliancelist();
     calc.generation();
+    calc.currentenergy();
     
     calc.temperature();
     calc.space_heating();
@@ -1020,6 +1021,113 @@ calc.generation = function()
             data.total_income += data.generation.hydro_annual_kwh * data.generation.hydro_FIT;
         }
     }
+};
+
+calc.currentenergy = function()
+{
+    if (data.currentenergy==undefined) data.currentenergy = {
+        electric_annual_kwh: 0,
+        storageheaters_annual_kwh: 0,
+        waterheating_annual_kwh: 0,
+        electriccar_annual_kwh: 0,
+        heatpump_annual_kwh: 0,
+        woodlogs_annual_m3: 0,
+        woodpellets_annual_m3: 0,
+        oil_annual_L: 0,
+        gas_annual_m3: 0,
+        LPG_annual_L: 0,
+        bottledgas_annual_kg: 0,
+        
+        electriccar2_annual_miles: 0,
+        electriccar2_milesperkwh: 4,
+        
+        car1_annual_miles: 0,
+        car1_mpg: 35,
+        
+        car2_annual_miles: 0,
+        car2_mpg: 35,
+
+        car3_annual_miles: 0,
+        car3_mpg: 35,
+        
+        motorbike_annual_miles: 0,
+        motorbike_mpg: 35,
+        
+        bus_miles: 0,
+        train_miles: 0, 
+        boat_miles: 0, 
+        plane_miles: 0 
+    };
+    
+    data.currentenergy.electric_kwhd = data.currentenergy.electric_annual_kwh / 365.0;
+    data.currentenergy.electric_co2 = data.currentenergy.electric_annual_kwh * 0.02;
+    
+    data.currentenergy.storageheaters_kwhd = data.currentenergy.storageheaters_annual_kwh / 365.0;
+    data.currentenergy.storageheaters_co2 = data.currentenergy.storageheaters_annual_kwh * 0.02;
+
+    data.currentenergy.heatpump_kwhd = data.currentenergy.heatpump_annual_kwh / 365.0;
+    data.currentenergy.heatpump_co2 = data.currentenergy.heatpump_annual_kwh * 0.02;
+    
+    data.currentenergy.waterheating_kwhd = data.currentenergy.waterheating_annual_kwh / 365.0;
+    data.currentenergy.waterheating_co2 = data.currentenergy.waterheating_annual_kwh * 0.02;
+    
+    data.currentenergy.electriccar_kwhd = data.currentenergy.electriccar_annual_kwh / 365.0;
+    data.currentenergy.electriccar_co2 = data.currentenergy.electriccar_annual_kwh * 0.02;
+
+    // ------    
+
+    data.currentenergy.woodlogs_kwhd = (data.currentenergy.woodlogs_annual_m3 * 1380) / 365.0;
+    data.currentenergy.woodlogs_co2 = 0;
+    
+    data.currentenergy.woodpellets_kwhd = (data.currentenergy.woodpellets_annual_m3 * 4800) / 365.0;
+    data.currentenergy.woodpellets_co2 = 0;
+    
+    data.currentenergy.oil_kwhd = (data.currentenergy.oil_annual_L * 10.27) / 365.0;
+    data.currentenergy.oil_co2 = (data.currentenergy.oil_annual_L * 2.518);
+    
+    data.currentenergy.gas_kwhd = (data.currentenergy.gas_annual_m3 * 9.8) / 365.0;
+    data.currentenergy.gas_co2 = (data.currentenergy.gas_annual_m3 * 2.198);
+    
+    data.currentenergy.LPG_kwhd = (data.currentenergy.LPG_annual_L * 11.0) / 365.0;
+    data.currentenergy.LPG_co2 = (data.currentenergy.LPG_annual_L * 1.5);
+    
+    data.currentenergy.bottledgas_kwhd = (data.currentenergy.bottledgas_annual_kg * 13.9) / 365.0;
+    data.currentenergy.bottledgas_co2 = (data.currentenergy.bottledgas_annual_kg * 1.5);
+    
+    // ------
+    
+    data.currentenergy.electriccar2_kwhd = (data.currentenergy.electriccar2_annual_miles/data.currentenergy.electriccar2_milesperkwh) / 365.0;
+    data.currentenergy.electriccar2_co2 = (data.currentenergy.electriccar2_annual_miles/data.currentenergy.electriccar2_milesperkwh) * 0.02;
+
+
+    data.currentenergy.car1_kwhd = ((data.currentenergy.car1_annual_miles/data.currentenergy.car1_mpg)*4.54609*9.7) / 365.0;
+    data.currentenergy.car1_co2 = ((data.currentenergy.car1_annual_miles/data.currentenergy.car1_mpg)*4.54609) * 2.31;
+    
+    data.currentenergy.car2_kwhd = ((data.currentenergy.car2_annual_miles/data.currentenergy.car2_mpg)*4.54609*9.7) / 365.0;
+    data.currentenergy.car2_co2 = ((data.currentenergy.car2_annual_miles/data.currentenergy.car2_mpg)*4.54609) * 2.31; 
+    
+    data.currentenergy.car3_kwhd = ((data.currentenergy.car3_annual_miles/data.currentenergy.car3_mpg)*4.54609*9.7) / 365.0;
+    data.currentenergy.car3_co2 = ((data.currentenergy.car3_annual_miles/data.currentenergy.car3_mpg)*4.54609) * 2.31;
+
+    data.currentenergy.motorbike_kwhd = ((data.currentenergy.motorbike_annual_miles/data.currentenergy.motorbike_mpg)*4.54609*9.7) / 365.0;
+    data.currentenergy.motorbike_co2 = ((data.currentenergy.motorbike_annual_miles/data.currentenergy.motorbike_mpg)*4.54609) * 2.31;   
+    
+    // -------
+    
+    data.currentenergy.bus_kwhd = (data.currentenergy.bus_miles * 0.53)/365.0;
+    data.currentenergy.bus_co2 = data.currentenergy.bus_miles * 0.176;
+    
+    data.currentenergy.train_kwhd = (data.currentenergy.train_miles * 0.096)/365.0;
+    data.currentenergy.train_co2 = data.currentenergy.train_miles * 0.096;
+    
+    data.currentenergy.boat_kwhd = (data.currentenergy.boat_miles * 1.0)/365.0;
+    data.currentenergy.boat_co2 = data.currentenergy.boat_miles * 0.192;
+    
+    data.currentenergy.plane_kwhd = (data.currentenergy.plane_miles * 0.69)/365.0;
+    data.currentenergy.plane_co2 = data.currentenergy.plane_miles * 0.43;
+    // RFI = 3 0.43 kg per mile
+    
+
 };
 
 //---------------------------------------------------------------------------------------------

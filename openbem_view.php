@@ -61,6 +61,7 @@ if (!$project_id) $project_id = 0;
 
     <table class="table table-bordered">
         <tr><td><a href="#start">Home</a></td></tr>
+        <tr><td><a href="#currentenergy">Actual Energy Use</a></td></tr>
         <tr><td><a href="#context">1. Floors</a></td></tr>
         <tr><td><a href="#ventilation">2. Ventilation</a></td></tr>
         <tr><td><a href="#elements">3. Fabric</a></td></tr>
