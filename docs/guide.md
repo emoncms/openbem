@@ -150,6 +150,17 @@ A summary of all the measures applied is presented. We can see that our retrofit
 
 ![Comparison screenshot](files/compare.png)
 
+### Generation
+
+Onsite renewable generation such as Solar PV, wind or hydro can be used to reduce the total energy cost further and so increase the SAP rating. 
+
+- Navigate to the Generation page.
+- Enter the annual kWh generated from the generator and the fraction used on site.
+- Put a tick in the tick box next to the generation page link to include this data in the model.
+
+Note: income from FIT's are not yet considered in the SAP rating, only the saving made through reduction in imported electricity demand.
+
+Adding a 4 kWp solar PV system generating around 3400 kWh a year where 50% is used on-site reduced the total energy cost from £810 to £564 and brings the SAP rating up to 73.8 - a C rating. 
 
 
 
