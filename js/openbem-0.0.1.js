@@ -195,6 +195,9 @@ var openbem = {
             reduced_internal_heat_gains: data.LAC.reduced_internal_heat_gains
         };
         
+        inputdata.use_generation = data.use_generation;
+        inputdata.generation = data.generation;
+        
         // Waterheating
         inputdata.use_water_heating = data.use_water_heating;
         inputdata.water_heating = {

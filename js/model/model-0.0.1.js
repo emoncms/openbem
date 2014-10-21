@@ -46,6 +46,7 @@ calc.run = function()
     calc.water_heating();
     calc.SHW();
     calc.appliancelist();
+    calc.generation();
     
     calc.temperature();
     calc.space_heating();
@@ -72,6 +73,7 @@ calc.start = function()
     
     data.energy_requirements = {};
     data.total_cost = 0;
+    data.total_income = 0;
 }
 
 //---------------------------------------------------------------------------------------------
@@ -647,6 +649,8 @@ calc.energy_systems = function()
         data.fuel_totals[z].fuelcost = data.fuels[z].fuelcost;
         data.total_cost += data.fuel_totals[z].annualcost;
     }
+    
+    data.net_cost = data.total_cost - data.total_income;
 }
 
 //---------------------------------------------------------------------------------------------
@@ -977,6 +981,44 @@ calc.appliancelist = function()
     if (data.use_appliancelist) {
         data.gains_W["Appliances"] = data.appliancelist.gains_W_monthly;
         if (data.appliancelist.annualkwh>0) data.energy_requirements.appliances = {name: "Appliances", quantity: data.appliancelist.annualkwh};
+    }
+};
+
+calc.generation = function()
+{
+    if (data.generation==undefined) data.generation = {
+        solar_annual_kwh: 0, solar_fraction_used_onsite: 0.5, solar_FIT: 0,
+        wind_annual_kwh: 0, wind_fraction_used_onsite: 0.5, wind_FIT: 0,
+        hydro_annual_kwh: 0, hydro_fraction_used_onsite: 0.5, hydro_FIT: 0
+    };
+    
+    data.generation.total_energy_income = 0;
+    
+    if (data.use_generation == true)
+    {
+        if (data.generation.solar_annual_kwh>0)
+        {
+            data.energy_requirements.solarpv = {name: "Solar PV", quantity: -data.generation.solar_annual_kwh * data.generation.solar_fraction_used_onsite};
+            data.energy_systems.solarpv = [];
+            data.energy_systems.solarpv[0] = {system: "electric", fraction: 1, efficiency: 1};
+            data.total_income += data.generation.solar_annual_kwh * data.generation.solar_FIT;
+        }
+
+        if (data.generation.wind_annual_kwh>0)
+        {
+            data.energy_requirements.wind = {name: "Wind", quantity: -data.generation.wind_annual_kwh * data.generation.wind_fraction_used_onsite};
+            data.energy_systems.wind = [];
+            data.energy_systems.wind[0] = {system: "electric", fraction: 1, efficiency: 1};
+            data.total_income += data.generation.wind_annual_kwh * data.generation.wind_FIT;
+        }
+
+        if (data.generation.wind_annual_kwh>0)
+        {
+            data.energy_requirements.hydro = {name: "Hydro", quantity: -data.generation.hydro_annual_kwh * data.generation.hydro_fraction_used_onsite};
+            data.energy_systems.hydro = [];
+            data.energy_systems.hydro[0] = {system: "electric", fraction: 1, efficiency: 1};
+            data.total_income += data.generation.hydro_annual_kwh * data.generation.hydro_FIT;
+        }
     }
 };
 
