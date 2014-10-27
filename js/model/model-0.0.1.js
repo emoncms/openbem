@@ -37,6 +37,9 @@ var calc = {};
 calc.run = function() 
 {
     calc.start();
+    
+    calc.simple();
+    
     calc.floors();
     calc.occupancy();
     calc.fabric();
@@ -75,6 +78,67 @@ calc.start = function()
     data.energy_requirements = {};
     data.total_cost = 0;
     data.total_income = 0;
+}
+
+calc.simple = function()
+{
+    if (data.simple==undefined) data.simple = {};
+    
+    data.floors = {};
+    
+    for (var i=1; i<=data.simple.nooffloors; i++)
+    {
+        var name = "Floor "+i;
+        data.floors[name] = {
+            name: name, 
+            area:data.simple.floorarea, 
+            height:data.simple.storeyheight
+        };
+    }
+    
+    data.fabric.elements = [];
+    
+    var wall_width = Math.sqrt(data.simple.floorarea);
+    
+    data.fabric.elements.push(
+    {
+        type: "wall",
+        name: "South Wall",
+        l: wall_width,
+        h: data.simple.storeyheight * data.simple.nooffloors,
+        uvalue: 0.3,
+        kvalue: 170
+    });
+    
+    data.fabric.elements.push(
+    {
+        type: "wall",
+        name: "West Wall",
+        l: wall_width,
+        h: data.simple.storeyheight * data.simple.nooffloors,
+        uvalue: 0.3,
+        kvalue: 170
+    });
+    
+    data.fabric.elements.push(
+    {
+        type: "wall",
+        name: "North Wall",
+        l: wall_width,
+        h: data.simple.storeyheight * data.simple.nooffloors,
+        uvalue: 0.3,
+        kvalue: 170
+    });
+    
+    data.fabric.elements.push(
+    {
+        type: "wall",
+        name: "East Wall",
+        l: wall_width,
+        h: data.simple.storeyheight * data.simple.nooffloors,
+        uvalue: 0.3,
+        kvalue: 170
+    });
 }
 
 //---------------------------------------------------------------------------------------------
