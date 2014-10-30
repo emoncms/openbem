@@ -91,24 +91,53 @@ calc.simple = function()
         var name = "Floor "+i;
         data.floors[name] = {
             name: name, 
-            area:data.simple.floorarea, 
+            area:data.simple.floorarea/data.simple.nooffloors, 
             height:data.simple.storeyheight
         };
     }
     
     data.fabric.elements = [];
     
-    var wall_width = Math.sqrt(data.simple.floorarea);
+    var wall_width = Math.sqrt(data.simple.floorarea/data.simple.nooffloors);
     
+    var window_width = Math.sqrt(data.simple.windowarea);
+    
+    var window_uvalue;
+    if(data.simple.windowtype == "Single glazed"){window_uvalue = 5.0;}
+    else if(data.simple.windowtype == "Double glazed (new)"){window_uvalue = 1.8;}
+    else if(data.simple.windowtype == "Triple glazed"){window_uvalue = 0.8;}
+    else {window_uvalue = 3.0;} /*(data.simple.windowtype == "Double glazed (old)")*/
+    
+    var wall_uvalue;
+    if(data.simple.wallinsulation == "Super insulated"){wall_uvalue = 0.11;}
+    else if(data.simple.wallinsulation == "Well insulated"){wall_uvalue = 0.25;}
+    else if(data.simple.wallinsulation == "Some insulation"){wall_uvalue = 0.45;}
+    else if(data.simple.wallinsulation == "Uninsulated solid wall"){wall_uvalue = 1.6;}
+    else {wall_uvalue = 1.3;} /*(data.simple.wallinsulation == "Uninsulated cavity wall")*/
+    
+    var roof_uvalue;
+    if(data.simple.roofinsulation == "Super insulated"){roof_uvalue = 0.12;}
+    else if(data.simple.roofinsulation == "Well insulated"){roof_uvalue = 0.16;}
+    else if(data.simple.roofinsulation == "No insulation"){roof_uvalue = 2.0;}
+    else {roof_uvalue = 0.3;} /*(data.simple.roofinsulation == "Some insulation")*/
+    
+    var floor_uvalue;
+    if(data.simple.floorinsulation == "Super insulated"){floor_uvalue = 0.14;}
+    else if(data.simple.floorinsulation == "Some insulation"){floor_uvalue = 0.25;}
+    else {floor_uvalue = 0.7;} /*(data.simple.floorinsulation == "No insulation")*/
+    
+    if(data.simple.dwellingtype == "Detached")
+    {
     data.fabric.elements.push(
     {
         type: "wall",
         name: "South Wall",
         l: wall_width,
         h: data.simple.storeyheight * data.simple.nooffloors,
-        uvalue: 0.3,
+        uvalue: wall_uvalue,
         kvalue: 170
     });
+    }
     
     data.fabric.elements.push(
     {
@@ -116,7 +145,7 @@ calc.simple = function()
         name: "West Wall",
         l: wall_width,
         h: data.simple.storeyheight * data.simple.nooffloors,
-        uvalue: 0.3,
+        uvalue: wall_uvalue,
         kvalue: 170
     });
     
@@ -126,7 +155,7 @@ calc.simple = function()
         name: "North Wall",
         l: wall_width,
         h: data.simple.storeyheight * data.simple.nooffloors,
-        uvalue: 0.3,
+        uvalue: wall_uvalue,
         kvalue: 170
     });
     
@@ -136,8 +165,43 @@ calc.simple = function()
         name: "East Wall",
         l: wall_width,
         h: data.simple.storeyheight * data.simple.nooffloors,
-        uvalue: 0.3,
+        uvalue: wall_uvalue,
         kvalue: 170
+    });
+    
+    data.fabric.elements.push(
+    {
+        type: "roof",
+        name: "Roof",
+        l: wall_width,
+        h: wall_width,
+        uvalue: roof_uvalue,
+        kvalue: 100
+    });
+    
+    data.fabric.elements.push(
+    {
+        type: "floor",
+        name: "Floor",
+        l: wall_width,
+        h: wall_width,
+        uvalue: floor_uvalue,
+        kvalue: 100
+    });
+    
+    data.fabric.elements.push(
+    {
+        type: "window",
+        name: "all windows",
+        subtractfrom: 2,
+        l: window_width,
+        h: window_width,
+        orientation: 2,
+        overshading: 2,
+        g: 0.76,
+        gL: 0.8,
+        ff: 0.7,
+        uvalue: window_uvalue
     });
 }
 
@@ -1003,7 +1067,7 @@ calc.water_heating = function()
     
 
     /*
-    // Combi loss for each month from Table 3a, 3b or 3c (enter “0” if not a combi boiler)
+    // Combi loss for each month from Table 3a, 3b or 3c (enter “0�? if not a combi boiler)
     switch(combi_type)
     {
     case 'instantaneous_no_keephot':
