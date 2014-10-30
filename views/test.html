@@ -2,7 +2,7 @@
 
 <table class="table">
     <tr>
-        <td>Floor area (m2)</td>
+        <td>Total floor area (m<sup>2</sup>)</td>
         <td><input type="text" value="0" key="data.simple.floorarea" style="width:60px" /></td>
     </tr>
     <tr>
@@ -12,6 +12,74 @@
     <tr>
         <td>Number of floors</td>
         <td><input type="text" value="0" key="data.simple.nooffloors" style="width:60px" /></td>
+    </tr>
+    <tr>
+        <td>Dwelling type</td>
+        <td>
+            <select key="data.simple.dwellingtype" style="width:150px">
+            <option value="Mid-terrace">Mid-terrace</option>
+            <option value="Semi-detached" selected>Semi-detached</option>
+            <option value="Detached">Detached</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>Windows area (m<sup>2</sup>)</td>
+        <td><input type="text" value="0" key="data.simple.windowarea" style="width:60px" /></td>
+    </tr>
+<!--    <tr>
+        <td>South</td>
+        <td><input type="text" value="0" key="data.simple.southwindows" style="width:60px" /></td>
+        <td>North</td>
+        <td><input type="text" value="0" key="data.simple.northwindows" style="width:60px" /></td>
+        <td>East</td>
+        <td><input type="text" value="0" key="data.simple.eastwindows" style="width:60px" /></td>
+        <td>West</td>
+        <td><input type="text" value="0" key="data.simple.westwindows" style="width:60px" /></td>
+    </tr>-->
+    <tr>
+        <td>Window type</td>
+        <td>
+            <select key="data.simple.windowtype" style="width:200px">
+            <option value="Single glazed">Single glazed</option>
+            <option value="Double glazed (old)" selected>Double glazed (old)</option>
+            <option value="Double glazed (new)">Double glazed (new)</option>
+            <option value="Triple glazed">Triple glazed</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>Wall insulation</td>
+        <td>
+            <select key="data.simple.wallinsulation" style="width:200px">
+            <option value="Super insulated">Super insulated</option>
+            <option value="Well insulated">Well insulated</option>
+            <option value="Some insulation">Some insulation</option>
+            <option value="Uninsulated cavity wall" selected>Uninsulated cavity wall</option>
+            <option value="Uninsulated solid wall">Uninsulated solid wall</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>Roof insulation</td>
+        <td>
+            <select key="data.simple.roofinsulation" style="width:200px">
+            <option value="Super insulated">Super insulated</option>
+            <option value="Well insulated">Well insulated</option>
+            <option value="Some insulation" selected>Some insulation</option>
+            <option value="No insulation">No insulation</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>Floor insulation</td>
+        <td>
+            <select key="data.simple.floorinsulation" style="width:200px">
+            <option value="Super insulated">Super insulated</option>
+            <option value="Some insulation">Some insulation</option>
+            <option value="Uninsulated floor" selected>Uninsulated floor</option>
+            </select>
+        </td>
     </tr>
 </table>
     
