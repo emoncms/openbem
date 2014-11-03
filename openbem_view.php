@@ -97,6 +97,8 @@ if (!$project_id) $project_id = 0;
 
 <script>
 
+    usesimpleview = false;
+
     var path = "<?php echo $path;?>";
     load_view("#topgraphic",'topgraphic');
     
@@ -128,6 +130,9 @@ if (!$project_id) $project_id = 0;
     
     $(window).on('hashchange', function() {
         page = (window.location.hash).substring(1);
+        
+        if (page=="test") update();
+
         load_view("#content",page);
         InitUI();
         UpdateUI(data);
@@ -135,6 +140,8 @@ if (!$project_id) $project_id = 0;
     
     function update()
     {
+        if (page=="test") usesimpleview = true; else usesimpleview = false;
+        
         calc.run();
         UpdateUI(data);
         draw_rating(ctx);

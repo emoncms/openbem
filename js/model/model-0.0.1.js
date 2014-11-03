@@ -38,7 +38,7 @@ calc.run = function()
 {
     calc.start();
     
-    calc.simple();
+    if (usesimpleview) calc.simple();
     
     calc.floors();
     calc.occupancy();
