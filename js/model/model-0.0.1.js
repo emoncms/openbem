@@ -38,7 +38,7 @@ calc.run = function()
 {
     calc.start();
     
-    calc.simple();
+    if (usesimpleview) calc.simple();
     
     calc.floors();
     calc.occupancy();
@@ -83,6 +83,7 @@ calc.start = function()
 calc.simple = function()
 {
     if (data.simple==undefined) data.simple = {};
+    if (data.fabric==undefined) data.fabric = {};
     
     data.floors = {};
     
@@ -95,6 +96,8 @@ calc.simple = function()
             height:data.simple.storeyheight
         };
     }
+    
+    
     
     data.fabric.elements = [];
     
@@ -1067,7 +1070,7 @@ calc.water_heating = function()
     
 
     /*
-    // Combi loss for each month from Table 3a, 3b or 3c (enter “0�? if not a combi boiler)
+    // Combi loss for each month from Table 3a, 3b or 3c (enter “0\E2\80? if not a combi boiler)
     switch(combi_type)
     {
     case 'instantaneous_no_keephot':

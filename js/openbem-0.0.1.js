@@ -131,6 +131,18 @@ var openbem = {
     extract_inputdata: function(data)
     {
         var inputdata = {};
+        
+        inputdata.simple = {};
+        
+        inputdata.simple.floorarea = data.simple.floorarea;
+        inputdata.simple.storeyheight = data.simple.storeyheight;
+        inputdata.simple.nooffloors = data.simple.nooffloors;
+        inputdata.simple.dwellingtype = data.simple.dwellingtype;
+        inputdata.simple.windowarea = data.simple.windowarea;
+        inputdata.simple.windowtype = data.simple.windowtype;
+        inputdata.simple.wallinsulation = data.simple.wallinsulation;
+        inputdata.simple.roofinsulation = data.simple.roofinsulation;
+        inputdata.simple.floorinsulation = data.simple.floorinsulation;
 
         inputdata.region = data.region;
         inputdata.altitude = data.altitude
