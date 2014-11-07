@@ -222,6 +222,43 @@ calc.simple = function()
     data.ventilation.air_permeability_test = true;
     data.ventilation.air_permeability_value = airpermeabilityvalue;
     data.temperature.target = data.simple.heatingtargettemperature;
+    
+    if (data.simple.heatingsystem=="Gas boiler - old") {
+        data.energy_systems = {
+            space_heating:[{ system: "gasboiler", fraction: 1.0, efficiency: 0.80 }]
+        };
+    }
+    
+    if (data.simple.heatingsystem=="Gas boiler - new") {
+        data.energy_systems = {
+            space_heating:[{ system: "gasboiler", fraction: 1.0, efficiency: 0.90 }]
+        };
+    }
+    
+    if (data.simple.heatingsystem=="Oil boiler") {
+        data.energy_systems = {
+            space_heating:[{ system: "oilboiler", fraction: 1.0, efficiency: 0.85 }]
+        };
+    }
+    
+    if (data.simple.heatingsystem=="Electric") {
+        data.energy_systems = {
+            space_heating:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }]
+        };
+    }
+    
+    if (data.simple.heatingsystem=="Heat pump") {
+        data.energy_systems = {
+            space_heating:[{ system: "heatpump", fraction: 1.0, efficiency: 3.0 }]
+        };
+    }
+    
+    if (data.simple.heatingsystem=="Wood boiler") {
+        data.energy_systems = {
+            space_heating:[{ system: "woodbatch", fraction: 1.0, efficiency: 0.92 }]
+        };
+    }
+    
 
 }
 
