@@ -143,6 +143,9 @@ var openbem = {
         inputdata.simple.wallinsulation = data.simple.wallinsulation;
         inputdata.simple.roofinsulation = data.simple.roofinsulation;
         inputdata.simple.floorinsulation = data.simple.floorinsulation;
+        inputdata.simple.draughtiness = data.simple.draughtiness;
+        inputdata.simple.heatingsystem = data.simple.heatingsystem;
+        inputdata.simple.heatingtargettemperature = data.simple.heatingtargettemperature;
 
         inputdata.region = data.region;
         inputdata.altitude = data.altitude
