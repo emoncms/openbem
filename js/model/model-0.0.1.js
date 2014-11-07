@@ -84,6 +84,7 @@ calc.simple = function()
 {
     if (data.simple==undefined) data.simple = {};
     if (data.fabric==undefined) data.fabric = {};
+    if (data.ventilation==undefined) data.ventilation = {};
     
     data.floors = {};
     
@@ -96,9 +97,7 @@ calc.simple = function()
             height:data.simple.storeyheight
         };
     }
-    
-    
-    
+        
     data.fabric.elements = [];
     
     var wall_width = Math.sqrt(data.simple.floorarea/data.simple.nooffloors);
@@ -107,9 +106,9 @@ calc.simple = function()
     
     var window_uvalue;
     if(data.simple.windowtype == "Single glazed"){window_uvalue = 5.0;}
-    else if(data.simple.windowtype == "Double glazed (new)"){window_uvalue = 1.8;}
+    else if(data.simple.windowtype == "Double glazed - new"){window_uvalue = 1.8;}
     else if(data.simple.windowtype == "Triple glazed"){window_uvalue = 0.8;}
-    else {window_uvalue = 3.0;} /*(data.simple.windowtype == "Double glazed (old)")*/
+    else {window_uvalue = 3.0;} /*(data.simple.windowtype == "Double glazed - new")*/
     
     var wall_uvalue;
     if(data.simple.wallinsulation == "Super insulated"){wall_uvalue = 0.11;}
@@ -129,6 +128,19 @@ calc.simple = function()
     else if(data.simple.floorinsulation == "Some insulation"){floor_uvalue = 0.25;}
     else {floor_uvalue = 0.7;} /*(data.simple.floorinsulation == "No insulation")*/
     
+    var airpermeabilityvalue;
+    if(data.simple.draughtiness == "Draughty"){airpermeabilityvalue = 15;}
+    else if(data.simple.draughtiness == "Air-tight"){airpermeabilityvalue = 3;}
+    else {airpermeabilityvalue = 8;} /*(data.simple.floorinsulation == "Average")*/
+    
+    var heating_system;
+    if(data.simple.heatingsystem == "Gas boiler - new"){heating_system = "Gas boiler - new";}
+    else if(data.simple.heatingsystem == "Oil boiler"){heating_system = "Oil boiler";}
+    else if(data.simple.heatingsystem == "Electric"){heating_system = "Electric";}
+    else if(data.simple.heatingsystem == "Heat pump"){heating_system = "Heat pump";}
+    else if(data.simple.heatingsystem == "Wood boiler"){heating_system = "Wood boiler";}
+    else {heating_system = "Gas boiler - old";} /*(data.simple.heatingsystem == "Gas boiler - old")*/
+    
     if(data.simple.dwellingtype == "Detached")
     {
     data.fabric.elements.push(
@@ -141,7 +153,7 @@ calc.simple = function()
         kvalue: 170
     });
     }
-    
+
     data.fabric.elements.push(
     {
         type: "wall",
@@ -206,6 +218,11 @@ calc.simple = function()
         ff: 0.7,
         uvalue: window_uvalue
     });
+    
+    data.ventilation.air_permeability_test = true;
+    data.ventilation.air_permeability_value = airpermeabilityvalue;
+    data.temperature.target = data.simple.heatingtargettemperature;
+
 }
 
 //---------------------------------------------------------------------------------------------
