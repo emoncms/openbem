@@ -146,6 +146,7 @@ var openbem = {
         inputdata.simple.draughtiness = data.simple.draughtiness;
         inputdata.simple.heatingsystem = data.simple.heatingsystem;
         inputdata.simple.heatingtargettemperature = data.simple.heatingtargettemperature;
+        inputdata.simple.noofoccupants = data.simple.noofoccupants;
 
         inputdata.region = data.region;
         inputdata.altitude = data.altitude

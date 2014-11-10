@@ -141,33 +141,10 @@ calc.simple = function()
     else if(data.simple.heatingsystem == "Wood boiler"){heating_system = "Wood boiler";}
     else {heating_system = "Gas boiler - old";} /*(data.simple.heatingsystem == "Gas boiler - old")*/
     
-    if(data.simple.dwellingtype == "Detached")
-    {
-    data.fabric.elements.push(
-    {
-        type: "wall",
-        name: "South Wall",
-        l: wall_width,
-        h: data.simple.storeyheight * data.simple.nooffloors,
-        uvalue: wall_uvalue,
-        kvalue: 170
-    });
-    }
-
     data.fabric.elements.push(
     {
         type: "wall",
         name: "West Wall",
-        l: wall_width,
-        h: data.simple.storeyheight * data.simple.nooffloors,
-        uvalue: wall_uvalue,
-        kvalue: 170
-    });
-    
-    data.fabric.elements.push(
-    {
-        type: "wall",
-        name: "North Wall",
         l: wall_width,
         h: data.simple.storeyheight * data.simple.nooffloors,
         uvalue: wall_uvalue,
@@ -183,6 +160,32 @@ calc.simple = function()
         uvalue: wall_uvalue,
         kvalue: 170
     });
+    
+    if(data.simple.dwellingtype == "Detached")
+    {
+    data.fabric.elements.push(
+    {
+        type: "wall",
+        name: "South Wall",
+        l: wall_width,
+        h: data.simple.storeyheight * data.simple.nooffloors,
+        uvalue: wall_uvalue,
+        kvalue: 170
+    });
+    }
+
+    if(data.simple.dwellingtype != "Mid-terrace")
+    {
+    data.fabric.elements.push(
+    {
+        type: "wall",
+        name: "North Wall",
+        l: wall_width,
+        h: data.simple.storeyheight * data.simple.nooffloors,
+        uvalue: wall_uvalue,
+        kvalue: 170
+    });
+    }
     
     data.fabric.elements.push(
     {
@@ -208,7 +211,7 @@ calc.simple = function()
     {
         type: "window",
         name: "all windows",
-        subtractfrom: 2,
+        subtractfrom: 0,
         l: window_width,
         h: window_width,
         orientation: 2,
@@ -221,45 +224,85 @@ calc.simple = function()
     
     data.ventilation.air_permeability_test = true;
     data.ventilation.air_permeability_value = airpermeabilityvalue;
+    
     data.temperature.target = data.simple.heatingtargettemperature;
+    if(data.simple.floorarea < 50){data.temperature.living_area = data.simple.floorarea * 0.75;}
+    else if (data.simple.floorarea > 100){data.temperature.living_area = data.simple.floorarea * 0.2;}
+    else {data.temperature.living_area = data.simple.floorarea * 
+                (0.75 - (0.55*((data.simple.floorarea-50)/50)));}
     
-    if (data.simple.heatingsystem=="Gas boiler - old") {
+    data.use_LAC = 1;
+    
+    data.use_water_heating = 1;
+    var storage_volume = 50 * data.simple.noofoccupants;
+    data.water_heating.storage_volume = storage_volume;
+    data.water_heating.loss_factor_b = 0.033;
+    data.water_heating.volume_factor_b = Math.pow(120/storage_volume,1/3);
+    data.water_heating.temperature_factor_b = 1.08;
+    
+    data.use_custom_occupancy = 1;
+    data.custom_occupancy = data.simple.noofoccupants;
+    
+    if (heating_system=="Gas boiler - old") {
         data.energy_systems = {
-            space_heating:[{ system: "gasboiler", fraction: 1.0, efficiency: 0.80 }]
+            space_heating:[{ system: "gasboiler", fraction: 1.0, efficiency: 0.80 }],
+            waterheating:[{ system: "gasboiler", fraction: 1.0, efficiency: 0.75 }],
+            lighting:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+            cooking:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+            appliances:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }]
         };
     }
     
-    if (data.simple.heatingsystem=="Gas boiler - new") {
+    if (heating_system=="Gas boiler - new") {
         data.energy_systems = {
-            space_heating:[{ system: "gasboiler", fraction: 1.0, efficiency: 0.90 }]
+            space_heating:[{ system: "gasboiler", fraction: 1.0, efficiency: 0.90 }],
+            waterheating:[{ system: "gasboiler", fraction: 1.0, efficiency: 0.85 }],
+            lighting:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+            cooking:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+            appliances:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }]
         };
     }
     
-    if (data.simple.heatingsystem=="Oil boiler") {
+    if (heating_system=="Oil boiler") {
         data.energy_systems = {
-            space_heating:[{ system: "oilboiler", fraction: 1.0, efficiency: 0.85 }]
+            space_heating:[{ system: "oilboiler", fraction: 1.0, efficiency: 0.85 }],
+            waterheating:[{ system: "oilboiler", fraction: 1.0, efficiency: 0.80}],
+            lighting:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+            cooking:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+            appliances:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }]
         };
     }
     
-    if (data.simple.heatingsystem=="Electric") {
+    if (heating_system=="Electric") {
         data.energy_systems = {
-            space_heating:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }]
+            space_heating:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+            waterheating:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+            lighting:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+            cooking:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+            appliances:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }]
         };
     }
     
-    if (data.simple.heatingsystem=="Heat pump") {
+    if (heating_system=="Heat pump") {
         data.energy_systems = {
-            space_heating:[{ system: "heatpump", fraction: 1.0, efficiency: 3.0 }]
+            space_heating:[{ system: "heatpump", fraction: 1.0, efficiency: 3.0 }],
+            waterheating:[{ system: "heatpump", fraction: 1.0, efficiency: 2.0 }],
+            lighting:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+            cooking:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+            appliances:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }]
         };
     }
     
-    if (data.simple.heatingsystem=="Wood boiler") {
+    if (heating_system=="Wood boiler") {
         data.energy_systems = {
-            space_heating:[{ system: "woodbatch", fraction: 1.0, efficiency: 0.92 }]
+            space_heating:[{ system: "woodbatch", fraction: 1.0, efficiency: 0.92 }],
+            waterheating:[{ system: "woodbatch", fraction: 1.0, efficiency: 0.87 }],
+            lighting:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+            cooking:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+            appliances:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }]
         };
     }
     
-
 }
 
 //---------------------------------------------------------------------------------------------
