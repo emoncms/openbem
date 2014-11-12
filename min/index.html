@@ -701,13 +701,17 @@
         
         //================================================================================
         
-        // 1) Run input data through model
+        // 1) Run pre-retrofit data as set above through the model.
+        // the model then populates the data object with the results of the calculation
         calc.run(); calc.run();
         
-        // 2) Copy result to master object (unlinked)
+        // 2) Clone the result and save temporarily as 'master', we use JSON parse stringify here to
+        // create an unlinked copy of the data object, otherwise further changes to data will change
+        // the pre-retrofit data.
         var master = JSON.parse(JSON.stringify(data));
-        
-        
+       
+        // 3) Apply measures to data object, we just overwrite the data object entries with the effect 
+        // of the retrofit measures:
         var wall_uvalue;
         if(data.simple.retrofit.wallinsulation == "Super insulated"){wall_uvalue = 0.11;}
         else if(data.simple.retrofit.wallinsulation == "Well insulated"){wall_uvalue = 0.25;}
@@ -734,7 +738,6 @@
             if (data.fabric.elements[z].type=="window") data.fabric.elements[z].uvalue = window_uvalue;
         }
         
-        // 3) Apply measures to data object
         var airpermeabilityvalue;
         if(data.simple.retrofit.draughtiness == "Draughty"){airpermeabilityvalue = 15;}
         else if(data.simple.retrofit.draughtiness == "Air-tight"){airpermeabilityvalue = 3;}
@@ -745,13 +748,13 @@
         // 4) Run retrofit measures through model
         calc.run(); calc.run();
 
-        // 5) Copy resultant heat demand
+        // 5) Copy resultant heat demand from the retrofit data object
         var retrofit_heat_demand = data.space_heating.heat_demand_kwh;
         
-        // 6) Save a copy of the retrofit calculation object
+        // 6) Save a copy of the retrofit data object
         var retrofit = JSON.parse(JSON.stringify(data));
         
-        // 7) Switch data object back to pre-retrofit master
+        // 7) Switch 'data' back to pre-retrofit master, as we're using the master as the basis for the UI
         data = master;
         
         // 8) Place retrofit data in master object so that it can be drawn to the UI
