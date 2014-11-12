@@ -1,0 +1,761 @@
+
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        
+        
+        <script type="text/javascript" src="js/jquery-1.9.0.min.js"></script>
+        
+        <script language="javascript" type="text/javascript" src="js/openbem-0.0.1.js"></script>
+        <script language="javascript" type="text/javascript" src="js/ui-helper-0.0.2.js"></script>
+        <script language="javascript" type="text/javascript" src="js/ui-openbem-0.0.1.js"></script>
+        <script language="javascript" type="text/javascript" src="js/model/datasets-0.0.1.js"></script>
+        <script language="javascript" type="text/javascript" src="js/model/model-0.0.1.js"></script>    
+
+        <script language="javascript" type="text/javascript" src="graph.js"></script>
+    </head>
+
+    <style>
+
+        #bound {
+            width: 1024px;
+            height: auto;
+            margin: 0px auto;
+            text-align: left;
+            background-color:#fff;
+            
+            padding:30px;
+            margin-top:0px;
+        }
+        
+        body {
+            background-color:#eee;
+            font-family:"Ubuntu Light";
+            font-size: 18px;
+            padding:0px;
+            margin:0px;
+        }
+        
+        h1 { 
+            color: #ff2712;
+        }
+        
+        h3 { 
+            color: #ff2712;
+            margin:0px;
+        }
+        
+        hr {
+            background: #ff2712;
+            border: 0; height: 1px;
+        }
+        
+        .table {
+        }
+        
+        td {
+            padding-right:10px;
+            font-family:"Ubuntu Light";
+            font-size: 16px;
+        }
+        
+        input[type="text"] {
+            padding:3px;
+            font-family:"Ubuntu Light";
+            font-size: 16px;
+            color: #ff2712;
+            width:120px;
+        
+        }
+        
+        select {
+            width:120px;
+            padding:3px;
+            font-family:"Ubuntu Light";
+            font-size: 16px;
+        }
+
+    </style>
+ 
+ <body id="openbem">
+ 
+ 
+ <div id="bound">
+
+ <h1>SIMPLE DOMESTIC ENERGY ASSESSMENT TOOL</h1>
+ <p><b>1) First get your home's predicted current energy use. Try to match it roughly to your meter readings.*</b></p>
+ 
+ 
+
+ 
+<table class="table" style="width:100%">
+    <colgroup>
+    <col style="width:35%">
+    <col style="width:10%">
+    <col style="width:10%">
+    <col style="width:35%">
+    <col style="width:10%">
+    </colgroup> 
+    <tr>
+        <td>Total floor area (m<sup>2</sup>)</td>
+        <td><input type="text" value="0" key="data.simple.floorarea"  /></td>
+        <td></td>
+        <td>Windows</td>
+        <td>Area (m2)</td>
+    </tr>
+
+    <tr>
+        <td>Average storey height (m)</td>
+        <td><input type="text" value="0" key="data.simple.storeyheight"  /></td>
+        <td></td>
+        <td>South</td>
+        <td><input type="text" value="0" key="data.simple.windowarea_south"  /></td>
+    </tr>
+    
+    <tr>
+        <td>Number of floors</td>
+        <td><input type="text" value="0" key="data.simple.nooffloors"  /></td>
+        <td></td>
+        <td>North</td>
+        <td><input type="text" value="0" key="data.simple.windowarea_north"  /></td>
+    </tr>
+    
+    <tr>
+        <td>House type</td>
+        <td>
+            <select key="data.simple.dwellingtype" >
+            <option value="Mid-terrace">Mid-terrace</option>
+            <option value="Semi-detached" selected>Semi-detached</option>
+            <option value="Detached">Detached</option>
+            </select>
+        </td>
+        <td></td>
+        <td>East</td>
+        <td><input type="text" value="0" key="data.simple.windowarea_east"  /></td>
+    </tr>
+    
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>West</td>
+        <td><input type="text" value="0" key="data.simple.windowarea_west"  /></td>
+    </tr>
+
+    <tr>
+        <td>Floor</td>
+        <td>
+            <select key="data.simple.floorinsulation">
+            <option value="Super insulated">Super insulated</option>
+            <option value="Some insulation">Some insulation</option>
+            <option value="Uninsulated floor" selected>Uninsulated floor</option>
+            </select>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr> 
+    
+    <tr>
+        <td>External walls</td>
+        <td>
+            <select key="data.simple.wallinsulation">
+            <option value="Super insulated">Super insulated</option>
+            <option value="Well insulated">Well insulated</option>
+            <option value="Some insulation">Some insulation</option>
+            <option value="Uninsulated cavity wall" selected>Uninsulated cavity wall</option>
+            <option value="Uninsulated solid wall">Uninsulated solid wall</option>
+            </select>
+        </td>
+        <td></td>
+        <td>Solar hot water?</td>
+        <td>NO</td>
+    </tr>
+    
+    <tr>
+        <td>Roof</td>
+        <td>
+            <select key="data.simple.roofinsulation">
+            <option value="Super insulated">Super insulated</option>
+            <option value="Well insulated">Well insulated</option>
+            <option value="Some insulation" selected>Some insulation</option>
+            <option value="No insulation">No insulation</option>
+            </select>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr> 
+    
+    
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Heating set-point (C)</td>
+        <td><input type="text" value="0" key="data.simple.heatingtargettemperature"  /></td>
+    </tr>
+    
+    <tr>
+        <td>Window type</td>
+        <td>
+            <select key="data.simple.windowtype">
+            <option value="Single glazed">Single glazed</option>
+            <option value="Double glazed - old" selected>Double glazed - old</option>
+            <option value="Double glazed - new">Double glazed - new</option>
+            <option value="Triple glazed">Triple glazed</option>
+            </select>
+        </td>
+        <td></td>
+        <td>Typical Occupancy?</td>
+        <td><input type="text" value="2" key="data.simple.noofoccupants"  /></td>
+    </tr>
+    
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    
+    <tr>
+        <td>Draughtiness</td>
+        <td>
+            <select key="data.simple.draughtiness">
+            <option value="Air-tight">Air-tight</option>
+            <option value="Draughty">Draughty</option>
+            <option value="Average" selected>Average</option>
+            </select>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    
+    <tr>
+        <td>Heating system</td>
+        <td>
+            <select key="data.simple.heatingsystem">
+            <option value="Gas boiler - old" selected>Gas boiler - old</option>
+            <option value="Gas boiler - new">Gas boiler - new</option>
+            <option value="Oil boiler">Oil boiler</option>
+            <option value="Electric">Electric</option>
+            <option value="Heat pump">Heat pump</option>
+            <option value="Wood boiler">Wood boiler</option>
+            </select>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    
+</table>
+<br>
+<table style="width:100%">
+    <tr>
+        <td>Predicted total gas/oil/wood use (kWh)</td>
+        <td><span key="data.space_heating.heat_demand_kwh.0" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.1" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.2" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.3" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.4" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.5" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.6" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.7" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.8" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.9" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.10" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.11" dp=0></span></td>
+    </tr>
+</table>
+
+<br>
+<p><b>Predicted total gas/oil/wood use (kWh)</b></p>
+
+<canvas id="monthly" width="1024" height=300" style="float:left; margin-right:20px;"></canvas>
+
+
+<p><b>2) Then explore energy bill and carbon savings from retrofit options.</b></p>
+
+<table class="table" style="width:100%">
+    <colgroup>
+    <col style="width:35%">
+    <col style="width:10%">
+    <col style="width:10%">
+    <col style="width:35%">
+    <col style="width:10%">
+    </colgroup>
+    
+    <tr>
+        <td>External walls</td>
+        <td>
+            <select key="data.simple.retrofit.wallinsulation">
+            <option value="Super insulated">Super insulated</option>
+            <option value="Well insulated">Well insulated</option>
+            <option value="Some insulation">Some insulation</option>
+            <option value="Uninsulated cavity wall" selected>Uninsulated cavity wall</option>
+            <option value="Uninsulated solid wall">Uninsulated solid wall</option>
+            </select>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    
+    <tr>
+        <td>Roof</td>
+        <td>
+            <select key="data.simple.retrofit.roofinsulation">
+            <option value="Super insulated">Super insulated</option>
+            <option value="Well insulated">Well insulated</option>
+            <option value="Some insulation" selected>Some insulation</option>
+            <option value="No insulation">No insulation</option>
+            </select>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    
+    <tr>
+        <td>Window type</td>
+        <td>
+            <select key="data.simple.retrofit.windowtype">
+            <option value="Single glazed">Single glazed</option>
+            <option value="Double glazed - old" selected>Double glazed - old</option>
+            <option value="Double glazed - new">Double glazed - new</option>
+            <option value="Triple glazed">Triple glazed</option>
+            </select>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    
+    <tr>
+        <td>Draughtiness</td>
+        <td>
+            <select key="data.simple.retrofit.draughtiness">
+            <option value="Air-tight">Air-tight</option>
+            <option value="Draughty">Draughty</option>
+            <option value="Average" selected>Average</option>
+            </select>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    
+</table>
+
+<table style="width:100%">
+    <tr>
+        <td>Retrofit predicted total gas/oil/wood use (kWh)</td>
+        <td><span key="data.simple.retrofit.heat_demand_kwh.0" dp=0></span></td>
+        <td><span key="data.simple.retrofit.heat_demand_kwh.1" dp=0></span></td>
+        <td><span key="data.simple.retrofit.heat_demand_kwh.2" dp=0></span></td>
+        <td><span key="data.simple.retrofit.heat_demand_kwh.3" dp=0></span></td>
+        <td><span key="data.simple.retrofit.heat_demand_kwh.4" dp=0></span></td>
+        <td><span key="data.simple.retrofit.heat_demand_kwh.5" dp=0></span></td>
+        <td><span key="data.simple.retrofit.heat_demand_kwh.6" dp=0></span></td>
+        <td><span key="data.simple.retrofit.heat_demand_kwh.7" dp=0></span></td>
+        <td><span key="data.simple.retrofit.heat_demand_kwh.8" dp=0></span></td>
+        <td><span key="data.simple.retrofit.heat_demand_kwh.9" dp=0></span></td>
+        <td><span key="data.simple.retrofit.heat_demand_kwh.10" dp=0></span></td>
+        <td><span key="data.simple.retrofit.heat_demand_kwh.11" dp=0></span></td>
+    </tr>
+</table>
+
+ </div>
+
+ </body>
+ 
+ </html>
+
+  <script type="application/javascript">
+  
+    //var path = "<?php echo $path;?>";
+    var usesimpleview = true;
+    var keys = {};
+    var page = "";
+
+    var data = {
+        simple: {
+        
+            floorarea: 100,
+            storeyheight: 2.5,
+            nooffloors: 2,
+            
+            dwellingtype: "Detached",
+            
+            windowarea_north: 10,
+            windowarea_south: 10, 
+            windowarea_east: 0, 
+            windowarea_west: 0,
+             
+            windowtype: "Single glazed",
+            
+            roofinsulation: "No insulation",
+            floorinsulation: "Uninsulated floor",
+            wallinsulation: "Uninsulated solid wall",
+            
+            draughtiness: "Average",
+            
+            heatingsystem: "Gas boiler - old",
+            
+            heatingtargettemperature: 18,
+            noofoccupants: 2,
+            
+            retrofit: {
+                roofinsulation: "No insulation",
+                wallinsulation: "Uninsulated solid wall",
+                draughtiness: "Average",
+                windowtype: "Single glazed"
+            }
+        
+        }
+    };
+    
+    process();
+    InitUI();    
+    UpdateUI(data);
+    update_graph();
+    
+    function update()
+    {   
+        process();
+        UpdateUI(data);
+        update_graph();
+    }
+    
+    $("#openbem").on("change",'[key]', function(){
+        var key = $(this).attr('key');
+        var val = $(this).val();
+        var input_type = $(this).attr('type');
+        if (input_type=='checkbox') val = $(this)[0].checked;
+        
+        if (!isNaN(val)) val *= 1;
+        varset(key,val);
+        
+        $("#openbem").trigger("onKeyChange",{key:key,value:val});
+        update();
+        
+        console.log(key+ " "+val);
+    });
+    
+    function update_graph()
+    {
+        var monthly = [
+            [0,data.space_heating.heat_demand_kwh[0],"Jan"],
+            [1,data.space_heating.heat_demand_kwh[1],"Feb"],
+            [2,data.space_heating.heat_demand_kwh[2],"Mar"],
+            [3,data.space_heating.heat_demand_kwh[3],"Apr"],
+            [4,data.space_heating.heat_demand_kwh[4],"May"],
+            [5,data.space_heating.heat_demand_kwh[5],"Jun"],
+            [6,data.space_heating.heat_demand_kwh[6],"Jul"],
+            [7,data.space_heating.heat_demand_kwh[7],"Aug"],
+            [8,data.space_heating.heat_demand_kwh[8],"Sep"],
+            [9,data.space_heating.heat_demand_kwh[9],"Oct"],
+            [10,data.space_heating.heat_demand_kwh[10],"Nov"],
+            [11,data.space_heating.heat_demand_kwh[11],"Dec"]
+        ];
+       
+        graph.width = 1024;
+        graph.height = 300;
+        //graph.ymax = 2000;
+        graph.ytick = 500;
+        graph.yaxislabel = "kWh";
+        graph.draw("monthly",[monthly]);
+    }
+
+
+    function process()
+    {
+        
+        if (data.simple==undefined) data.simple = {};
+        if (data.simple.retrofit==undefined) data.simple.retrofit = {};
+        if (data.fabric==undefined) data.fabric = {};
+        if (data.ventilation==undefined) data.ventilation = {};
+        if (data.temperature==undefined) data.temperature = {};
+        if (data.water_heating==undefined) data.water_heating = {};
+        
+        data.floors = {};
+        
+        for (var i=1; i<=data.simple.nooffloors; i++)
+        {
+            var name = "Floor "+i;
+            data.floors[name] = {
+                name: name, 
+                area:data.simple.floorarea/data.simple.nooffloors, 
+                height:data.simple.storeyheight
+            };
+        }
+            
+        data.fabric.elements = [];
+        
+        var wall_width = Math.sqrt(data.simple.floorarea/data.simple.nooffloors);
+        
+        data.simple.windowarea = data.simple.windowarea_north + data.simple.windowarea_south + data.simple.windowarea_east + data.simple.windowarea_west;
+        
+        var window_width = Math.sqrt(data.simple.windowarea);
+        
+        var window_uvalue;
+        if(data.simple.windowtype == "Single glazed"){window_uvalue = 5.0;}
+        else if(data.simple.windowtype == "Double glazed - new"){window_uvalue = 1.8;}
+        else if(data.simple.windowtype == "Triple glazed"){window_uvalue = 0.8;}
+        else {window_uvalue = 3.0;} /*(data.simple.windowtype == "Double glazed - new")*/
+        
+        var wall_uvalue;
+        if(data.simple.wallinsulation == "Super insulated"){wall_uvalue = 0.11;}
+        else if(data.simple.wallinsulation == "Well insulated"){wall_uvalue = 0.25;}
+        else if(data.simple.wallinsulation == "Some insulation"){wall_uvalue = 0.45;}
+        else if(data.simple.wallinsulation == "Uninsulated solid wall"){wall_uvalue = 1.6;}
+        else {wall_uvalue = 1.3;} /*(data.simple.wallinsulation == "Uninsulated cavity wall")*/
+        
+        var roof_uvalue;
+        if(data.simple.roofinsulation == "Super insulated"){roof_uvalue = 0.12;}
+        else if(data.simple.roofinsulation == "Well insulated"){roof_uvalue = 0.16;}
+        else if(data.simple.roofinsulation == "No insulation"){roof_uvalue = 2.0;}
+        else {roof_uvalue = 0.3;} /*(data.simple.roofinsulation == "Some insulation")*/
+        
+        var floor_uvalue;
+        if(data.simple.floorinsulation == "Super insulated"){floor_uvalue = 0.14;}
+        else if(data.simple.floorinsulation == "Some insulation"){floor_uvalue = 0.25;}
+        else {floor_uvalue = 0.7;} /*(data.simple.floorinsulation == "No insulation")*/
+        
+        var airpermeabilityvalue;
+        if(data.simple.draughtiness == "Draughty"){airpermeabilityvalue = 15;}
+        else if(data.simple.draughtiness == "Air-tight"){airpermeabilityvalue = 3;}
+        else {airpermeabilityvalue = 8;} /*(data.simple.floorinsulation == "Average")*/
+        
+        var heating_system;
+        if(data.simple.heatingsystem == "Gas boiler - new"){heating_system = "Gas boiler - new";}
+        else if(data.simple.heatingsystem == "Oil boiler"){heating_system = "Oil boiler";}
+        else if(data.simple.heatingsystem == "Electric"){heating_system = "Electric";}
+        else if(data.simple.heatingsystem == "Heat pump"){heating_system = "Heat pump";}
+        else if(data.simple.heatingsystem == "Wood boiler"){heating_system = "Wood boiler";}
+        else {heating_system = "Gas boiler - old";} /*(data.simple.heatingsystem == "Gas boiler - old")*/
+        
+        data.fabric.elements.push(
+        {
+            type: "wall",
+            name: "West Wall",
+            l: wall_width,
+            h: data.simple.storeyheight * data.simple.nooffloors,
+            uvalue: wall_uvalue,
+            kvalue: 170
+        });
+        
+        data.fabric.elements.push(
+        {
+            type: "wall",
+            name: "East Wall",
+            l: wall_width,
+            h: data.simple.storeyheight * data.simple.nooffloors,
+            uvalue: wall_uvalue,
+            kvalue: 170
+        });
+        
+        if(data.simple.dwellingtype == "Detached")
+        {
+            data.fabric.elements.push(
+            {
+                type: "wall",
+                name: "South Wall",
+                l: wall_width,
+                h: data.simple.storeyheight * data.simple.nooffloors,
+                uvalue: wall_uvalue,
+                kvalue: 170
+            });
+        }
+
+        if(data.simple.dwellingtype != "Mid-terrace")
+        {
+            data.fabric.elements.push(
+            {
+                type: "wall",
+                name: "North Wall",
+                l: wall_width,
+                h: data.simple.storeyheight * data.simple.nooffloors,
+                uvalue: wall_uvalue,
+                kvalue: 170
+            });
+        }
+        
+        data.fabric.elements.push(
+        {
+            type: "roof",
+            name: "Roof",
+            l: wall_width,
+            h: wall_width,
+            uvalue: roof_uvalue,
+            kvalue: 100
+        });
+        
+        data.fabric.elements.push(
+        {
+            type: "floor",
+            name: "Floor",
+            l: wall_width,
+            h: wall_width,
+            uvalue: floor_uvalue,
+            kvalue: 100
+        });
+        
+        data.fabric.elements.push(
+        {
+            type: "window",
+            name: "all windows",
+            subtractfrom: 0,
+            l: window_width,
+            h: window_width,
+            orientation: 2,
+            overshading: 2,
+            g: 0.76,
+            gL: 0.8,
+            ff: 0.7,
+            uvalue: window_uvalue
+        });
+        
+        data.ventilation.air_permeability_test = true;
+        data.ventilation.air_permeability_value = airpermeabilityvalue;
+        
+        data.temperature.target = data.simple.heatingtargettemperature;
+        if(data.simple.floorarea < 50){data.temperature.living_area = data.simple.floorarea * 0.75;}
+        else if (data.simple.floorarea > 100){data.temperature.living_area = data.simple.floorarea * 0.2;}
+        else {data.temperature.living_area = data.simple.floorarea * 
+                    (0.75 - (0.55*((data.simple.floorarea-50)/50)));}
+        
+        data.use_LAC = 1;
+        
+        data.use_water_heating = 1;
+        var storage_volume = 50 * data.simple.noofoccupants;
+        data.water_heating.storage_volume = storage_volume;
+        data.water_heating.loss_factor_b = 0.033;
+        data.water_heating.volume_factor_b = Math.pow(120/storage_volume,1/3);
+        data.water_heating.temperature_factor_b = 1.08;
+        
+        data.use_custom_occupancy = 1;
+        data.custom_occupancy = data.simple.noofoccupants;
+        
+        if (heating_system=="Gas boiler - old") {
+            data.energy_systems = {
+                space_heating:[{ system: "gasboiler", fraction: 1.0, efficiency: 0.80 }],
+                waterheating:[{ system: "gasboiler", fraction: 1.0, efficiency: 0.75 }],
+                lighting:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+                cooking:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+                appliances:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }]
+            };
+        }
+        
+        if (heating_system=="Gas boiler - new") {
+            data.energy_systems = {
+                space_heating:[{ system: "gasboiler", fraction: 1.0, efficiency: 0.90 }],
+                waterheating:[{ system: "gasboiler", fraction: 1.0, efficiency: 0.85 }],
+                lighting:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+                cooking:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+                appliances:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }]
+            };
+        }
+        
+        if (heating_system=="Oil boiler") {
+            data.energy_systems = {
+                space_heating:[{ system: "oilboiler", fraction: 1.0, efficiency: 0.85 }],
+                waterheating:[{ system: "oilboiler", fraction: 1.0, efficiency: 0.80}],
+                lighting:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+                cooking:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+                appliances:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }]
+            };
+        }
+        
+        if (heating_system=="Electric") {
+            data.energy_systems = {
+                space_heating:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+                waterheating:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+                lighting:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+                cooking:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+                appliances:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }]
+            };
+        }
+        
+        if (heating_system=="Heat pump") {
+            data.energy_systems = {
+                space_heating:[{ system: "heatpump", fraction: 1.0, efficiency: 3.0 }],
+                waterheating:[{ system: "heatpump", fraction: 1.0, efficiency: 2.0 }],
+                lighting:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+                cooking:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+                appliances:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }]
+            };
+        }
+        
+        if (heating_system=="Wood boiler") {
+            data.energy_systems = {
+                space_heating:[{ system: "woodbatch", fraction: 1.0, efficiency: 0.92 }],
+                waterheating:[{ system: "woodbatch", fraction: 1.0, efficiency: 0.87 }],
+                lighting:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+                cooking:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }],
+                appliances:[{ system: "electric", fraction: 1.0, efficiency: 1.0 }]
+            };
+        }
+        
+        //================================================================================
+        
+        // 1) Run input data through model
+        calc.run(); calc.run();
+        
+        // 2) Copy result to master object (unlinked)
+        var master = JSON.parse(JSON.stringify(data));
+        
+        
+        var wall_uvalue;
+        if(data.simple.retrofit.wallinsulation == "Super insulated"){wall_uvalue = 0.11;}
+        else if(data.simple.retrofit.wallinsulation == "Well insulated"){wall_uvalue = 0.25;}
+        else if(data.simple.retrofit.wallinsulation == "Some insulation"){wall_uvalue = 0.45;}
+        else if(data.simple.retrofit.wallinsulation == "Uninsulated solid wall"){wall_uvalue = 1.6;}
+        else {wall_uvalue = 1.3;} /*(data.simple.wallinsulation == "Uninsulated cavity wall")*/
+
+        var roof_uvalue;
+        if(data.simple.retrofit.roofinsulation == "Super insulated"){roof_uvalue = 0.12;}
+        else if(data.simple.retrofit.roofinsulation == "Well insulated"){roof_uvalue = 0.16;}
+        else if(data.simple.retrofit.roofinsulation == "No insulation"){roof_uvalue = 2.0;}
+        else {roof_uvalue = 0.3;} /*(data.simple.roofinsulation == "Some insulation")*/
+        
+        var window_uvalue;
+        if(data.simple.retrofit.windowtype == "Single glazed"){window_uvalue = 5.0;}
+        else if(data.simple.retrofit.windowtype == "Double glazed - new"){window_uvalue = 1.8;}
+        else if(data.simple.retrofit.windowtype == "Triple glazed"){window_uvalue = 0.8;}
+        else {window_uvalue = 3.0;} /*(data.simple.windowtype == "Double glazed - new")*/
+        
+        for (z in data.fabric.elements)
+        {
+            if (data.fabric.elements[z].type=="wall") data.fabric.elements[z].uvalue = wall_uvalue;
+            if (data.fabric.elements[z].type=="roof") data.fabric.elements[z].uvalue = roof_uvalue;
+            if (data.fabric.elements[z].type=="window") data.fabric.elements[z].uvalue = window_uvalue;
+        }
+        
+        // 3) Apply measures to data object
+        var airpermeabilityvalue;
+        if(data.simple.retrofit.draughtiness == "Draughty"){airpermeabilityvalue = 15;}
+        else if(data.simple.retrofit.draughtiness == "Air-tight"){airpermeabilityvalue = 3;}
+        else {airpermeabilityvalue = 8;} /*(data.simple.floorinsulation == "Average")*/
+        
+        data.ventilation.air_permeability_value = airpermeabilityvalue;
+        
+        // 4) Run retrofit measures through model
+        calc.run(); calc.run();
+
+        // 5) Copy resultant heat demand
+        var retrofit_heat_demand = data.space_heating.heat_demand_kwh;
+        
+        // 6) Save a copy of the retrofit calculation object
+        var retrofit = JSON.parse(JSON.stringify(data));
+        
+        // 7) Switch data object back to pre-retrofit master
+        data = master;
+        
+        // 8) Place retrofit data in master object so that it can be drawn to the UI
+        data.simple.retrofit.heat_demand_kwh = retrofit_heat_demand;
+    }
+
+  </script>
