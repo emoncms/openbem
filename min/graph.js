@@ -19,17 +19,16 @@ var graph = {
         {
             var data = series[s];
             for (z in data) {
-                if (data[z][2].length>xlabelmax) xlabelmax = data[z][2].length;
+                if (data[z][3].length>xlabelmax) xlabelmax = data[z][3].length;
             }
         }
         
-        this.margin.bottom = (xlabelmax * 6.5)+25;
+        this.margin.bottom = (xlabelmax * 6.5) + 25;
         
         var plot_height = this.height - this.margin.bottom - this.margin.top;
-    
+
         // Initialise the canvas get context
-        if (!ctx) 
-        {
+        if (!ctx) {
             this.element = element;
             var c = document.getElementById(element);  
             this.ctx = c.getContext("2d");
@@ -74,11 +73,6 @@ var graph = {
         
         var scale = 1;
         
-
-        
-        
-        
-        
         ctx.font="16px Arial";
         ctx.save();
         ctx.translate(20, this.margin.top + plot_height/2);
@@ -86,7 +80,6 @@ var graph = {
         ctx.textAlign = "center";
         ctx.fillText(this.yaxislabel, 0,0);
         ctx.restore();
-        
         
         ctx.textAlign = "right";
         ctx.font="13px Arial";
@@ -110,11 +103,19 @@ var graph = {
             {
                 var x = ((data[z][0] - xmin) / (xmax - xmin)) * this.width;
                 var y = this.margin.top + plot_height - (((data[z][1] - ymin) / (ymax - ymin)) * plot_height);
+                
+                var y2 = this.margin.top + plot_height - (((data[z][2] - ymin) / (ymax - ymin)) * plot_height);
                   
                 var barwidth = ((0.65) / (xmax - xmin)) * this.width;
                 
                 ctx.fillStyle = "#ff2712";
-                ctx.fillRect(x-(barwidth/2),y,barwidth,this.margin.top+plot_height-y);
+                ctx.fillRect(x-22,y,20,this.margin.top+plot_height-y);
+                
+                ctx.fillStyle = "#ff7466";
+                ctx.fillRect(x+2,y2,20,this.margin.top+plot_height-y2);
+                
+                ctx.fillStyle = "#ffb5ad";
+                //ctx.fillRect(x+10,0,15,this.margin.top+plot_height-0);
                   
                   
                 // X AXIS LABELS  
@@ -124,15 +125,11 @@ var graph = {
                 ctx.translate(x+5, this.margin.top + plot_height+10);
                 ctx.rotate(-Math.PI/2);
                 ctx.textAlign = "right";
-                ctx.fillText(data[z][2], 0,0);
+                ctx.fillText(data[z][3], 0,0);
                 ctx.restore();
             }
             ctx.stroke();
-        }
-        
-        
-   
-        
+        } 
     }
 
 };
