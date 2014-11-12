@@ -88,7 +88,7 @@
  
 
  
-<table class="table" style="width:100%">
+<table class="table" style="width:70%; float:left;">
     <colgroup>
     <col style="width:35%">
     <col style="width:10%">
@@ -251,34 +251,10 @@
     </tr>
     
 </table>
-<br>
-<table style="width:100%">
-    <tr>
-        <td>Predicted total gas/oil/wood use (kWh)</td>
-        <td><span key="data.space_heating.heat_demand_kwh.0" dp=0></span></td>
-        <td><span key="data.space_heating.heat_demand_kwh.1" dp=0></span></td>
-        <td><span key="data.space_heating.heat_demand_kwh.2" dp=0></span></td>
-        <td><span key="data.space_heating.heat_demand_kwh.3" dp=0></span></td>
-        <td><span key="data.space_heating.heat_demand_kwh.4" dp=0></span></td>
-        <td><span key="data.space_heating.heat_demand_kwh.5" dp=0></span></td>
-        <td><span key="data.space_heating.heat_demand_kwh.6" dp=0></span></td>
-        <td><span key="data.space_heating.heat_demand_kwh.7" dp=0></span></td>
-        <td><span key="data.space_heating.heat_demand_kwh.8" dp=0></span></td>
-        <td><span key="data.space_heating.heat_demand_kwh.9" dp=0></span></td>
-        <td><span key="data.space_heating.heat_demand_kwh.10" dp=0></span></td>
-        <td><span key="data.space_heating.heat_demand_kwh.11" dp=0></span></td>
-    </tr>
-</table>
 
-<br>
-<p><b>Predicted total gas/oil/wood use (kWh)</b></p>
-
-<canvas id="monthly" width="1024" height=300" style="float:left; margin-right:20px;"></canvas>
-
-
-<p><b>2) Then explore energy bill and carbon savings from retrofit options.</b></p>
-
-<table class="table" style="width:100%">
+<div style="width:25%; background-color:#eee;  padding:10px; margin-left:10px; float:left;">
+<b>2) Then explore energy bill and carbon savings from retrofit options.</b><br><br>
+<table class="table">
     <colgroup>
     <col style="width:35%">
     <col style="width:10%">
@@ -348,10 +324,29 @@
     </tr>
     
 </table>
+</div>
 
+<div style="clear:both"></div>
+<br>
 <table style="width:100%">
     <tr>
-        <td>Retrofit predicted total gas/oil/wood use (kWh)</td>
+        <td>Pre-retrofit heating demand (kWh)</td>
+        <td><span key="data.space_heating.heat_demand_kwh.0" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.1" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.2" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.3" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.4" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.5" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.6" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.7" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.8" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.9" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.10" dp=0></span></td>
+        <td><span key="data.space_heating.heat_demand_kwh.11" dp=0></span></td>
+    </tr>
+    
+    <tr>
+        <td>Post-retrofit heating demand (kWh)</td>
         <td><span key="data.simple.retrofit.heat_demand_kwh.0" dp=0></span></td>
         <td><span key="data.simple.retrofit.heat_demand_kwh.1" dp=0></span></td>
         <td><span key="data.simple.retrofit.heat_demand_kwh.2" dp=0></span></td>
@@ -367,6 +362,11 @@
     </tr>
 </table>
 
+<br>
+<p><b>Predicted total gas/oil/wood use (kWh)</b></p>
+
+<canvas id="monthly" width="1024" height=300" style="float:left; margin-right:20px;"></canvas>
+<div style="clear:both"></div>
  </div>
 
  </body>
@@ -447,22 +447,23 @@
     function update_graph()
     {
         var monthly = [
-            [0,data.space_heating.heat_demand_kwh[0],"Jan"],
-            [1,data.space_heating.heat_demand_kwh[1],"Feb"],
-            [2,data.space_heating.heat_demand_kwh[2],"Mar"],
-            [3,data.space_heating.heat_demand_kwh[3],"Apr"],
-            [4,data.space_heating.heat_demand_kwh[4],"May"],
-            [5,data.space_heating.heat_demand_kwh[5],"Jun"],
-            [6,data.space_heating.heat_demand_kwh[6],"Jul"],
-            [7,data.space_heating.heat_demand_kwh[7],"Aug"],
-            [8,data.space_heating.heat_demand_kwh[8],"Sep"],
-            [9,data.space_heating.heat_demand_kwh[9],"Oct"],
-            [10,data.space_heating.heat_demand_kwh[10],"Nov"],
-            [11,data.space_heating.heat_demand_kwh[11],"Dec"]
+            [0,data.space_heating.heat_demand_kwh[0],data.simple.retrofit.heat_demand_kwh[0],"Jan"],
+            [1,data.space_heating.heat_demand_kwh[1],data.simple.retrofit.heat_demand_kwh[1],"Feb"],
+            [2,data.space_heating.heat_demand_kwh[2],data.simple.retrofit.heat_demand_kwh[2],"Mar"],
+            [3,data.space_heating.heat_demand_kwh[3],data.simple.retrofit.heat_demand_kwh[3],"Apr"],
+            [4,data.space_heating.heat_demand_kwh[4],data.simple.retrofit.heat_demand_kwh[4],"May"],
+            [5,data.space_heating.heat_demand_kwh[5],data.simple.retrofit.heat_demand_kwh[5],"Jun"],
+            [6,data.space_heating.heat_demand_kwh[6],data.simple.retrofit.heat_demand_kwh[6],"Jul"],
+            [7,data.space_heating.heat_demand_kwh[7],data.simple.retrofit.heat_demand_kwh[7],"Aug"],
+            [8,data.space_heating.heat_demand_kwh[8],data.simple.retrofit.heat_demand_kwh[8],"Sep"],
+            [9,data.space_heating.heat_demand_kwh[9],data.simple.retrofit.heat_demand_kwh[9],"Oct"],
+            [10,data.space_heating.heat_demand_kwh[10],data.simple.retrofit.heat_demand_kwh[10],"Nov"],
+            [11,data.space_heating.heat_demand_kwh[11],data.simple.retrofit.heat_demand_kwh[11],"Dec"]
         ];
        
         graph.width = 1024;
         graph.height = 300;
+        
         //graph.ymax = 2000;
         graph.ytick = 500;
         graph.yaxislabel = "kWh";
