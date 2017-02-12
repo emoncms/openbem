@@ -26,7 +26,3 @@ The source code for OpenBEM under GPL. You can download and install OpenBEM on y
 [OpenBEM v2](https://github.com/emoncms/openbem/tree/master)
 
 [SAP v1](https://github.com/emoncms/archive/tree/master/sap)
-
-### Documentation
-
-[OpenEnergyMonitor github: Building Energy Modelling](https://github.com/openenergymonitor/documentation/tree/master/BuildingBlocks/BuildingEnergyModelling)
